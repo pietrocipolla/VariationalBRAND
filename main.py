@@ -1,4 +1,4 @@
-from controller.cavi import cavi
+from controller.cavi.cavi import cavi
 from controller.hyperparameters.set_hyperparameters_fake import set_hyperparameters_fake
 from controller.model_parameters_calculator.minimum_covariance_determinant import calculate_robust_parameters
 from controller.sample_data_hanlder.data_handler import generate_learning_and_test_sets
