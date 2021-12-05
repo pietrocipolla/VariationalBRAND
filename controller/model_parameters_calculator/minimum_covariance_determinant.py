@@ -1,0 +1,32 @@
+#https://towardsdatascience.com/detecting-and-treating-outliers-in-python-part-2-3a3319ec2c33
+#Load libraries
+import numpy as np
+
+
+def calculate_robust_parameters(X, labels, num_classes):
+    list_mcd = []
+    list_robust_mean = []
+    i = 0
+    while i< num_classes:
+        X_cluster_i = X[np.where(labels == i)]
+        temp_mcd, temp_robust_mean = mcd(X_cluster_i)
+        list_mcd.append(temp_mcd)
+        list_robust_mean.append(temp_robust_mean)
+        i+=1
+    return list_mcd, list_robust_mean
+
+def mcd(X):
+    # Load libraries
+    import scipy as sp
+    from sklearn.covariance import MinCovDet
+
+    cov = MinCovDet(random_state=0).fit(X)
+    mcd = cov.covariance_  # robust covariance metric
+    robust_mean = cov.location_  # robust mean
+    inv_covmat = sp.linalg.inv(mcd)  # inverse covariance metric
+
+    return mcd, robust_mean
+
+
+# X, labels, num_classes = generate_sample_data()
+# calculate_robust_parameters(X, labels, num_classes)
