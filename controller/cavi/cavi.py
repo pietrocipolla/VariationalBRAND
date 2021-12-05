@@ -1,7 +1,7 @@
 from controller.cavi.init_cavi.init_cavi_fake import init_cavi_fake
 from controller.cavi.updater.parameters_updater import update_parameters
 from model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from model.variational_parameters.variational_model import VariationalParameters
+from model.variational_parameters.variational_parameters import VariationalParameters
 
 
 def cavi(hyperparameters_model : HyperparametersModel, n_iter):

@@ -1,4 +1,4 @@
-from model.variational_parameters.variational_model import VariationalParameters
+from model.variational_parameters.variational_parameters import VariationalParameters
 
 
 def update_parameters(variational_parameters : VariationalParameters):

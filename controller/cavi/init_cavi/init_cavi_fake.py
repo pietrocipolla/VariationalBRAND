@@ -11,7 +11,7 @@ from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Lambda_VAR_
 from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Mu_VAR_MIX import Mu_VAR_MIX
 from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Nu_VAR_MIX import Nu_VAR_MIX
 from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.PHI_VAR_MIX import PHI_VAR_MIX
-from model.variational_parameters.variational_model import VariationalParameters
+from model.variational_parameters.variational_parameters import VariationalParameters
 from model.variational_parameters.a_k_beta import A_k_beta
 from model.variational_parameters.b_k_beta import B_k_beta
 from model.variational_parameters.eta_k import Eta_k
