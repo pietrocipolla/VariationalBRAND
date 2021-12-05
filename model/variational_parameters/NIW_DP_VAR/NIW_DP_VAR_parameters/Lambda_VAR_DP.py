@@ -4,7 +4,7 @@ class Lambda_VAR_DP:
     #-> vettore (T) componenti
     # (lambda_var_DP[i] = lambda_var della (i+1) esima NIW della misturaDP)
     def __init__(self, lambda_VAR_DP: jnp.array):
-        self.lambda_VAR_DP = jnp.array(lambda_VAR_DP)
+        self.lambda_VAR_DP = lambda_VAR_DP
 
 # example
 # T = 2

@@ -5,7 +5,7 @@ class B_k_beta:
     #Secondo parametro delle beta -> vettore (T-1) componenti
     # #V_T, ultima beta variazionale, è SEMPRE 1
     def __init__(self, b_k : jnp.array):
-        self.b_k = jnp.array(b_k)
+        self.b_k = b_k
 
 # #example
 # T = 2

@@ -8,7 +8,7 @@ class Phi_m_k:
     #todo #RICORDARSI DI NORMALIZZARE A SOMMA 1 DOPO AVERLE AGGIORNATE O TUTTO VA A *ROIE
 
     def __init__(self, Phi_m_k: jnp.array):
-        self.Phi_m_k = jnp.array(Phi_m_k)
+        self.Phi_m_k = Phi_m_k
 
 # # example matrice (Mx(J+T)
 # M = 2

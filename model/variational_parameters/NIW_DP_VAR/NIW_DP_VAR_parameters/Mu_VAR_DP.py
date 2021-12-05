@@ -4,7 +4,7 @@ class Mu_VAR_DP:
     #-> matrice (Txp) -> riga per riga ci sono le medie delle componenti della misturaDP
     # (mu_var_DP[i,:] -> media della (i+1)-esima NIW della misturaDP)
     def __init__(self, mu_VAR_DP: jnp.ndarray):
-        self.mu_VAR_DP = jnp.array(mu_VAR_DP)
+        self.mu_VAR_DP = mu_VAR_DP
 
 # # example
 # T = 2

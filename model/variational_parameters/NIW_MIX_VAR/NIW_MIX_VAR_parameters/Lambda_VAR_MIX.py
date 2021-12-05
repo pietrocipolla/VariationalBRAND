@@ -5,7 +5,7 @@ class Lambda_VAR_MIX:
     # (lambda_var_MIX[i] = lambda_var della (i+1) esima NIW della mistura)
 
     def __init__(self, lambda_VAR_MIX: jnp.array):
-        self.lambda_VAR_MIX = jnp.array(lambda_VAR_MIX)
+        self.lambda_VAR_MIX = lambda_VAR_MIX
 
 # example
 # J = 3

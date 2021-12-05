@@ -5,7 +5,7 @@ class Nu_VAR_MIX:
     #   (nu_VAR_MIX[i] = nu_VAR della (i+1) esima NIW della mistura)
 
     def __init__(self, nu_VAR_MIX : jnp.array):
-        self.nu_VAR_MIX = jnp.array(nu_VAR_MIX)
+        self.nu_VAR_MIX = nu_VAR_MIX
 
 #example
 # J = 3

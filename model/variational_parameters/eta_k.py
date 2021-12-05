@@ -3,7 +3,7 @@ from jax import numpy as jnp
 class Eta_k:
     #-> parametri della dirichlet -> vettore (J+1) componenti
     def __init__(self, eta_k : jnp.array):
-        self.eta_k = jnp.array(eta_k)
+        self.eta_k = eta_k
 
 # #example
 # J = 3

@@ -3,7 +3,7 @@ from jax import numpy as jnp
 class PHI_0_DP:
     #-> Matrice (pxp)
     def __init__(self, PHI_0_DP: jnp.array):
-        self.PHI_0_DP = jnp.array(PHI_0_DP)
+        self.PHI_0_DP = PHI_0_DP
 
 #example
 # p = 2

@@ -3,7 +3,7 @@ from jax import numpy as jnp
 class Mu_0_DP:
     #vettore (p) componenti
     def __init__(self, mu_0_DP : jnp.array):
-        self.mu_0_DP = jnp.array(mu_0_DP)
+        self.mu_0_DP = mu_0_DP
 
 #example
 # p = 2

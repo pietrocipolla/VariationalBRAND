@@ -5,7 +5,7 @@ class PHI_VAR_MIX:
     # -> PHI_var_MIX[i,:,:] = Matrice PHI della (i+1)esima NIW della mistura
 
     def __init__(self, PHI_VAR_MIX: jnp.ndarray):
-        self.PHI_VAR_MIX = jnp.array(PHI_VAR_MIX)
+        self.PHI_VAR_MIX = PHI_VAR_MIX
 
 # # example
 # J = 3

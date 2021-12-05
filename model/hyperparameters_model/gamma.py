@@ -6,5 +6,5 @@ class Gamma:
 
 # #example
 # user_input = 5
-# hello = gamma(user_input)
+# hello = Gamma(user_input)
 # print(hello.gamma)

@@ -4,7 +4,7 @@ class Mu_VAR_MIX:
     #-> matrice (Jxp) -> riga per riga ci sono le medie delle componenti della mistura
     # (mu_var_MIX[i,:] -> media della (i+1)-esima NIW della mistura)
     def __init__(self, Mu_VAR_MIX: jnp.ndarray):
-        self.Mu_VAR_MIX = jnp.array(Mu_VAR_MIX)
+        self.Mu_VAR_MIX = Mu_VAR_MIX
 
 # # example
 # J = 3
