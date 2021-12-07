@@ -12,8 +12,11 @@ if __name__ == '__main__':
           = generate_learning_and_test_sets()
 
     # ROBUST PARAMETERS
+    #todo creare funzione che chiede due hyper robust che non escono dal calculate
+    #piu settare gia la struttura
     robust_covariance, robust_mean = calculate_robust_parameters(X_learning, labels_learning, num_classes_learning)
-    print(robust_covariance, robust_mean)
+    #print(robust_covariance, robust_mean)
+    #ritorna vettore di covaraince e mean per ogni cluster training set
 
     # HYPERPARAMETERS
     ask_hyperparameters_from_user_input = False
@@ -24,4 +27,5 @@ if __name__ == '__main__':
 
     # CAVI (init + update + elbo)
     n_iter = 1000
-    variational_parameters, elbo_values = cavi(hyperparameters_model, n_iter)
+    #data all data
+    variational_parameters, elbo_values = cavi(data, hyperparameters_model, n_iter)

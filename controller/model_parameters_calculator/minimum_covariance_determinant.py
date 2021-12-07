@@ -2,6 +2,8 @@
 #Load libraries
 import numpy as np
 
+from controller.sample_data_hanlder.data_generator import generate_sample_data
+
 
 def calculate_robust_parameters(X, labels, num_classes):
     list_mcd = []
@@ -14,6 +16,8 @@ def calculate_robust_parameters(X, labels, num_classes):
         list_robust_mean.append(temp_robust_mean)
         i+=1
     return list_mcd, list_robust_mean
+
+#todo settare altri paraemtri robusti
 
 def mcd(X):
     # Load libraries
@@ -28,5 +32,5 @@ def mcd(X):
     return mcd, robust_mean
 
 
-# X, labels, num_classes = generate_sample_data()
-# calculate_robust_parameters(X, labels, num_classes)
+# X, labels, num_classes = generate_sample_data(5,500)
+# print(calculate_robust_parameters(X, labels, num_classes))

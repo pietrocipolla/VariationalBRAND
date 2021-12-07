@@ -34,3 +34,6 @@ def get_test_set(X, labels, num_classes, num_classes_learning):
     # plt.show()
 
     return X_set, labels_set, num_classes_set
+
+n_samples = 500
+print(generate_sample_data(5, n_samples))

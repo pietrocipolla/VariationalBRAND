@@ -1,3 +1,4 @@
+from model.hyperparameters_model.NIW import NIW
 from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Lambda_0_DP import Lambda_0_DP
 from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Mu_0_DP import Mu_0_DP
 from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Nu_0_DP import Nu_0_DP
@@ -16,14 +17,17 @@ from jax import numpy as jnp
 def set_hyperparameters_fake(ask_hyperparameters_from_user_input,
                              num_classes, num_classes_learning, num_classes_test, robust_mean, n_samples):
     return HyperparametersModel(
-        Gamma(5),
+        gamma =  5,
         # gamma -> parametro dello Stick Breaking -> scalare
         # iperparametro tra 1 e 50 tipo oppure buttarci su una distribuzione e una prior
 
-        A_dir_k(jnp.ones(3+1)),
+        a_dir_k = jnp.ones(3+1),
         #a_dir_k -> vettore delle componenti della Dirichlet -> vettore di (J+1) componenti
         # J = num_classes_learning
 
+        nIW_DP_0 = NIW(
+
+        )
         NIW_DP_0(
             Mu_0_DP(
                 jnp.ones(2)

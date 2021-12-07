@@ -73,7 +73,7 @@ def init_cavi_fake(hyperparameters_model: HyperparametersModel):
             Lambda_VAR_MIX(
                 jnp.ones(3)
                 # J = 3
-            ).lambda_VAR_MIX,
+            ),
             PHI_VAR_MIX(
                 jnp.array([[[2, 3], [4, 5], [1, 2]],
                            [[2, 3], [4, 5], [1, 2]]])
