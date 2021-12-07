@@ -37,6 +37,12 @@ def init_cavi_fake(hyperparameters_model: HyperparametersModel):
 
         B_k_beta(2 - 1),
         # T = 2
+        hello = hyperparameters_model.T
+
+        dp_var_temp = jnp.zeros(T,p,p)
+        for t in range(0,T):
+            #dp_var_temp[t,:,:] = jnp.identity(p)
+            dp_var_temp[t, :, :] = hyperparameters_model.nWI_DP_0
 
         # NIW_DP_VAR(
         #     Mu_VAR_DP(
