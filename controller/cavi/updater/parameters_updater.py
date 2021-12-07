@@ -1,5 +1,9 @@
 from model.variational_parameters.variational_parameters import VariationalParameters
-
+from model.hyperparameters_model.hyperparameters_model import HyperparametersModel # non so se si faccia cosi
+# from cavi.utils import useful_functions
+from jax import numpy as jnp
+import jax.scipy.special.digamma as jdigamma
+import jax.scipy.special.gamma as jgamma
 
 def update_parameters(variational_parameters : VariationalParameters):
     #update paramerters
