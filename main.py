@@ -8,7 +8,7 @@ if __name__ == '__main__':
     #GENERATE SAMPLE DATA
     X_learning, labels_learning, num_classes_learning, \
     X_test, labels_test, num_classes_test,\
-    num_classes, n_samples\
+    num_classes, n_samples, X\
           = generate_learning_and_test_sets()
 
     # ROBUST PARAMETERS
@@ -28,4 +28,5 @@ if __name__ == '__main__':
     # CAVI (init + update + elbo)
     n_iter = 1000
     #data all data
+    data = X
     variational_parameters, elbo_values = cavi(data, hyperparameters_model, n_iter)

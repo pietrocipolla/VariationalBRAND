@@ -10,7 +10,7 @@ def generate_learning_and_test_sets():
 
     return get_learning_set(X, labels, num_classes, num_classes_learning), \
            get_test_set(X, labels, num_classes, num_classes_learning), \
-           num_classes, n_samples
+           num_classes, n_samples, X
 
 
 #print(generate_learning_and_test_sets())

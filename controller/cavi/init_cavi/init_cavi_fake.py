@@ -19,6 +19,10 @@ from model.variational_parameters.phi_m_k import Phi_m_k
 
 def init_cavi_fake(hyperparameters_model: HyperparametersModel):
     return VariationalParameters(
+        for i in (J + 1):
+            for j in (J+1):
+                phi_m_k[,] = 1/J+1
+        phi_m_k = 1/J+1 , 1/J
         Phi_m_k(jnp.array([[0.1, 0.3, 0.2, 0.0, 0.5],
                                               [0.1, 0.3, 0.2, 0, 0.5]])),
         # todo
@@ -34,49 +38,49 @@ def init_cavi_fake(hyperparameters_model: HyperparametersModel):
         B_k_beta(2 - 1),
         # T = 2
 
-        NIW_DP_VAR(
-            Mu_VAR_DP(
-                jnp.array([[2,3],[4,5]])
-                # matrice (Txp) -> riga per riga ci sono le medie delle componenti della misturaDP
-                # (mu_var_DP[i,:] -> media della (i+1)-esima NIW della misturaDP)
-            ),
-            Nu_VAR_DP(
-                jnp.ones(2)
-                # T = 2
-                # vettore (T) componenti
-                # (nu_var_MIX[i] = nu_var della (i+1) esima NIW della misturaDP)
-            ),
-            Lambda_VAR_DP(
-                jnp.ones(2)
-                # T = 2
-                # (lambda_var_DP[i] = lambda_var della (i+1) esima NIW della misturaDP)
-            ),
-            PHI_VAR_DP(
-                jnp.array([ [[2,3],[4,5]],[[2,3],[4,5]]])
-                # T = 2
-                # p = 2
-                # -> vettore di matrici
-                # (Txpxp), sostanzialmente un ndarray -> PHI_var_DP[i,:,:] = Matrice PHI della (i+1)esima NIW della misturaDP
-            )
-
-        ),
-        NIW_MIX_VAR(
-            Mu_VAR_MIX(
-                # J = 3
-                # p = 2
-                jnp.array([[2,3],[4,5],[1,2]])
-            ),
-            Nu_VAR_MIX(
-                jnp.ones(3)
-                # J = 3
-            ),
-            Lambda_VAR_MIX(
-                jnp.ones(3)
-                # J = 3
-            ),
-            PHI_VAR_MIX(
-                jnp.array([[[2, 3], [4, 5], [1, 2]],
-                           [[2, 3], [4, 5], [1, 2]]])
-            )
-        )
+        # NIW_DP_VAR(
+        #     Mu_VAR_DP(
+        #         jnp.array([[2,3],[4,5]])
+        #         # matrice (Txp) -> riga per riga ci sono le medie delle componenti della misturaDP
+        #         # (mu_var_DP[i,:] -> media della (i+1)-esima NIW della misturaDP)
+        #     ),
+        #     Nu_VAR_DP(
+        #         jnp.ones(2)
+        #         # T = 2
+        #         # vettore (T) componenti
+        #         # (nu_var_MIX[i] = nu_var della (i+1) esima NIW della misturaDP)
+        #     ),
+        #     Lambda_VAR_DP(
+        #         jnp.ones(2)
+        #         # T = 2
+        #         # (lambda_var_DP[i] = lambda_var della (i+1) esima NIW della misturaDP)
+        #     ),
+        #     PHI_VAR_DP(
+        #         jnp.array([ [[2,3],[4,5]],[[2,3],[4,5]]])
+        #         # T = 2
+        #         # p = 2
+        #         # -> vettore di matrici
+        #         # (Txpxp), sostanzialmente un ndarray -> PHI_var_DP[i,:,:] = Matrice PHI della (i+1)esima NIW della misturaDP
+        #     )
+        #
+        # ),
+        # NIW_MIX_VAR(
+        #     Mu_VAR_MIX(
+        #         # J = 3
+        #         # p = 2
+        #         jnp.array([[2,3],[4,5],[1,2]])
+        #     ),
+        #     Nu_VAR_MIX(
+        #         jnp.ones(3)
+        #         # J = 3
+        #     ),
+        #     Lambda_VAR_MIX(
+        #         jnp.ones(3)
+        #         # J = 3
+        #     ),
+        #     PHI_VAR_MIX(
+        #         jnp.array([[[2, 3], [4, 5], [1, 2]],
+        #                    [[2, 3], [4, 5], [1, 2]]])
+        #     )
+        # )
     )

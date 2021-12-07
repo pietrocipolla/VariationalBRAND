@@ -6,16 +6,16 @@ from controller.sample_data_hanlder.data_generator import generate_sample_data
 
 
 def calculate_robust_parameters(X, labels, num_classes):
-    list_mcd = []
+    list_inv_cov_mat = []
     list_robust_mean = []
     i = 0
     while i< num_classes:
         X_cluster_i = X[np.where(labels == i)]
-        temp_mcd, temp_robust_mean = mcd(X_cluster_i)
-        list_mcd.append(temp_mcd)
+        temp_inv_cov_mat, temp_robust_mean = mcd(X_cluster_i)
+        list_inv_cov_mat.append(temp_inv_cov_mat)
         list_robust_mean.append(temp_robust_mean)
         i+=1
-    return list_mcd, list_robust_mean
+    return list_inv_cov_mat, list_robust_mean
 
 #todo settare altri paraemtri robusti
 
@@ -29,7 +29,7 @@ def mcd(X):
     robust_mean = cov.location_  # robust mean
     inv_covmat = sp.linalg.inv(mcd)  # inverse covariance metric
 
-    return mcd, robust_mean
+    return inv_covmat, robust_mean
 
 
 # X, labels, num_classes = generate_sample_data(5,500)

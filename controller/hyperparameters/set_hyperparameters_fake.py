@@ -14,8 +14,7 @@ from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.Lambda_0_MIX imp
 from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.PHI_0_MIX import PHI_0_MIX
 from jax import numpy as jnp
 
-def set_hyperparameters_fake(ask_hyperparameters_from_user_input,
-                             num_classes, num_classes_learning, num_classes_test, robust_mean, n_samples):
+def set_hyperparameters_fake(mu_0_MIX, phi_0_MIX): #todo nel caso agigugnere check dimensioni array
     return HyperparametersModel(
         gamma =  5,
         # gamma -> parametro dello Stick Breaking -> scalare
@@ -26,43 +25,19 @@ def set_hyperparameters_fake(ask_hyperparameters_from_user_input,
         # J = num_classes_learning
 
         nIW_DP_0 = NIW(
-
-        )
-        NIW_DP_0(
-            Mu_0_DP(
-                jnp.ones(2)
-                #vettore (p) componenti, con p = 2
-            ),
-            Nu_0_DP(
-                2
-                #p = 2 numero di componenti del vettore di y
-            ),
-            Lambda_0_DP(
-                1
-                #-> scalare
-            ),
-            PHI_0_DP(
-                jnp.identity(2)
-                # matrice identità p x p con p = 2
-            )
-
+            mu_0 = jnp.oneseyeones(2)[None, :], #così che sia comunque della forma n_elems x p
+            nu_0 = 2,
+            lambda_0 = 1,
+            phi_0 = jnp.identity(2)
+            # vettore (p) componenti, con p = 2
         ),
-        NIW_MIX_0(
-            Mu_0_MIX(
-                jnp.array([[2, 3], [4, 5], [1, 2]])
-            ),
-            Nu_0_MIX(
-                jnp.ones(3)
-                #J = 3
-            ),
-            Lambda_0_MIX(
-                jnp.ones(3)
-                # J = 3
-            ),
-            PHI_0_MIX(
-                jnp.array([[[2,3],[4,5],[1,2]],
-                          [[2,3],[4,5],[1,2]]])
-            )
-        )
+
+        nIW_MIX_0 = NIW(
+            mu_0 = mu_0_MIX,
+            nu_0 =  jnp.array([2, 2, 2]),
+            lambda_0= jnp.ones(3),
+            phi_0 = phi_0_MIX, #varianza
+        ) #TODO trovare inizializzazione più furba
+
     )
 
