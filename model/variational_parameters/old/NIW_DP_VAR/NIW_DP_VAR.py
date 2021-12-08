@@ -1,5 +1,7 @@
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR_parameters import Mu_VAR_DP, Nu_VAR_DP, Lambda_VAR_DP, \
+from model.variational_parameters.old.NIW_DP_VAR.NIW_DP_VAR_parameters import Mu_VAR_DP, Lambda_VAR_DP, \
     PHI_VAR_DP
+from model.variational_parameters.old.NIW_DP_VAR.NIW_DP_VAR_parameters import Nu_VAR_DP
+
 
 class NIW_DP_VAR:
     # parametri NIW DP

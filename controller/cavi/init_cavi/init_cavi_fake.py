@@ -2,21 +2,8 @@ from jax import numpy as jnp
 
 from model.hyperparameters_model.NIW import NIW
 from model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR import NIW_DP_VAR
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR_parameters.Lambda_VAR_DP import Lambda_VAR_DP
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR_parameters.Mu_VAR_DP import Mu_VAR_DP
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR_parameters.Nu_VAR_DP import Nu_VAR_DP
-from model.variational_parameters.NIW_DP_VAR.NIW_DP_VAR_parameters.PHI_VAR_DP import PHI_VAR_DP
-from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR import NIW_MIX_VAR
-from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Lambda_VAR_MIX import Lambda_VAR_MIX
-from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Mu_VAR_MIX import Mu_VAR_MIX
-from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.Nu_VAR_MIX import Nu_VAR_MIX
-from model.variational_parameters.NIW_MIX_VAR.NIW_MIX_VAR_parameters.PHI_VAR_MIX import PHI_VAR_MIX
 from model.variational_parameters.variational_parameters import VariationalParameters
-from model.variational_parameters.a_k_beta import A_k_beta
-from model.variational_parameters.b_k_beta import B_k_beta
-from model.variational_parameters.eta_k import Eta_k
-from model.variational_parameters.phi_m_k import Phi_m_k
+
 
 def init_cavi_fake(hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters):
     M = hyperparameters_model.M

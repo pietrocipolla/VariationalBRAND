@@ -1,17 +1,5 @@
 from model.hyperparameters_model.NIW import NIW
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Lambda_0_DP import Lambda_0_DP
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Mu_0_DP import Mu_0_DP
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Nu_0_DP import Nu_0_DP
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.PHI_0_DP import PHI_0_DP
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0 import NIW_MIX_0
-from model.hyperparameters_model.a_dir_k import A_dir_k
-from model.hyperparameters_model.gamma import Gamma
 from model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0 import NIW_DP_0
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.Mu_0_MIX import Mu_0_MIX
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.Nu_0_MIX import Nu_0_MIX
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.Lambda_0_MIX import Lambda_0_MIX
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters.PHI_0_MIX import PHI_0_MIX
 from jax import numpy as jnp
 
 def set_hyperparameters_fake(mu_0_MIX, phi_0_MIX): #todo nel caso agigugnere check dimensioni array

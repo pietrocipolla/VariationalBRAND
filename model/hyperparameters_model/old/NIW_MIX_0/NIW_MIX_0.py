@@ -1,4 +1,4 @@
-from model.hyperparameters_model.NIW_MIX_0.NIW_MIX_0_parameters import Mu_0_MIX, Nu_0_MIX, Lambda_0_MIX, PHI_0_MIX
+from model.hyperparameters_model.old.NIW_MIX_0.NIW_MIX_0_parameters import Nu_0_MIX, Mu_0_MIX, Lambda_0_MIX, PHI_0_MIX
 
 
 class NIW_MIX_0:

@@ -1,5 +1,3 @@
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters import Lambda_0_DP, Nu_0_DP, PHI_0_DP
-from model.hyperparameters_model.NIW_DP_0.NIW_DP_0_parameters.Mu_0_DP import Mu_0_DP
 from jax import numpy as jnp
 
 class NIW:
