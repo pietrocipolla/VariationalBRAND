@@ -20,6 +20,8 @@ def init_cavi_fake(hyperparameters_model: HyperparametersModel, variational_para
 
     variational_parameters.phi_m_k = phi_m_k_temp
 
+    variational_parameters.nIW_MIX_VAR.
+
     variational_parameters.eta_k = hyperparameters_model.a_dir_k
 
     variational_parameters.a_k_beta = jnp.ones(T-1)
@@ -28,10 +30,10 @@ def init_cavi_fake(hyperparameters_model: HyperparametersModel, variational_para
 
     variational_parameters.nIW_MIX_VAR = hyperparameters_model.nIW_MIX_0
 
-    variational_parameters.nIW_DP_VAR = NIW(mu_0=jnp.repeat(hyperparameters_model.nIW_DP_0.mu_0_DP, repeats = T, axis=0),
-                                            nu_0=jnp.multiply(jnp.ones(T),hyperparameters_model.nIW_DP_0.nu_0_DP),
-                                            lambda_0=jnp.multiply(jnp.ones(T), hyperparameters_model.nIW_DP_0.lambda_0_DP),
-                                            phi_0 = jnp.repeat(hyperparameters_model.nIW_DP_0.phi_0_dp, repeats = T, axis=0))
+    variational_parameters.nIW_DP_VAR = NIW(mu=jnp.repeat(hyperparameters_model.nIW_DP_0.mu_0_DP, repeats = T, axis=0),
+                                            nu=jnp.multiply(jnp.ones(T), hyperparameters_model.nIW_DP_0.nu_0_DP),
+                                            lambdA=jnp.multiply(jnp.ones(T), hyperparameters_model.nIW_DP_0.lambda_0_DP),
+                                            phi= jnp.repeat(hyperparameters_model.nIW_DP_0.phi_0_dp, repeats = T, axis=0))
     #todo check se output in ndarray da probemi (cfr funzione jnp.repeat)
 
 

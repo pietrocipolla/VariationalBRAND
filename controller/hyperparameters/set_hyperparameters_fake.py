@@ -13,18 +13,18 @@ def set_hyperparameters_fake(mu_0_MIX, phi_0_MIX): #todo nel caso agigugnere che
         # J = num_classes_learning
 
         nIW_DP_0 = NIW(
-            mu_0 = jnp.ones(2)[None, :], #così che sia comunque della forma n_elems x p
-            nu_0 = jnp.array([2]),
-            lambda_0 = jnp.array([1]),
-            phi_0 = jnp.identity(2)[None,:]
+            mu=jnp.ones(2)[None, :], #così che sia comunque della forma n_elems x p
+            nu= jnp.array([2]),
+            lambdA= jnp.array([1]),
+            phi=jnp.identity(2)[None, :]
             # vettore (p) componenti, con p = 2
         ),
 
         nIW_MIX_0 = NIW(
-            mu_0 = mu_0_MIX,
-            nu_0 =  jnp.multiply(jnp.ones(3), 2),
-            lambda_0= jnp.ones(3),
-            phi_0 = phi_0_MIX, #varianza #todo check coerenza robust estimaros
+            mu= mu_0_MIX,
+            nu=  jnp.multiply(jnp.ones(3), 2),
+            lambdA= jnp.ones(3),
+            phi= phi_0_MIX, #varianza #todo check coerenza robust estimaros
         ) #TODO trovare inizializzazione più furba
 
     )

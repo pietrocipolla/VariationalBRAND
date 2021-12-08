@@ -9,7 +9,7 @@ import jax.scipy.special.gamma as jgamma
 
 
 
-def update_parameters(data, hyperparameters, variational_parameters):
+def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
     #update parameters
     J = hyperparameters.J
     sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=-1)
@@ -42,13 +42,15 @@ def update_parameters(data, hyperparameters, variational_parameters):
 # Scrivo qua in caso poi organizziamo meglio i file
 
 ############# UPDATE DIRICHLET ##############à
-def update_dirichlet(variational_parameters, hyperparameters, sum_phi_k):
+def update_dirichlet(variational_parameters : VariationalParameters, hyperparameters, sum_phi_k):
     J = hyperparameters.J
     temporary_phi_k = jnp.zeros(J+1)
     temporary_phi_k[0:-1] = sum_phi_k[:J]
     temporary_phi_k[-1] = jnp.sum(sum_phi_k[J:])
 
-    variational_parameters.eta_k = hyperparameters.a_dir_k + temporary_phi_k
+    variational_parameters.nIW_MIX_VAR. eta_k = hyperparameters.a_dir_k + temporary_phi_k
+
+    variational_parameters.nIW_MIX_VAR.
 
 
 ############# UPDATE BETA ##############
@@ -133,7 +135,7 @@ def update_NIW_MIX_lambda(variational_parameters,hyperparameters, sum_phi_k):
     lambda0 = jnp.concatenate((lambda0_MIX, lambda0_DP_vec))  # J+T_true
 
 # NON cambio ora i nomi ma forse meglio non chiamare con 0 i parametri variazionali (eg lambda_0_mix o mu_0_mix)
-    variational_parameters.nIW_MIX_VAR.lambda_0_MIX = (lambda0 + sum_phi_k)[:J]
+    variational_parameters.nIW_MIX_VAR lambda_0_MIX = (lambda0 + sum_phi_k)[:J]
     variational_parameters.nIW_DP_VAR.lambda_VAR_DP = (lambda0 + sum_phi_k)[J:]
 
 
