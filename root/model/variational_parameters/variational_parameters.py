@@ -1,10 +1,10 @@
 from jax import numpy as jnp
 
-from model.hyperparameters_model import NIW
+from root.model.hyperparameters_model import NIW
 
 
 class VariationalParameters:
-    def __init__(self,  phi_m_k: jnp.array,  eta_k: jnp.array, a_k_beta: jnp.array, b_k_beta: jnp.array,
+    def __init__(self, phi_m_k: jnp.array, eta_k: jnp.array, a_k_beta: jnp.array, b_k_beta: jnp.array,
                  nIW_DP_VAR : NIW, nIW_MIX_VAR : NIW):
         self.phi_m_k = phi_m_k
         self.eta_k = eta_k

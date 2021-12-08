@@ -1,5 +1,5 @@
 import numpy as np
-from controller.cavi.init_cavi import get_fi_novelty
+from controller.cavi import get_fi_novelty
 
 
 def set_hyperparameters_old(num_classes, num_classes_learning, num_classes_test, robust_mean, n_samples):
