@@ -14,7 +14,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     J = hyperparameters.J
     sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=-1)
 
-    mask = create_mask(sum_phi_k)
+    mask = create_mask(sum_phi_k, J)
     sum_phi_k = sum_phi_k[mask]
     T_true = len(sum_phi_k) - J
 
@@ -26,6 +26,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     # NIW_mu_nu_lamda_Phi_mixture
     # NIW_mu_nu_lamda_Phi_DP
     # Multinomial_phi
+
 
 
     # Con una struttura di aggiornamento del genere conviene che i parametri vengano modificati con puntatori
@@ -48,14 +49,14 @@ def update_dirichlet(variational_parameters : VariationalParameters, hyperparame
     temporary_phi_k[0:-1] = sum_phi_k[:J]
     temporary_phi_k[-1] = jnp.sum(sum_phi_k[J:])
 
-    variational_parameters.nIW_MIX_VAR. eta_k = hyperparameters.a_dir_k + temporary_phi_k
+    variational_parameters.eta_k = hyperparameters.a_dir_k + temporary_phi_k
 
-    variational_parameters.nIW_MIX_VAR.
 
 
 ############# UPDATE BETA ##############
 def update_beta(variational_parameters : VariationalParameters, hyperparameters : HyperparametersModel, sum_phi_k):
     J = hyperparameters.J
+    T = hyperparameters.T
 
     remaining_probs = jnp.cumsum(jnp.flip(sum_phi_k[J:]))
 
@@ -68,10 +69,9 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
 ###############################################################
 
 ############# UPDATE NIW ##############à
-def update_NIW(y, variational_parameters, hyperparameters, sum_phi_k,mask,T_true):
+def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel, sum_phi_k,mask,T_true):
     J = hyperparameters.J
     phi_mk = variational_parameters.phi_m_k
-
 
 
     # supponendo y Mxp
@@ -83,7 +83,7 @@ def update_NIW(y, variational_parameters, hyperparameters, sum_phi_k,mask,T_true
     update_NIW_MIX_nu(variational_parameters, hyperparameters, sum_phi_k)
     update_NIW_MIX_PHI(variational_parameters, hyperparameters, sum_phi_k, y_bar, y, phi_mk)
 
-def create_mask(sum_phi_k):
+def create_mask(sum_phi_k,J):
     mask = (sum_phi_k != 0)
     mask[0:J] = True
     return mask
@@ -94,9 +94,9 @@ def eval_y_bar(sum_phi_k, sum_y_phi):
     return y_bar
 
 
-def update_NIW_MIX_mu(variational_parameters, hyperparameters, sum_y_phi, sum_phi_k, T_true):
+def update_NIW_MIX_mu(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, sum_y_phi, sum_phi_k, T_true):
     # Estrazione parametri
-    J = hyperparameters.J
+    J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambda_0_DP
     lambda0_MIX = hyperparameters_model.nIW_MIX_0.lambda_0_MIX
     mu0_DP = hyperparameters_model.nIW_DP_0.mu_0_DP             # px1
@@ -119,12 +119,12 @@ def update_NIW_MIX_mu(variational_parameters, hyperparameters, sum_y_phi, sum_ph
     den = lambda0 + sum_phi_k
     mu_k = num/den                                                          # px(J+T_true)
 
-    variational_parameters.nIW_MIX_VAR.mu_0_MIX = mu_k[:J,:].T
-    variational_parameters.nIW_DP_VAR.mu_VAR_DP = mu_k[J:,:].T
+    variational_parameters.nIW_MIX_VAR.mu = mu_k[:J,:].T
+    variational_parameters.nIW_DP_VAR.mu = mu_k[J:,:].T
 
 
-def update_NIW_MIX_lambda(variational_parameters,hyperparameters, sum_phi_k):
-    J = hyperparameters.J
+def update_NIW_MIX_lambda(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, sum_phi_k):
+    J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambda_0_DP
     lambda0_MIX = hyperparameters_model.nIW_MIX_0.lambda_0_MIX
 
@@ -135,12 +135,12 @@ def update_NIW_MIX_lambda(variational_parameters,hyperparameters, sum_phi_k):
     lambda0 = jnp.concatenate((lambda0_MIX, lambda0_DP_vec))  # J+T_true
 
 # NON cambio ora i nomi ma forse meglio non chiamare con 0 i parametri variazionali (eg lambda_0_mix o mu_0_mix)
-    variational_parameters.nIW_MIX_VAR lambda_0_MIX = (lambda0 + sum_phi_k)[:J]
-    variational_parameters.nIW_DP_VAR.lambda_VAR_DP = (lambda0 + sum_phi_k)[J:]
+    variational_parameters.nIW_MIX_VAR.labmdA= (lambda0 + sum_phi_k)[:J]
+    variational_parameters.nIW_DP_VAR.lambdA = (lambda0 + sum_phi_k)[J:]
 
 
-def update_NIW_MIX_nu(variational_parameters,hyperparameters, sum_phi_k):
-    J = hyperparameters.J
+def update_NIW_MIX_nu(variational_parameters: VariationalParameters,hyperparameters_model: HyperparametersModel, sum_phi_k):
+    J = hyperparameters_model.J
     nu0_DP = hyperparameters_model.nIW_DP_0.nu_0_DP
     nu0_MIX = hyperparameters_model.nIW_MIX_0.nu_0_MIX
 
@@ -150,12 +150,12 @@ def update_NIW_MIX_nu(variational_parameters,hyperparameters, sum_phi_k):
     nu0_DP_vec = nu0_DP * one_vec  # T_true
     nu0 = jnp.concatenate((nu0_MIX, nu0_DP_vec))  # J+T_true
 
-    variational_parameters.nIW_MIX_VAR.nu_0_MIX = (nu0 + sum_phi_k)[:J]
-    variational_parameters.nIW_DP_VAR.nu_VAR_DP = (nu0 + sum_phi_k)[J:]
+    variational_parameters.nIW_MIX_VAR.nu = (nu0 + sum_phi_k)[:J]
+    variational_parameters.nIW_DP_VAR.nu = (nu0 + sum_phi_k)[J:]
 
 # modified untill here
 
-def update_NIW_MIX_PHI(variational_parameters,hyperparameters, sum_phi_k, y_bar,y, phi_mk):
+def update_NIW_MIX_PHI(variational_parameters: VariationalParameters,hyperparameters: HyperparametersModel, sum_phi_k, y_bar,y, phi_mk):
 
     PHI0 = hyperparameters.nIW_MIX_0.phi_0_MIX
     J = hyperparameters.J
@@ -179,5 +179,5 @@ def update_NIW_MIX_PHI(variational_parameters,hyperparameters, sum_phi_k, y_bar,
         coeff = lambda0[k]*sum_phi_k[k]/(lambda0[k]+sum_phi_k[k])
         comp_3[k, :, :] = coeff*diff_matrix
 
-    variational_parameters.nIW_MIX_VAR.phi_0_MIX = PHI0 + comp_2 + comp_3
+    variational_parameters.nIW_MIX_VAR.phi = PHI0 + comp_2 + comp_3
 

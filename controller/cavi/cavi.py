@@ -5,7 +5,7 @@ from model.variational_parameters.variational_parameters import VariationalParam
 
 #Nota: aggiungere input dati qua dentro
 def cavi(data, hyperparameters_model : HyperparametersModel, n_iter):
-    variational_parameters : VariationalParameters = init_cavi_fake(hyperparameters_model)
+    variational_parameters: VariationalParameters = init_cavi_fake(hyperparameters_model)
     elbo_values = []
 
     for i in n_iter:
