@@ -18,6 +18,8 @@ if __name__ == '__main__':
     #print(robust_covariance, robust_mean)
     #ritorna vettore di covaraince e mean per ogni cluster training set
 
+
+
     # HYPERPARAMETERS
     ask_hyperparameters_from_user_input = False
 

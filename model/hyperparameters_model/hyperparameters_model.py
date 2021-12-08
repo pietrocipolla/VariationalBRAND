@@ -15,5 +15,7 @@ class HyperparametersModel:
         self.J = J
         #Numero di classi massime nel Dirichlet Process
         self.T = T
+        # Numero totale di dati (size data frame ossia numero di righe)
+        self.M = M
 
 

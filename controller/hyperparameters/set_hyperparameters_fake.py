@@ -36,7 +36,7 @@ def set_hyperparameters_fake(mu_0_MIX, phi_0_MIX): #todo nel caso agigugnere che
             mu_0 = mu_0_MIX,
             nu_0 =  jnp.array([2, 2, 2]),
             lambda_0= jnp.ones(3),
-            phi_0 = phi_0_MIX, #varianza
+            phi_0 = phi_0_MIX, #varianza #todo check coerenza robust estimaros
         ) #TODO trovare inizializzazione più furba
 
     )
