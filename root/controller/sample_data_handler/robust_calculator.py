@@ -2,8 +2,11 @@
 #Load libraries
 #import numpy as np
 from jax import numpy as jnp
+from controller.sample_data_handler.data_generator import get_labels_cluster_kmeans
 
-def calculate_robust_parameters(X, labels, num_classes):
+
+def calculate_robust_parameters(X, num_classes):
+    labels = get_labels_cluster_kmeans(X, num_classes)
     list_inv_cov_mat = []
     list_robust_mean = []
     i = 0
