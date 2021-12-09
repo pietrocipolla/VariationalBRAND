@@ -7,12 +7,12 @@ from jax import numpy as jnp
 
 
 #Nota: aggiungere input dati qua dentro
-#To do: fissare p
 
-def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel, n_iter):
+
+def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel, n_iter, tol):
     variational_parameters = init_cavi(user_input_parameters)
     elbo_values = []
-    #p=?
+    p = data.shape[1]
 
     for i in range(n_iter):
         variational_parameters = update_parameters(data, hyperparameters_model, variational_parameters)
