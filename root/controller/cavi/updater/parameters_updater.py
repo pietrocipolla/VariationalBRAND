@@ -1,3 +1,4 @@
+from model import NIW
 from model.variational_parameters import VariationalParameters
 from model.hyperparameters_model import HyperparametersModel # non so se si faccia cosi
 # from cavi.utils import useful_functions
@@ -51,6 +52,7 @@ def update_dirichlet(variational_parameters : VariationalParameters, hyperparame
 
 
 
+
 ############# UPDATE BETA ##############
 def update_beta(variational_parameters : VariationalParameters, hyperparameters : HyperparametersModel, sum_phi_k):
     J = hyperparameters.J
@@ -70,7 +72,6 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
 def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel, sum_phi_k,mask,T_true):
     J = hyperparameters.J
     phi_mk = variational_parameters.phi_m_k
-
 
     # supponendo y Mxp
     sum_y_phi = y.T @ phi_mk[mask]                          # (Mxp)T*(M*(J+T_true)) = px(J+T_true)
@@ -121,7 +122,7 @@ def update_NIW_MIX_mu(variational_parameters: VariationalParameters , hyperparam
     variational_parameters.nIW_DP_VAR.mu = mu_k[J:,:].T
 
 
-def update_NIW_MIX_lambda(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, sum_phi_k):
+def update_NIW_MIX_lambda(variational_parameters: VariationalParameters, hyperparameters_model: HyperparametersModel, sum_phi_k):
     J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambda_0_DP
     lambda0_MIX = hyperparameters_model.nIW_MIX_0.lambda_0_MIX
@@ -133,7 +134,7 @@ def update_NIW_MIX_lambda(variational_parameters: VariationalParameters , hyperp
     lambda0 = jnp.concatenate((lambda0_MIX, lambda0_DP_vec))  # J+T_true
 
 # NON cambio ora i nomi ma forse meglio non chiamare con 0 i parametri variazionali (eg lambda_0_mix o mu_0_mix)
-    variational_parameters.nIW_MIX_VAR.labmdA= (lambda0 + sum_phi_k)[:J]
+    variational_parameters.nIW_MIX_VAR. labmdA= (lambda0 + sum_phi_k)[:J]
     variational_parameters.nIW_DP_VAR.lambdA = (lambda0 + sum_phi_k)[J:]
 
 

@@ -3,6 +3,13 @@ import numpy as np
 from model.user_input_model import UserInputModel
 
 def specify_user_input(robust_mean, robust_inv_cov_mat):
+    # Numero di classi nel training set
+    J = 3
+    # Numero di classi massime nel Dirichlet Process
+    T = 5
+    # Numero totale di dati (size data frame ossia numero di righe)
+    M = 500
+
     #HYPERPARAMETERS
     gamma = 5
     # gamma -> parametro dello Stick Breaking -> scalare
@@ -117,6 +124,13 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_VAR_MIX = copy.deepcopy(PHI_0_MIX)
 
     return UserInputModel(
+        # Numero di classi nel training set
+        J = J,
+        # Numero di classi massime nel Dirichlet Process
+        T = T,
+        # Numero totale di dati (size data frame ossia numero di righe)
+        M = M,
+
         gamma = gamma,
         a_dir_k = a_dir_k,
 

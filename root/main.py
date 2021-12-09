@@ -4,6 +4,7 @@ from controller.cavi.cavi import cavi
 from controller.sample_data_handler.utils import get_training_set_example
 from controller.user_input import specify_user_input
 from controller.hyperparameters.set_hyperparameters import set_hyperparameters
+from model.hyperparameters_model import HyperparametersModel
 
 if __name__ == '__main__':
     #STEP 1
@@ -21,7 +22,7 @@ if __name__ == '__main__':
     user_input_parameters = specify_user_input(robust_mean, robust_inv_cov_mat)
 
     #the rest of the code is automatic
-    hyperparameters_model = set_hyperparameters(user_input_parameters)
+    hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters)
 
     # CAVI (init + update + elbo)
     n_iter = 1000

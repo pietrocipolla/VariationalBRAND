@@ -8,5 +8,5 @@ class VariationalParameters:
         self.eta_k = eta_k
         self.a_k_beta = a_k_beta
         self.b_k_beta = b_k_beta
-        self.nIW_MIX_VAR = nIW_MIX_VAR
-        self.nIW_DP_VAR = nIW_DP_VAR
+        self.nIW_MIX_VAR : NIW = nIW_MIX_VAR
+        self.nIW_DP_VAR : NIW = nIW_DP_VAR

@@ -1,10 +1,15 @@
 class UserInputModel:
-    def __init__(self, gamma, a_dir_k,
+    def __init__(self, J,T,M,gamma, a_dir_k,
                  mu_0_DP,nu_0_DP,lambda_0_DP,PHI_0_DP,
                  mu_0_MIX,nu_0_MIX,lambda_0_MIX,PHI_0_MIX,
                  Phi_m_k,eta_k,a_k_beta,b_k_beta,
                  mu_var_DP,nu_var_DP,lambda_var_DP,PHI_var_DP,
                  mu_VAR_MIX,nu_VAR_MIX,lambda_VAR_MIX,PHI_VAR_MIX):
+
+        self.J = J
+        self.T = T
+        self.M = M
+
         self.gamma = gamma
         self.a_dir_k = a_dir_k
 
