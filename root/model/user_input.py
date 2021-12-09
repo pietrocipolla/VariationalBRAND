@@ -1,4 +1,4 @@
-class UserInput:
+class UserInputModel:
     def __init__(self, gamma, a_dir_k,
                  mu_0_DP,nu_0_DP,lambda_0_DP,PHI_0_DP,
                  mu_0_MIX,nu_0_MIX,lambda_0_MIX,PHI_0_MIX,

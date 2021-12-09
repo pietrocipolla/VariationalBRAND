@@ -1,9 +1,9 @@
-from model.user_input import UserInput
+from model.user_input import UserInputModel
 from root.model.hyperparameters_model.NIW import NIW
 from root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
 from jax import numpy as jnp
 
-def set_hyperparameters(user_input_parameters: UserInput):
+def set_hyperparameters(user_input_parameters: UserInputModel):
     return HyperparametersModel(
         gamma=user_input_parameters.gamma,
 

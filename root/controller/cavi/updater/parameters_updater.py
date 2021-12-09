@@ -7,7 +7,6 @@ from jax import numpy as jnp
 # QUI HO COPIATO E INCOLLATO
 
 
-
 def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
     #update parameters
     J = hyperparameters.J

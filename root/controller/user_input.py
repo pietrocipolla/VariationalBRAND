@@ -1,6 +1,6 @@
 import copy
 import numpy as np
-from model.user_input import UserInput
+from model.user_input import UserInputModel
 
 def specify_user_input(robust_mean, robust_inv_cov_mat):
     #HYPERPARAMETERS
@@ -116,7 +116,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     PHI_VAR_MIX = copy.deepcopy(PHI_0_MIX)
 
-    return UserInput(
+    return UserInputModel(
         gamma = gamma,
         a_dir_k = a_dir_k,
 

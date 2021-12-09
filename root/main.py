@@ -10,16 +10,17 @@ if __name__ == '__main__':
     #modify generate_some_data to create your own data
     Y = generate_some_data()
 
-    #modify and pick a subset of Y for calculating robust parameters
+    #modify and pick a subset of Y for calculating robust parameters on Y_training
     Y_training, num_classes_training = get_training_set(Y)
 
-    #calculate robust parameters from y_training and num of training classes
+    #automatic robust parameters from y_training and num of training classes
     robust_mean, robust_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
 
     # STEP 2
     #modify specify_user_input to change hyperparameters to match your data
     user_input_parameters = specify_user_input(robust_mean, robust_inv_cov_mat)
 
+    #the rest of the code is automatic
     hyperparameters_model = set_hyperparameters(user_input_parameters)
 
     # CAVI (init + update + elbo)
