@@ -94,7 +94,7 @@ def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameter
     J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambda_0_DP
     lambda0_MIX = hyperparameters_model.nIW_MIX_0.lambda_0_MIX
-    mu0_DP = hyperparameters_model.nIW_DP_0.mu_0_DP.T           # px1
+    mu0_DP = hyperparameters_model.nIW_DP_0.mu_0_DP.T           # pxT
     mu0_MIX = hyperparameters_model.nIW_MIX_0.mu_0_MIX.T        # pxJ
 
     # vettore di uni di supporto per le operazioni matriciali
@@ -139,11 +139,11 @@ def update_NIW_nu(variational_parameters: VariationalParameters,hyperparameters_
     nu0_DP = hyperparameters_model.nIW_DP_0.nu_0_DP
     nu0_MIX = hyperparameters_model.nIW_MIX_0.nu_0_MIX
 
-    one_vec = jnp.ones((1, T_true))
+    #one_vec = jnp.ones((1, T_true))
 
-    # LAMBDA
-    nu0_DP_vec = nu0_DP * one_vec  # T_true
-    nu0 = jnp.concatenate((nu0_MIX, nu0_DP_vec))  # J+T_true
+    # NU
+    #nu0_DP_vec = nu0_DP * one_vec  # T_true
+    nu0 = jnp.concatenate((nu0_MIX, nu0_DP))  # J+T_true
 
     variational_parameters.nIW_MIX_VAR.nu = (nu0 + sum_phi_k)[:J]
     variational_parameters.nIW_DP_VAR.nu = (nu0 + sum_phi_k)[J:]
@@ -161,11 +161,7 @@ def update_NIW_MIX_PHI(variational_parameters: VariationalParameters,hyperparame
     PHI0_DP = hyperparameters.nIW_DP_0.phi              # 1xpxp
     PHI0_MIX = hyperparameters.nIW_MIX_0.phi            # Jxpxp
 
-    one_vec = jnp.ones((1, T_true))
-    # Expand hyperparameters
-    # LAMBDA
-    nu0_DP_vec = nu0_DP * one_vec  # T_true
-
+    y_bar_matrix = jnp.repeat(y_bar[:, jnp.newaxis, :], M, axis=1)
     mu0 = jnp.concatenate((mu0_MIX, mu0))  # J+T_true
 
 
