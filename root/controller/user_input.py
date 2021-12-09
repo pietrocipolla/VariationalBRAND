@@ -5,7 +5,7 @@ import numpy as np
 from model.user_input import UserInput
 
 
-def user_input(robust_mean, robust_inv_cov_mat):
+def define_user_input(robust_mean, robust_inv_cov_mat):
 
     #HYPERPARAMETERS
     gamma = 5
