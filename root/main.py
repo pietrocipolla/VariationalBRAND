@@ -27,4 +27,4 @@ if __name__ == '__main__':
 
     # CAVI (init + update + elbo)
     n_iter = 1000
-    variational_parameters, elbo_values = cavi(Y, hyperparameters_model,user_input_parameters, n_iter)
+    variational_parameters, elbo_values = cavi(Y, hyperparameters_model, user_input_parameters, n_iter)
