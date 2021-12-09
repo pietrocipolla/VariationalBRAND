@@ -1,13 +1,12 @@
 from controller.cavi.init_cavi.init_cavi import init_cavi
-from controller.cavi.init_cavi.init_cavi_fake import init_cavi_fake
 from controller.cavi.updater.parameters_updater import update_parameters
+from model.user_input import UserInput
 from root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from root.model.variational_parameters.variational_parameters import VariationalParameters
 from jax import numpy as jnp
 
 #Nota: aggiungere input dati qua dentro
-def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel,variational_parameters : VariationalParameters, n_iter):
-    variational_parameters = init_cavi(hyperparameters_model)
+def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel,user_input_parameters: UserInput, n_iter):
+    variational_parameters = init_cavi(user_input_parameters)
     elbo_values = []
 
     for i in n_iter:

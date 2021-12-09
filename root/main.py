@@ -1,7 +1,7 @@
 from controller.sample_data_handler.sample_data_handler import generate_sample_data_and_robust_parameters
 from controller.cavi.cavi import cavi
 from controller.user_input import define_user_input
-from model.hyperparameters_model.set_hyperparameters import set_hyperparameters
+from controller.hyperparameters.set_hyperparameters import set_hyperparameters
 
 if __name__ == '__main__':
     #STEP 1
