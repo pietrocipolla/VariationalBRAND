@@ -4,7 +4,6 @@ from root.model.hyperparameters_model.hyperparameters_model import Hyperparamete
 from jax import numpy as jnp
 
 def set_hyperparameters(user_input_parameters: UserInput):
-
     return HyperparametersModel(
         #gamma=5,
         gamma=user_input_parameters.gamma,
