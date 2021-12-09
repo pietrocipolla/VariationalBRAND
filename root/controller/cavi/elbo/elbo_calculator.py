@@ -1,10 +1,23 @@
-import jax.numpy.log as jlog
-import jax.scipy.special.digamma as jdgamma
-import jax.scipy.special.gamma as jgamma
-from VariationalBRAND.root.controller.cavi.utils import useful_functions
-from VariationalBRAND.root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from VariationalBRAND.root.model.variational_parameters.variational_parameters import VariationalParameters
+#import jax.numpy.log as jlog
+#import jax.scipy.special.digamma as jdgamma
+#import jax.scipy.special.gamma as jgamma
+# from VariationalBRAND.root.controller.cavi.utils import useful_functions
+# from VariationalBRAND.root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
+# from VariationalBRAND.root.model.variational_parameters.variational_parameters import VariationalParameters
+
+import jax.numpy as jnp
+import jax.scipy as js
+from jax._src.numpy.linalg import jdet, jinv
+
+from jax.numpy import log as jlog
+from jax._src.scipy.special import jdigamma as jdgamma
+from jax.scipy.stats.gamma import pdf as jgamma
+
 from jax import numpy as jnp
+
+from controller.cavi.utils import useful_functions
+from model.hyperparameters_model import HyperparametersModel
+from model.variational_parameters import VariationalParameters
 
 
 def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalParameters, p):
@@ -33,7 +46,7 @@ def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalPara
 
     mu_dp=nIW_DP_VAR.mu
     nu_dp=nIW_DP_VAR.nu
-    lam_dp=nIW_DP_VAR.lamdA
+    lam_dp=nIW_DP_VAR.lambdA
     psi_dp=nIW_DP_VAR.phi
 
 
@@ -46,7 +59,7 @@ def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalPara
         for k in range(1,J+1):
             f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[k,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
         for k in range(J,J+T+1):
-            f2 += phi_m_k[m,h]*useful_functions.E_log_norm(data[k,:],mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
+            f2 += phi_m_k[m,k]*useful_functions.E_log_norm(data[k,:],mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
 
     #f3 e f4
@@ -116,10 +129,10 @@ def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalPara
     #h4 e h5
     h4=0
     for k in range(1,J+1):
-        h4 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],phi_mix[k,:,:],p)
+        h4 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
     h5 = 0
     for k in range(1, J+1):
-        h5 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],phi_dp[k,:,:],p)
+        h5 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
     E_log_q= h1+h2+h3+h4+h5
 

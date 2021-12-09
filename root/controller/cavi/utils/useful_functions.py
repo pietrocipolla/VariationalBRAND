@@ -7,12 +7,19 @@ Original file is located at
     https://colab.research.google.com/drive/1ZvO4Den1OdMWEJ87yKss7z6MTYAIJhYk
 """
 
+# import jax.numpy as jnp
+# import jax.numpy.linalg.det as jdet
+# import jax.numpy.linalg.inv as jinv
+# import jax.scipy as js
+# import jax.scipy.special.digamma as jdigamma
+# import jax.scipy.special.gamma as jgamma
+
 import jax.numpy as jnp
-import jax.numpy.linalg.det as jdet
-import jax.numpy.linalg.inv as jinv
 import jax.scipy as js
-import jax.scipy.special.digamma as jdigamma
-import jax.scipy.special.gamma as jgamma
+from jax._src.numpy.linalg import jdet, jinv
+from jax._src.scipy.special import jdigamma
+from jax.scipy.stats.gamma import pdf as gamma
+from jax.scipy.stats.gamma import pdf as jgamma
 
 # val atteso log beta
 def E_log_beta(a,b):
