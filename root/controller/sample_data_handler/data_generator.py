@@ -1,6 +1,6 @@
 from jax import numpy as jnp
 
-def generate_some_data():
+def generate_some_data_example():
     #example : 5, 2d gaussians
     num_clusters = 5
     num_samples = 500

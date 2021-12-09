@@ -1,6 +1,6 @@
 import numpy as np
 
-def get_training_set(X):
+def get_training_set_example(X):
     # example get data from 3 of the 5 clusters
     num_classes_learning = 3
     labels = get_labels_cluster_kmeans(X, num_classes_learning)
