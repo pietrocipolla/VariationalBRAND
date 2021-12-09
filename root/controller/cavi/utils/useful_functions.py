@@ -51,3 +51,12 @@ def E_log_dens_beta(a,b):
     b = jnp.exp(jgamma(a)*jgamma(b)/jgamma(a+b))
     return (a-1)*E_log_beta(a,b) + (b-1)*E_log_beta(b,a) - jnp.log(b)
 
+#val atteso log normale dati
+def E_log_norm(data,mu,nu,lam,psi,p):
+    ret = -jnp.log(jdet(jinv(psi)))
+    for i in range(1,p+1):
+        ret = ret - jdigamma((nu-i+1)/2)
+    ret = ret+p/lam
+    ret = ret+ nu*jnp.dot(data-mu,jnp.dot(jinv(psi),data-mu))
+    ret = -0.5*ret
+    return ret
