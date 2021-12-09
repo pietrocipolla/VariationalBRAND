@@ -20,17 +20,17 @@ def E_log_beta(a,b):
     return jdigamma(a)-jdigamma(a+b)
 
 # val atteso log densità normal inverse wishart 
-def E_log_dens_norm_inv_wish(mu,nu,lambda,PHI,p): # this phi should be a psi
+def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
     # p dim of mu
-    ret = -jnp.log(jdet(jinv(PHI)))
+    ret = -jnp.log(jdet(jinv(psi)))
     for i in range(1,p+1):
         ret = ret - jdigamma((nu-i+1)/2)
-    ret = ret - jnp.log(lambda**p)
+    ret = ret - jnp.log(lam**p)
 
     em = jnp.exp(js.special.multigammaln(nu/2,p))
-    ret = ret + jnp.log((jdet(PHI)**(nu/2))/((2**(nu*p/2))*em))
+    ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
 
-    brut = p*jnp.log(2) + jnp.log(jdet(jinv(PHI)))
+    brut = p*jnp.log(2) + jnp.log(jdet(jinv(psi)))
     for k in range(1,p+1):
         brut = brut + jdigamma((nu-k+1)/2)
     
@@ -51,5 +51,3 @@ def E_log_dens_beta(a,b):
     b = jnp.exp(jgamma(a)*jgamma(b)/jgamma(a+b))
     return (a-1)*E_log_beta(a,b) + (b-1)*E_log_beta(b,a) - jnp.log(b)
 
-for i in range(1,6):
-    print(i)
