@@ -1,10 +1,7 @@
 from model.variational_parameters import VariationalParameters
 from model.hyperparameters_model import HyperparametersModel # non so se si faccia cosi
-# from cavi.utils import useful_functions
+from model import NIW
 from jax import numpy as jnp
-
-
-# QUI HO COPIATO E INCOLLATO
 
 
 def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
