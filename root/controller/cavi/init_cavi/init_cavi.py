@@ -1,7 +1,8 @@
-from model.user_input_model import UserInputModel
-from model.variational_parameters import VariationalParameters
 from jax import numpy as jnp
 from model.NIW import NIW
+from model.user_input_model import UserInputModel
+from model.variational_parameters import VariationalParameters
+
 
 def init_cavi(user_input_parameters : UserInputModel):
     return VariationalParameters(

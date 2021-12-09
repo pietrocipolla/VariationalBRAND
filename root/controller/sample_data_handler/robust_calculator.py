@@ -1,5 +1,6 @@
-from jax import numpy as jnp
 from controller.sample_data_handler.utils import get_labels_cluster_kmeans
+from jax import numpy as jnp
+
 
 def calculate_robust_parameters(X, num_classes):
     labels = get_labels_cluster_kmeans(X, num_classes)

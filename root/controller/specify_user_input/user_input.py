@@ -1,6 +1,8 @@
 import copy
+
 import numpy as np
 from model.user_input_model import UserInputModel
+
 
 def specify_user_input(robust_mean, robust_inv_cov_mat):
     # Numero di classi nel training set
@@ -56,11 +58,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
-    M = 500 #numero di dati
-    J = 3 #numero di clusters in training set
-    T = 5 #troncamento
-
-    phi_m_k_temp = np.zeros(M, J + T)
+    phi_m_k_temp = np.zeros((M, J + T))
 
     for m in range(M):
         for k in range(J):

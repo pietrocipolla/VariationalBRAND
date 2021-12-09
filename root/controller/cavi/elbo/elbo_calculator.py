@@ -1,10 +1,11 @@
-from VariationalBRAND.root.model.variational_parameters.variational_parameters import VariationalParameters
-from VariationalBRAND.root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from VariationalBRAND.root.controller.cavi.utils import useful_functions
-from jax import numpy as jnp
+import jax.numpy.log as jlog
 import jax.scipy.special.digamma as jdgamma
 import jax.scipy.special.gamma as jgamma
-import jax.numpy.log as jlog
+from VariationalBRAND.root.controller.cavi.utils import useful_functions
+from VariationalBRAND.root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
+from VariationalBRAND.root.model.variational_parameters.variational_parameters import VariationalParameters
+from jax import numpy as jnp
+
 
 def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalParameters, p):
     M=hyper.M

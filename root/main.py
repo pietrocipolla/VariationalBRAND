@@ -2,8 +2,8 @@ from controller.sample_data_handler.data_generator import generate_some_data_exa
 from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
 from controller.cavi.cavi import cavi
 from controller.sample_data_handler.utils import get_training_set_example
-from controller.user_input import specify_user_input
-from controller.hyperparameters.set_hyperparameters import set_hyperparameters
+from controller.specify_user_input.user_input import specify_user_input
+from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from model.hyperparameters_model import HyperparametersModel
 
 if __name__ == '__main__':
@@ -18,12 +18,11 @@ if __name__ == '__main__':
     robust_mean, robust_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
 
     # STEP 2
-    #modify specify_user_input to change hyperparameters to match your data
+    #modify specify_user_input to change hyperparameters_setter to match your data
     user_input_parameters = specify_user_input(robust_mean, robust_inv_cov_mat)
 
     #the rest of the code is automatic
     hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters)
-    hyperparameters_model.nIW_DP_0.
 
     # CAVI (init + update + elbo)
     n_iter = 1000

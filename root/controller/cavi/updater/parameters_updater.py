@@ -1,9 +1,8 @@
-from model.variational_parameters import VariationalParameters
-from model.hyperparameters_model import HyperparametersModel # non so se si faccia cosi
-from model import NIW
-from jax import numpy as jnp
-import jax.scipy.linalg.det as jdet
 import jax.numpy.linalg.inv as jinv
+import jax.scipy.linalg.det as jdet
+from jax import numpy as jnp
+from model.hyperparameters_model import HyperparametersModel  # non so se si faccia cosi
+from model.variational_parameters import VariationalParameters
 
 
 def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):

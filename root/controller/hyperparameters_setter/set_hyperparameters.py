@@ -1,7 +1,9 @@
-from model.user_input_model import UserInputModel
+from jax import numpy as jnp
 from model.NIW import NIW
 from model.hyperparameters_model import HyperparametersModel
-from jax import numpy as jnp
+from model.user_input_model import UserInputModel
+#convert numpy array to jax array https://github.com/google/jax/issues/1961
+#jax_array = jnp.array(numpy_array)
 
 def set_hyperparameters(user_input_parameters: UserInputModel):
     return HyperparametersModel(

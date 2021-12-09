@@ -1,9 +1,9 @@
+from controller.cavi.elbo.elbo_calculator import elbo_calculator
 from controller.cavi.init_cavi.init_cavi import init_cavi
 from controller.cavi.updater.parameters_updater import update_parameters
-from controller.cavi.elbo.elbo_calculator import elbo_calculator
-from model.user_input_model import UserInputModel
-from model.hyperparameters_model import HyperparametersModel
 from jax import numpy as jnp
+from model.hyperparameters_model import HyperparametersModel
+from model.user_input_model import UserInputModel
 
 
 #Nota: aggiungere input dati qua dentro
