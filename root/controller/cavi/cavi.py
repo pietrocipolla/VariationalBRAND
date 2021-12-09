@@ -1,7 +1,7 @@
 from controller.cavi.init_cavi.init_cavi import init_cavi
 from controller.cavi.updater.parameters_updater import update_parameters
-from model.user_input import UserInputModel
-from root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
+from model.user_input_model import UserInputModel
+from model.hyperparameters_model import HyperparametersModel
 from jax import numpy as jnp
 
 #Nota: aggiungere input dati qua dentro

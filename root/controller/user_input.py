@@ -1,6 +1,6 @@
 import copy
 import numpy as np
-from model.user_input import UserInputModel
+from model.user_input_model import UserInputModel
 
 def specify_user_input(robust_mean, robust_inv_cov_mat):
     #HYPERPARAMETERS

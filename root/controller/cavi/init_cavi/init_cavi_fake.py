@@ -1,8 +1,8 @@
 from jax import numpy as jnp
 
-from root.model.hyperparameters_model.NIW import NIW
-from root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-from root.model.variational_parameters.variational_parameters import VariationalParameters
+from model.NIW import NIW
+from model.hyperparameters_model import HyperparametersModel
+from model.variational_parameters import VariationalParameters
 
 
 def init_cavi_fake(hyperparameters_model: HyperparametersModel):
