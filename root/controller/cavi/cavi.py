@@ -9,7 +9,7 @@ from jax import numpy as jnp
 #Nota: aggiungere input dati qua dentro
 
 
-def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel, n_iter, tol):
+def cavi(data: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel, n_iter, tol=10e-6):
     variational_parameters = init_cavi(user_input_parameters)
     elbo_values = []
     p = data.shape[1]
