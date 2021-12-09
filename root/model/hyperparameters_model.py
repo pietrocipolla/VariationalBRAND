@@ -1,4 +1,4 @@
-from model import NIW
+from model.NIW import NIW
 from jax import numpy as jnp
 
 class HyperparametersModel:

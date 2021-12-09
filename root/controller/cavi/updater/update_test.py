@@ -1,3 +1,4 @@
+from model.NIW import NIW
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 

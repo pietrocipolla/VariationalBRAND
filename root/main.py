@@ -23,6 +23,7 @@ if __name__ == '__main__':
 
     #the rest of the code is automatic
     hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters)
+    hyperparameters_model.nIW_DP_0.
 
     # CAVI (init + update + elbo)
     n_iter = 1000
