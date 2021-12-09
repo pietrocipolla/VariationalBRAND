@@ -1,5 +1,5 @@
 from jax import numpy as jnp
-from model import NIW
+from model.NIW import NIW
 
 class VariationalParameters:
     def __init__(self, phi_m_k: jnp.array, eta_k: jnp.array, a_k_beta: jnp.array, b_k_beta: jnp.array,
@@ -8,5 +8,5 @@ class VariationalParameters:
         self.eta_k = eta_k
         self.a_k_beta = a_k_beta
         self.b_k_beta = b_k_beta
-        self.nIW_MIX_VAR = nIW_MIX_VAR
-        self.nIW_DP_VAR = nIW_DP_VAR
+        self.nIW_MIX_VAR : NIW = nIW_MIX_VAR
+        self.nIW_DP_VAR : NIW = nIW_DP_VAR
