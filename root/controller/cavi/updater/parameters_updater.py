@@ -1,7 +1,7 @@
-import jax.numpy.linalg.inv as jinv
-import jax.scipy.linalg.det as jdet
+from jax._src.numpy.linalg import jdet, jinv
+from jax._src.scipy.special import jdigamma as digamma
 from jax import numpy as jnp
-from model.hyperparameters_model import HyperparametersModel  # non so se si faccia cosi
+from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
 
@@ -86,8 +86,8 @@ def update_NIW(y, variational_parameters : VariationalParameters, hyperparameter
 
     update_NIW_mu(variational_parameters, hyperparameters, sum_y_phi, sum_phi_k, T_true)
     update_NIW_lambda(variational_parameters, hyperparameters, sum_phi_k, T_true)
-    update_NIW_nu(variational_parameters, hyperparameters, sum_phi_k)
-    update_NIW_MIX_PHI(variational_parameters, hyperparameters, sum_phi_k, y_bar, y, phi_mk)
+    update_NIW_nu(variational_parameters, hyperparameters, sum_phi_k, T_true)
+    update_NIW_PHI(variational_parameters, hyperparameters, sum_phi_k, y_bar, y, phi_mk)
 
 
 def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, sum_y_phi, sum_phi_k, T_true):
