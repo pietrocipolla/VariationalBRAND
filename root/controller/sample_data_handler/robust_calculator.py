@@ -1,9 +1,5 @@
-#https://towardsdatascience.com/detecting-and-treating-outliers-in-python-part-2-3a3319ec2c33
-#Load libraries
-#import numpy as np
 from jax import numpy as jnp
-from controller.sample_data_handler.data_generator import get_labels_cluster_kmeans
-
+from controller.sample_data_handler.utils import get_labels_cluster_kmeans
 
 def calculate_robust_parameters(X, num_classes):
     labels = get_labels_cluster_kmeans(X, num_classes)

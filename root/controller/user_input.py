@@ -2,7 +2,7 @@ import copy
 import numpy as np
 from model.user_input import UserInput
 
-def define_user_input(robust_mean, robust_inv_cov_mat):
+def specify_user_input(robust_mean, robust_inv_cov_mat):
     #HYPERPARAMETERS
     gamma = 5
     # gamma -> parametro dello Stick Breaking -> scalare

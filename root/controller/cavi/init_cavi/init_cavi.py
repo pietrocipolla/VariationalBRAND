@@ -17,7 +17,6 @@ def init_cavi(user_input_parameters : UserInput):
             phi = jnp.array(user_input_parameters.PHI_var_DP)
         ),
 
-        # nIW_MIX_VAR=hyperparameters_model.nIW_MIX_0,
         nIW_MIX_VAR = NIW(
             mu=user_input_parameters.mu_VAR_MIX,
             nu=user_input_parameters.nu_VAR_MIX,
