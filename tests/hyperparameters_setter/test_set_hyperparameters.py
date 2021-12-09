@@ -1,5 +1,5 @@
 from unittest import TestCase
-
+from jax import numpy as jnp
 from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from controller.sample_data_handler.data_generator import generate_some_data_example
 from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
@@ -29,5 +29,5 @@ class Test(TestCase):
         self.assertEqual(hyperparameters_model.nIW_DP_0.phi[0].shape, user_input_parameters.PHI_0_DP[0].shape)
         self.assertEqual(len(hyperparameters_model.nIW_DP_0.phi), len(user_input_parameters.PHI_0_DP))
 
-        #print(user_input_parameters.mu_0_DP[0].shape)
+        self.assertEqual(type(hyperparameters_model.nIW_DP_0.mu), type(jnp.array([])))
 

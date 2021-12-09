@@ -6,4 +6,5 @@ class Test(TestCase):
     def test_generate_some_data_example(self):
         X = generate_some_data_example()
         # print(X.shape)
+        #print(X.shape[1])
         self.assertEqual(X.shape, (500, 2))

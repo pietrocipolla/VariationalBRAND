@@ -6,8 +6,8 @@ from model.variational_parameters import VariationalParameters
 
 def init_cavi(user_input_parameters : UserInputModel):
     return VariationalParameters(
-        phi_m_k = user_input_parameters.Phi_m_k,
-        eta_k=user_input_parameters.eta_k,
+        phi_m_k = jnp.array(user_input_parameters.Phi_m_k),
+        eta_k = jnp.array(user_input_parameters.eta_k),
         a_k_beta = jnp.array(user_input_parameters.a_k_beta),
         b_k_beta = jnp.array(user_input_parameters.b_k_beta),
 
@@ -19,10 +19,10 @@ def init_cavi(user_input_parameters : UserInputModel):
         ),
 
         nIW_MIX_VAR = NIW(
-            mu=user_input_parameters.mu_VAR_MIX,
-            nu=user_input_parameters.nu_VAR_MIX,
-            lambdA=user_input_parameters.lambda_VAR_MIX,
-            phi=user_input_parameters.PHI_VAR_MIX,
+            mu=jnp.array(user_input_parameters.mu_VAR_MIX),
+            nu=jnp.array(user_input_parameters.nu_VAR_MIX),
+            lambdA=jnp.array(user_input_parameters.lambda_VAR_MIX),
+            phi=jnp.array(user_input_parameters.PHI_VAR_MIX),
         )
 
     )

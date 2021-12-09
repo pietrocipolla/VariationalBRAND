@@ -12,6 +12,10 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # Numero totale di dati (size data frame ossia numero di righe)
     M = 500
 
+    # Num iteration and tolerancecavi
+    n_iter = 1000
+    tol = 10e-6
+
     #HYPERPARAMETERS
     gamma = 5
     # gamma -> parametro dello Stick Breaking -> scalare
@@ -122,12 +126,12 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_VAR_MIX = copy.deepcopy(PHI_0_MIX)
 
     return UserInputModel(
-        # Numero di classi nel training set
         J = J,
-        # Numero di classi massime nel Dirichlet Process
         T = T,
-        # Numero totale di dati (size data frame ossia numero di righe)
         M = M,
+
+        n_iter = n_iter,
+        tol = tol,
 
         gamma = gamma,
         a_dir_k = a_dir_k,
