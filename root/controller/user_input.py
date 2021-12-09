@@ -46,7 +46,7 @@ def define_user_input(robust_mean, robust_inv_cov_mat):
 
     lambda_0_MIX = np.ones(3)
 
-    PHI_0_MIX = robust_inv_cov_mat
+    PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
     M = 500 #numero di dati
