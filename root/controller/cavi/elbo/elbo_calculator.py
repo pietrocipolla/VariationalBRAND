@@ -20,7 +20,7 @@ from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
 
-def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalParameters, p):
+def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalParameters, p, psi_dp=None):
     M=hyper.M
     J=hyper.J
     T=hyper.T
@@ -88,7 +88,7 @@ def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalPara
     #f7
     f7=0
     for k in range(0,J+1):
-        f7 += (a_k_beta[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar))
+        f7 += (a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar))
 
     #f8
     f8 = 0
