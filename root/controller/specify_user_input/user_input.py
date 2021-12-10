@@ -37,7 +37,8 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     lambda_0_DP = np.array([1]),
 
-    PHI_0_DP = np.identity(2)[None, :]
+    PHI_0_DP = np.identity(2)
+
 
     #NIW_MIX_0
     # mu_0_MIX -> matrice (Jxp)
