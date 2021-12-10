@@ -57,9 +57,9 @@ def elbo_calculator(data,hyper: HyperparametersModel, var_param: VariationalPara
     f2=0
     for m in range(1,M+1):
         for k in range(1,J+1):
-            f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[k,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
+            f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
         for k in range(J,J+T+1):
-            f2 += phi_m_k[m,k]*useful_functions.E_log_norm(data[k,:],mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
+            f2 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
 
     #f3 e f4
