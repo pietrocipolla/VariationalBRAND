@@ -8,7 +8,7 @@ from model.user_input_model import UserInputModel
 def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel):
     n_iter = user_input_parameters.n_iter
     tol = user_input_parameters.tol
-    p = Y.shape[1] #number of data coordinates
+    p = hyperparameters_model.p
 
     variational_parameters = init_cavi(user_input_parameters)
     elbo_values = []

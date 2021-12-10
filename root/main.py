@@ -22,7 +22,7 @@ if __name__ == '__main__':
     user_input_parameters = specify_user_input(robust_mean, robust_inv_cov_mat)
 
     #the rest of the code is automatic
-    hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters)
+    hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
     # CAVI (init + update + elbo)
     variational_parameters, elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)

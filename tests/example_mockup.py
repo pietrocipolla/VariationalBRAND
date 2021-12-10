@@ -13,7 +13,10 @@ from jax import numpy as jnp
 
 class Test(TestCase):
     def test_init_cavi(self):
-        Y = generate_some_data_example()
+        from numpy import loadtxt
+        data = loadtxt('data.csv', delimiter=',')
+        Y = data
+
         Y_training, num_classes_training = get_training_set_example(Y)
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
