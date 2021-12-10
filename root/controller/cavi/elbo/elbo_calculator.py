@@ -55,35 +55,35 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #f1 e f2
     f1=0
     f2=0
-    for m in range(1,M+1):
-        for k in range(1,J+1):
+    for m in range(0,M):
+        for k in range(0,J):
             f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
-        for k in range(J,J+T+1):
+        for k in range(0,T):
             f2 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
 
     #f3 e f4
     f3=0
     f4=0
-    for k in range(1,J+1):
+    for k in range(0,J):
         f3 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
-    for k in range(J+1,J+T+1):
+    for k in range(0,T):
         f4 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
     #f5
     f5=0
-    for k in range(1,J+1):
-        for m in range(1,M+1):
+    for k in range(0,J):
+        for m in range(0,M):
             f5 += useful_functions.E_log_dens_dir(eta_k[k],J)*phi_m_k[m,k]
 
     #f6
     f6=0
-    for m in range(1,M+1):
-        for k in range(J+1,J+T+1):
+    for m in range(0,M):
+        for k in range(0,T-1):
             s=0
-            for h in range(1,k-J-1+1):
+            for h in range(0,k-J-1):
                 s=s+jdgamma(b_k_beta[h])-jdgamma(a_k_beta[h]+b_k_beta[h])
-            f6 += phi_m_k[m,k]*(jdgamma(eta_k[k])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s)
+            f6 += phi_m_k[m,k]*(jdgamma(eta_k[0])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s)
 
     #f7
     f7=0
@@ -92,7 +92,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
 
     #f8
     f8 = 0
-    for l in range(1,T+1):
+    for l in range(0,T-1):
         f7 += (gamma-1)*(jdgamma(b_k_beta[l])-jdgamma(a_k_beta[l]+b_k_beta[l]))
 
     E_log_p = f1+f2+f3+f4+f5+f6+f7+f8
@@ -101,12 +101,12 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
 
     #h1
     h1=0
-    for m in range(1,M+1):
-        s=0
-        for h in range(0,J+T+1):
-            s += phi_m_k[m,h]
-        for k in range(1,J+T+1):
-            h1 += phi_m_k[m,k]*jlog(phi_m_k[m,k])-jlog(s)
+    for m in range(0,M):
+        #s=0
+        #for h in range(0,J+T+1):
+        #    s += phi_m_k[m,h]
+        for k in range(0,J+T):
+            h1 += phi_m_k[m,k]*jlog(phi_m_k[m,k])#-jlog(s)
 
     #h2
     h2=0
@@ -121,17 +121,17 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
 
     #h3
     h3=0
-    for k in range(1,T+1):
+    for k in range(0,T-1):
         beta = (jgamma(a_k_beta[k]) * jgamma(b_k_beta[k]) / jgamma(a_k_beta[k] + b_k_beta[k]))
         h3 += (a_k_beta[k]-1)*(jdgamma(a_k_beta[k])-jdgamma(b_k_beta[k]+a_k_beta[k]))
         h3 += (b_k_beta[k]-1)*(jdgamma(b_k_beta[k])-jdgamma(a_k_beta[k]+b_k_beta[k]))-jlog(beta)
 
     #h4 e h5
     h4=0
-    for k in range(1,J+1):
+    for k in range(0,J):
         h4 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
     h5 = 0
-    for k in range(1, J+1):
+    for k in range(0, T):
         h5 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
 
     E_log_q= h1+h2+h3+h4+h5
