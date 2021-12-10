@@ -60,6 +60,8 @@ def E_log_dens_beta(a,b):
 
 #val atteso log normale dati
 def E_log_norm(data,mu,nu,lam,psi,p):
+    mu = jnp.reshape(mu, p)
+    data = jnp.reshape(data, p)
     ret = -jnp.log(jdet(jinv(psi)))
     for i in range(1,p+1):
         ret = ret - jdigamma((nu-i+1)/2)

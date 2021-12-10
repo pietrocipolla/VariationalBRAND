@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from controller.cavi.elbo.elbo_calculator import elbo_calculator
 from controller.cavi.init_cavi.init_cavi import init_cavi
-from controller.cavi.updater.parameters_updater import update_parameters
+from controller.cavi.updater.parameters_updater import update_parameters, create_mask
 from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from controller.sample_data_handler.data_generator import generate_some_data_example
 from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
@@ -20,8 +20,8 @@ class Test(TestCase):
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
-        hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters)
-        variational_parameters : VariationalParameters = init_cavi(user_input_parameters)
+        hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
+        variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
         update_parameters(Y, hyperparameters_model, variational_parameters)
 
@@ -31,3 +31,6 @@ class Test(TestCase):
         # self.assertEqual(type(variational_parameters.phi_m_k), type(jnp.array([])))
         #
         # self.assertEqual(variational_parameters.phi_m_k.shape, (500, 8))
+
+
+

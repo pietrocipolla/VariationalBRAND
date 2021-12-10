@@ -79,11 +79,11 @@ class Test(TestCase):
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
-        mu = hyperparameters_model.nIW_DP_0.mu
-        nu = hyperparameters_model.nIW_DP_0.nu
-        lam = hyperparameters_model.nIW_DP_0.lambdA
-        psi = hyperparameters_model.nIW_DP_0.phi
+        mu = hyperparameters_model.nIW_DP_0.mu[0]
+        nu = hyperparameters_model.nIW_DP_0.nu[0]
+        lam = hyperparameters_model.nIW_DP_0.lambdA[0]
+        psi = hyperparameters_model.nIW_DP_0.phi[0]
         p = hyperparameters_model.p
 
-        out = E_log_norm(data,mu,nu,lam,psi,p)
+        out = E_log_norm(data[0],mu,nu,lam,psi,p)
         print(out)

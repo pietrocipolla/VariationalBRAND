@@ -11,8 +11,8 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     J = hyperparameters.J
     sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=-1)
 
-    mask = create_mask(sum_phi_k, J)
-    sum_phi_k = sum_phi_k[mask]
+    #mask = create_mask(sum_phi_k, J)
+    #sum_phi_k = sum_phi_k[mask]
     T_true = len(sum_phi_k) - J
 
     # Define function for each family update:
@@ -21,7 +21,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     # Beta_V
     update_beta(variational_parameters, hyperparameters, sum_phi_k)
     # NIW_mu_nu_lamda_Phi
-    update_NIW(data, variational_parameters, hyperparameters, sum_phi_k, mask, T_true)
+    update_NIW(data, variational_parameters, hyperparameters, sum_phi_k, T_true)
     # Multinomial_phi
     update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J)
 
@@ -70,12 +70,11 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
 ###############################################################
 
 ############# UPDATE NIW ##############à
-def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel, sum_phi_k, mask, T_true):
+def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel, sum_phi_k, T_true):
     phi_mk = variational_parameters.phi_m_k
 
-
     # supponendo y Mxp
-    sum_y_phi = y.T @ phi_mk[mask]                          # (Mxp)T*(M*(J+T_true)) = px(J+T_true)
+    sum_y_phi = y.T @ phi_mk                         # (Mxp)T*(M*(J+T_true)) = px(J+T_true)
     y_bar = eval_y_bar(sum_phi_k, sum_y_phi)                # px(J+T_true)
 
     update_NIW_mu(variational_parameters, hyperparameters, sum_y_phi, sum_phi_k, T_true)
