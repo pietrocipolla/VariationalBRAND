@@ -4,6 +4,7 @@ from jax import numpy as jnp
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
+# Use jit and vectorization!
 
 def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
     #update parameters
@@ -22,14 +23,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     # NIW_mu_nu_lamda_Phi
     update_NIW(data, variational_parameters, hyperparameters, sum_phi_k, mask, T_true)
     # Multinomial_phi
-
-
-
-    # Con una struttura di aggiornamento del genere conviene che i parametri vengano modificati con puntatori
-    # per non copiare continuamente un oggetto sempre simile
-
-
-
+    update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J)
 
     #update jax array
     return variational_parameters
