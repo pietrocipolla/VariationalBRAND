@@ -23,9 +23,12 @@ class Test(TestCase):
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
+        #print(hyperparameters_model.nIW_DP_0.mu)
+        #print(hyperparameters_model.nIW_DP_0.mu.shape)
+
         update_parameters(Y, hyperparameters_model, variational_parameters)
 
-        print(variational_parameters)
+        #print(variational_parameters)
 
         # #check conversion to jnp array
         # self.assertEqual(type(variational_parameters.phi_m_k), type(jnp.array([])))
