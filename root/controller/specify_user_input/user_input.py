@@ -97,12 +97,24 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # -> PHI_var_DP[i,:,:] = Matrice PHI della (i+1)esima NIW della misturaDP
 
     mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0)
+    #print('mu_var_DP', mu_var_DP)
 
     nu_var_DP = np.multiply(np.ones(T), nu_0_DP)
+    nu_var_DP = np.reshape(nu_var_DP, T)
+    # print('nu_var_DP', nu_var_DP)
+    # print('nu_0_DP', nu_0_DP)
 
     lambda_var_DP = np.multiply(np.ones(T), lambda_0_DP)
+    lambda_var_DP = np.reshape(lambda_var_DP, T)
+    #print('lambda_var_DP', lambda_var_DP)
 
-    PHI_var_DP = np.repeat(copy.deepcopy(PHI_0_DP), repeats=T, axis=0)
+    p = 2
+    PHI_var_DP = np.repeat(copy.deepcopy(PHI_0_DP)[None,:], repeats = T, axis = 0)
+    PHI_var_DP = np.reshape(PHI_var_DP, (T, p, p))
+    #print('PHI_var_DP', PHI_var_DP)
+
+    # print('PHI_var_DP')
+    # print(PHI_var_DP)
 
     #NIW_MIX_VAR:
     # mu_VAR_MIX -> matrice (Jxp)

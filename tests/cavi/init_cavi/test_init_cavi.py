@@ -20,9 +20,12 @@ class Test(TestCase):
         #check conversion to jnp array
         self.assertEqual(type(variational_parameters.phi_m_k), type(jnp.array([])))
 
+        print(user_input_parameters.eta_k)
+
+        print(variational_parameters.eta_k)
+
         self.assertEqual(variational_parameters.phi_m_k.shape, (500, 8))
-        self.assertEqual(variational_parameters.eta_k[0].shape, (4,))
-        self.assertEqual(len(variational_parameters.eta_k), 1)
+        self.assertEqual(len(variational_parameters.eta_k), 4)
 
         self.assertEqual(len(variational_parameters.a_k_beta), 4)
         self.assertEqual(len(variational_parameters.b_k_beta), 4)

@@ -7,7 +7,7 @@ from model.variational_parameters import VariationalParameters
 def init_cavi(user_input_parameters : UserInputModel):
     return VariationalParameters(
         phi_m_k = jnp.array(user_input_parameters.Phi_m_k),
-        eta_k = jnp.array(user_input_parameters.eta_k),
+        eta_k = jnp.reshape(jnp.array(user_input_parameters.eta_k), user_input_parameters.J + 1),
         a_k_beta = jnp.array(user_input_parameters.a_k_beta),
         b_k_beta = jnp.array(user_input_parameters.b_k_beta),
 

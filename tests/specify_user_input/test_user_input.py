@@ -21,7 +21,7 @@ class Test(TestCase):
         self.assertEqual(user_input.M, 500)
 
         self.assertEqual(user_input.gamma, 5)
-        #print(user_input.eta_k)
+        print(user_input.eta_k)
         self.assertEqual([len(a) for a in user_input.eta_k], [4])
 
         #O_DP

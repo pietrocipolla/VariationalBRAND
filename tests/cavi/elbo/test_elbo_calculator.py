@@ -11,16 +11,19 @@ from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 from jax import numpy as jnp
 
+
 class Test(TestCase):
     def test_elbo_calculator(self):
-
-        Y = generate_some_data_example()
+        from numpy import loadtxt
+        data = loadtxt('data.csv', delimiter=',')
+        Y = data
         Y_training, num_classes_training = get_training_set_example(Y)
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
-        hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters)
+        hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
         result = elbo_calculator(Y, hyperparameters_model, variational_parameters, Y.shape[1])
         print(result)
+

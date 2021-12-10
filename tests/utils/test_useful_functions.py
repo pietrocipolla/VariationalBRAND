@@ -21,7 +21,6 @@ class Test(TestCase):
         self.assertEqual(result, -1.0833335)
 
 
-class Test(TestCase):
     def test_e_log_dens_norm_inv_wish(self):
         from numpy import loadtxt
         data = loadtxt('data.csv', delimiter=',')
@@ -44,7 +43,6 @@ class Test(TestCase):
         self.assertEqual(out, jnp.array([[0.895777]]))
 
 
-class Test(TestCase):
     def test_e_log_dens_dir(self):
         from numpy import loadtxt
         data = loadtxt('data.csv', delimiter=',')
@@ -67,7 +65,6 @@ class Test(TestCase):
         self.assertEqual(len(out), 4)
 
 
-class Test(TestCase):
     def test_e_log_norm(self):
         from numpy import loadtxt
         data = loadtxt('data.csv', delimiter=',')
@@ -79,11 +76,27 @@ class Test(TestCase):
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
-        mu = hyperparameters_model.nIW_DP_0.mu[0]
-        nu = hyperparameters_model.nIW_DP_0.nu[0]
-        lam = hyperparameters_model.nIW_DP_0.lambdA[0]
-        psi = hyperparameters_model.nIW_DP_0.phi[0]
+        mu = hyperparameters_model.nIW_DP_0.mu
+        nu = hyperparameters_model.nIW_DP_0.nu
+        lam = hyperparameters_model.nIW_DP_0.lambdA
+        psi = hyperparameters_model.nIW_DP_0.phi
         p = hyperparameters_model.p
+        data = Y[0]
 
-        out = E_log_norm(data[0],mu,nu,lam,psi,p)
-        print(out)
+        #print(psi)
+
+        out = E_log_norm(data,mu,nu,lam,psi,p)
+        #print(out)
+
+        mu = hyperparameters_model.nIW_MIX_0.mu[0]
+        nu = hyperparameters_model.nIW_MIX_0.nu[0]
+        lam = hyperparameters_model.nIW_MIX_0.lambdA[0]
+        psi = hyperparameters_model.nIW_MIX_0.phi[0]
+        p = hyperparameters_model.p
+        data = Y[0]
+
+        out2 = E_log_norm(data, mu, nu, lam, psi, p)
+        #print(out2)
+
+        #print(psi)
+
