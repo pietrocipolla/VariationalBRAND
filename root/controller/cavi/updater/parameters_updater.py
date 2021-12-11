@@ -72,8 +72,14 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
     remaining_probs = jnp.cumsum(jnp.flip(sum_phi_k[J:]))
     remaining_probs = jnp.flip(remaining_probs)
 
-    variational_parameters.a_k_beta = sum_phi_k[J:J+T] + 1
-    variational_parameters.b_k_beta = hyperparameters.gamma + remaining_probs
+    # print(variational_parameters.a_k_beta)
+    # print(variational_parameters.a_k_beta.shape)
+    #
+    # print(variational_parameters.b_k_beta)
+    # print(variational_parameters.b_k_beta.shape)
+
+    variational_parameters.a_k_beta = jnp.add(sum_phi_k[J:J+T-1], 1)
+    variational_parameters.b_k_beta = jnp.add(hyperparameters.gamma, remaining_probs[0:T-1])
 
     # print(variational_parameters.a_k_beta)
     # print(variational_parameters.a_k_beta.shape)
@@ -121,7 +127,8 @@ def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameter
     lambda0 = jnp.concatenate((lambda0_MIX, lambda0_DP_vec), axis=1)          # J+T_true
 
     # MU
-    mu0_DP_vec = jnp.repeat(mu0_DP[:, :], T_true, axis=1)                                 # pxT_true
+    mu0_DP_vec = jnp.repeat(mu0_DP, T_true, axis=1)
+    # pxT_true
     mu0 = jnp.concatenate((mu0_MIX, mu0_DP_vec), axis=1)        # px(J+T_tr
 
     # CALCOLI AGGIORNAMENTO
@@ -333,12 +340,23 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
     eta_signed = jnp.sum(eta_k)
     l = 1 - jnp.array(range(1, p+1))
 
+    # out =  (y - mu_MIX[0,:]) @ jinv(PHI_MIX[0, :, :]) @ (y - mu_MIX[0,:]).T
+    #print( 'MATRICIONAAA',out )
+    #print('MATRICIONAAA', out.shape)
+    # out = ((y - mu_MIX[0,:]) @ jinv(PHI_MIX[0, :, :]) @ (y - mu_MIX[0,:]).T)
+    #print( 'MATRICIONAAA',y)
+
+    # out = ((y - mu_MIX[0,:]).T @ jinv(PHI_MIX[0, :, :]) @ (y - mu_MIX[0,:]))
+    # print( 'scalare?',out)
+
     for k in range(J):
-        e_dir = digamma(eta_k[0,k]) - digamma(eta_signed)
+        e_dir = digamma(eta_k[k]) - digamma(eta_signed)
 
         e_norm = -1/2 * (-jnp.sum(digamma((nu_MIX[k] - l)/2)) + jnp.log(jdet(PHI_MIX[k, :, :]))
-                         + p/lambda_MIX[k] + nu_MIX[k] * ((y - mu_MIX[k,0]) @ jinv(PHI_MIX[k, :, :]) @
-                         (y - mu_MIX[k,0]).T))[0,:]
+                         + p/lambda_MIX[k] + nu_MIX[k] * jnp.diag( (y - mu_MIX[k,:]) @ jinv(PHI_MIX[k, :, :]) @ (y - mu_MIX[k,:]).T) )
+    # Mxp-1xp
+                                                                        # Mxp
+# problema matrice MxM
 
         # mu__MIX -> matrice (Jxp)
         #           -> riga per riga ci sono le medie delle componenti della mistura
@@ -346,7 +364,8 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
 
         phi_mk = phi_mk.at[:, k].set(jnp.exp(e_dir + e_norm))
 
-    e_dir = digamma(eta_k[0,0]) - digamma(eta_signed)
+    e_dir = digamma(eta_k[0]) - digamma(eta_signed)
+    # print('digammavec', digamma((nu_MIX[0] - l)/2))
 
     dig_b = digamma(b_k)
     dig_a = digamma(a_k + b_k)
@@ -360,7 +379,7 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
     z = jnp.zeros((1,1))
     dig_cumsum = jnp.concatenate((z, diff), axis=1)
 
-    for k in range(T):
+    for k in range(0,T-1):
         e_beta = digamma(a_k[k]) + digamma(a_k[k] + b_k[k])
         # todo
         # Questo è coerente con la formula?
@@ -369,11 +388,20 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
         e_norm = -1 / 2 * (-jnp.sum(digamma((nu_DP[k] - l) / 2))
                            + jnp.log(jdet(PHI_DP[k, :, :]))
                            + p / lambda_DP[k] + nu_DP[k]
-                           * ((y - mu_DP[0,k]) @ jinv(PHI_DP[k, :, :]) @ (
-                                       y - mu_DP[0,k].T).T))[0,:]
+                           * jnp.diag( ((y - mu_DP[k,:]) @ jinv(PHI_DP[k, :, :]) @ (
+                                       y - mu_DP[k,:]).T)))
 
         phi_mk = phi_mk.at[:, k+J].set(jnp.exp(e_dir + e_beta + e_res + e_norm))
 
+    e_res_T = dig_cumsum[0, T-1]
+
+    e_norm_T = -1 / 2 * (-jnp.sum(digamma((nu_DP[T-1] - l) / 2))
+                       + jnp.log(jdet(PHI_DP[(T-1), :, :]))
+                       + p / lambda_DP[T-1] + nu_DP[T-1]
+                       * jnp.diag( ((y - mu_DP[T-1,:]) @ jinv(PHI_DP[T-1, :, :]) @ (
+                    y - mu_DP[T-1,:]).T) ))
+
+    phi_mk = phi_mk.at[:, T + J-1].set(jnp.exp(e_dir + e_res_T + e_norm_T))
     norm_phi = jnp.reshape(jnp.sum(phi_mk, axis=1), (phi_mk.shape[0], 1))
 
     print('norm_phi', norm_phi.shape)

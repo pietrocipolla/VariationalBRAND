@@ -19,7 +19,7 @@ def set_hyperparameters(user_input_parameters: UserInputModel, Y):
         a_dir_k = jnp.array(user_input_parameters.a_dir_k),
 
         nIW_DP_0 = NIW(
-            mu = jnp.array(user_input_parameters.mu_0_DP),
+            mu = jnp.reshape(jnp.array(user_input_parameters.mu_0_DP),(1,Y.shape[1])),
             nu = jnp.array(user_input_parameters.nu_0_DP),
             lambdA = jnp.array(user_input_parameters.lambda_0_DP),
             phi = jnp.array(user_input_parameters.PHI_0_DP)

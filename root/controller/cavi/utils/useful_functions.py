@@ -22,10 +22,10 @@ from jax.scipy.stats.gamma import pdf as gamma
 from jax.scipy.stats.gamma import pdf as jgamma
 
 # val atteso log beta
-def E_log_beta(a,b):
+def E_log_beta_unjitted(a,b):
     # a,b coeffs logbeta
     return jdigamma(a)-jdigamma(a+b)
-
+E_log_beta = jax.jit(E_log_beta_unjitted)
 # val atteso log densità normal inverse wishart 
 def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
     # p dim of mu
@@ -58,27 +58,56 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
 #     return ret
 
 #Versione Jacopo
-def E_log_dens_dir_unjitted(eta : float ,s_eta : float,J : int):
+def E_log_dens_dir_unjitted(eta : float ,s_eta : float,):
    ret = (eta-1)*(jdigamma(eta)-jdigamma(s_eta))
    return ret
 E_log_dens_dir_J = jax.jit(E_log_dens_dir_unjitted)
 
 # val atteso log densità beta 
-def E_log_dens_beta(a,b):
+def E_log_dens_beta_unjitted(a:float,b:float):
     b = jnp.exp(jgamma(a)*jgamma(b)/jgamma(a+b))
     return (a-1)*E_log_beta(a,b) + (b-1)*E_log_beta(b,a) - jnp.log(b)
+E_log_dens_beta = jax.jit(E_log_dens_beta_unjitted)
 
 #val atteso log normale dati
-def E_log_norm(data,mu,nu,lam,psi,p):
-    # mu = jnp.reshape(mu, p)
-    # data = jnp.reshape(data, p)
-    # psi = jnp.reshape(psi, (p,p))
-    ret = -jnp.log(jdet(jinv(psi)))
-    for i in range(1,p+1):
-        ret = ret - jdigamma((nu-i+1)/2)
-    ret = ret+p/lam
-    ret = ret+ nu*jnp.dot(data-mu,jnp.dot(jinv(psi),data-mu))
-    ret = -0.5*ret
-    #print(ret)
+#def E_log_norm(data,mu,nu,lam,psi,p):
+#    mu = jnp.reshape(mu, p)
+#    data = jnp.reshape(data, p)
+#    psi = jnp.reshape(psi, (p,p))
+#
+#    ret = -jnp.log(jdet(jinv(psi)))
+#    for i in range(1,p+1):
+#        ret = ret - jdigamma((nu-i+1)/2)
+#    ret = ret+p/lam
+#    ret = ret+ nu*jnp.dot(data-mu,jnp.dot(jinv(psi),data-mu))
+#    ret = -0.5*ret
+#    #print(ret)
+#    return ret
+
+# -1 / 2 * (-jnp.sum(jdgamma((nu_mix[k] - l) / 2)) + jnp.log(jdet(psi_mix[k, :, :]))
+#                       + p / lam_mix[k] + nu_mix[k] * jnp.sum(jnp.diag(((data - mu_mix[k, :]) @ jinv(psi_mix[k, :, :]) @
+#                                                                           (data - mu_mix[k, :]).T))))
+
+#def E_log_norm_unjitted(data,mu,nu,lam,psi,p, l):
+#    #mu = jnp.reshape(mu, p)
+#    #data = jnp.reshape(data, p)
+#    #psi = jnp.reshape(psi, (p,p))
+#
+#    ret = -1/2*(-jnp.sum(jdigamma((nu-l)/2)) + jnp.log(jdet(psi))
+#                      + p/lam + nu*((data - mu).T @ jinv(psi) @(data - mu)))
+#
+#    return ret
+#E_log_norm = jax.jit(E_log_norm_unjitted)
+
+
+
+def E_log_norm_aneurism(phi, data,mu,nu,lam,psi,p, l,M):
+    #mu = jnp.reshape(mu, p)
+    #data = jnp.reshape(data, p)
+    #psi = jnp.reshape(psi, (p,p))
+
+    ret = jnp.multiply(-jnp.sum(jdigamma((nu-l)/2)) + jnp.log(jdet(psi)) + p/lam,jnp.ones(M))
+    ret+= nu*(jnp.diag((data - mu).T @ jinv(psi) @(data - mu)))
+    ret = jnp.dot(phi,ret)
     return ret
 

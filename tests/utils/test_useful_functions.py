@@ -58,6 +58,7 @@ class Test(TestCase):
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
         eta = variational_parameters.eta_k
         J = hyperparameters_model.J
+        eta_bar = jnp.sum(eta)
 
         out = E_log_dens_dir_J(eta[0],eta_bar)
         # print(out)  # [0. 0. 0. 0.]

@@ -54,6 +54,8 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     lam_dp=nIW_DP_VAR.lambdA
     psi_dp=nIW_DP_VAR.phi
 
+    l = 1 - jnp.array(range(1, p + 1))
+
     # print('psi_dp')
     # print(psi_dp)
 
@@ -97,7 +99,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     # print('f5 done',f5)
 
     # Versione Jacopo
-    f5_bis = 0
+    f5 = 0
     for k in range(0, J):
         f5 += jnp.sum(phi_m_k[:, k]) * E_log_dens_dir_J(eta_k[k], eta_bar)
     print('f5 done', f5)
