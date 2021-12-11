@@ -59,49 +59,59 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #val atteso log p
 
     # #f1 e f2
-    # f1=0
-    # f2=0
-    # for m in range(0,M):
-    #     for k in range(0,J):
-    #         f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
-    #     for k in range(0,T):
-    #         f2 += phi_m_k[m,k+J]*useful_functions.E_log_norm(data[m,:],mu_dp[k],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
-    # # k = 0
-    # # m = 0
-    # #out = useful_functions.E_log_norm(data[m, :], mu_dp[k,:], nu_dp[k], lam_dp[k], psi_dp[k, :, :], p)
-    # print('f1 f2 done',f1,f2)
+    f1=0
+    f2=0
+    for m in range(0,M):
+        for k in range(0,J):
+            f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
+        for k in range(0,T):
+            f2 += phi_m_k[m,k+J]*useful_functions.E_log_norm(data[m,:],mu_dp[k],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
+    # k = 0
+    # m = 0
+    #out = useful_functions.E_log_norm(data[m, :], mu_dp[k,:], nu_dp[k], lam_dp[k], psi_dp[k, :, :], p)
+    print('f1 f2 done',f1,f2)
     #
     #
     # #f3 e f4
-    # f3=0
-    # f4=0
-    # for k in range(0,J):
-    #     f3 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
-    # for k in range(0,T):
-    #     f4 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
-    # print('f3 f4 done',f3,f4)
-    #
-    # #f5
+    f3=0
+    f4=0
+    for k in range(0,J):
+        f3 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
+    for k in range(0,T):
+        f4 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
+    print('f3 f4 done',f3,f4)
+
+    #f5 #old version
     # f5=0
+    # print(eta_k)
     # for k in range(0,J):
     #     for m in range(0,M):
-    #         f5 += useful_functions.E_log_dens_dir(eta_k[k],J)*phi_m_k[m,k]
+    #         f5 += useful_functions.E_log_dens_dir(eta_k[k],J)*phi_m_k[m,k] #todo occhio che passa eta[k], ma poi
+    #                                                                         #all internero di elogdens ancora eta[]
     # print('f5 done',f5)
+
+    #f5
+    f5=0
+    #print(eta_k)
+    for k in range(0,J):
+        for m in range(0,M):
+            f5 += useful_functions.E_log_dens_dir(eta_k,J)*phi_m_k[m,k] #ora passata la eta invece di eta[k]
+    print('f5 done',f5)
 
     #f6
     f6=0
-    # for m in range(0,M):
-    #     for k in range(0,T-1):
-    #         s=0
-    #         for h in range(0,k-J-1):
-    #             s=float(s+jdgamma(b_k_beta[h])-jdgamma(a_k_beta[h]+b_k_beta[h]))
-    #         f6 += float(phi_m_k[m,k]*(jdgamma(eta_k[0])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s))
-    m = 0
-    k = 0
-    print(phi_m_k[m,k])
-    print(jdgamma(eta_k), jdgamma(eta_bar))
-    print(jdgamma(a_k_beta[k-J]), jdgamma(a_k_beta[k-J]+b_k_beta[k-J]))
-    print(eta_k)
+    for m in range(0,M):
+        for k in range(0,T-1):
+            s=0
+            for h in range(0,k-J-1):
+                s=float(s+jdgamma(b_k_beta[h])-jdgamma(a_k_beta[h]+b_k_beta[h]))
+            f6 += float(phi_m_k[m,k]*(jdgamma(eta_k[0])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s))
+    # m = 0
+    # k = 0
+    # print(phi_m_k[m,k])
+    # print(jdgamma(eta_k), jdgamma(eta_bar))
+    # print(jdgamma(a_k_beta[k-J]), jdgamma(a_k_beta[k-J]+b_k_beta[k-J]))
+    # print(eta_k)
 
     print('f6 done', f6)
 
@@ -111,14 +121,13 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
         f7 += float((a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar)))
     print('f7 done',f7)
 
-    print (jdgamma(b_k_beta[0]))
     #f8
     f8 = 0
     for l in range(0,T-1):
         f8 += float((gamma-1)*(jdgamma(b_k_beta[l])-jdgamma(a_k_beta[l]+b_k_beta[l])))
 
 
-    E_log_p = f1+f2+f3+f4+f5+f6+f7+f8
+    # E_log_p = f1+f2+f3+f4+f5+f6+f7+f8
     print('f8 done',f8)
     #val atteso log q
 
@@ -163,5 +172,5 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     E_log_q= h1+h2+h3+h4+h5
     print('h4 h5 done', h4,h5)
 
-    return E_log_p-E_log_q
+    # return E_log_p-E_log_q
 

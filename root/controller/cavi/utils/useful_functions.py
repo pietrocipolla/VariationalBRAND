@@ -47,10 +47,14 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
 
 # val atteso log densità dirichlet 
 def E_log_dens_dir(eta,J):
+    #print(eta)
     s_eta = jnp.sum(eta)
     ret = 0
     for j in range(0,J+1):
-        ret = ret + (eta[j]-1)*(jdigamma(eta[j])-jdigamma(s_eta))
+        ret = ret + \
+              (eta[j]-1)*\
+              (jdigamma(eta[j])
+               -jdigamma(s_eta))
     return ret    
 
 # val atteso log densità beta 
@@ -60,9 +64,9 @@ def E_log_dens_beta(a,b):
 
 #val atteso log normale dati
 def E_log_norm(data,mu,nu,lam,psi,p):
-    mu = jnp.reshape(mu, p)
-    data = jnp.reshape(data, p)
-    psi = jnp.reshape(psi, (p,p))
+    # mu = jnp.reshape(mu, p)
+    # data = jnp.reshape(data, p)
+    # psi = jnp.reshape(psi, (p,p))
     ret = -jnp.log(jdet(jinv(psi)))
     for i in range(1,p+1):
         ret = ret - jdigamma((nu-i+1)/2)

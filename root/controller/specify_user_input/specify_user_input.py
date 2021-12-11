@@ -13,7 +13,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     M = 500
 
     # Num iteration and tolerancecavi
-    n_iter = 1000
+    n_iter = 100
     tol = 10e-6
 
     #HYPERPARAMETERS
@@ -21,8 +21,9 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # gamma -> parametro dello Stick Breaking -> scalare
     # iperparametro tra 1 e 50 tipo oppure buttarci su una distribuzione e una prior
 
-    a_dir_k = np.ones(3 + 1),
-    # a_dir_k -> vettore delle componenti della Dirichlet -> vettore di (J+1) componenti
+    a_dir_k = np.ones(3 + 1)
+
+    # a_dir_k -> vettore delle componenti della Dir0ichlet -> vettore di (J+1) componenti
     # J = num_classes_learning
 
     #nIW_DP_0
@@ -31,11 +32,11 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # 	lambda_0_DP -> scalare
     # 	PHI_0_DP -> Matrice (pxp)
 
-    mu_0_DP = np.ones(2),  # così che sia comunque della forma n_elems x p
+    mu_0_DP = np.ones(2)  # così che sia comunque della forma n_elems x p
 
-    nu_0_DP = np.array([2]),
+    nu_0_DP = np.array([2])
 
-    lambda_0_DP = np.array([1]),
+    lambda_0_DP = np.array([1])
 
     PHI_0_DP = np.identity(2)
 
@@ -76,7 +77,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # -> phi_m_k[i:] = parametri della (i+1)esima multinomiale
     # -> phi_m_k[i,j] = prob che y_i sia nel cluster j
 
-    eta_k = a_dir_k
+    eta_k = copy.deepcopy(a_dir_k)
 
     a_k_beta = np.ones(T - 1)
 
@@ -96,8 +97,10 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # PHI_var_DP -> vettore di matrici (Txpxp), sostanzialmente un ndarray
     # -> PHI_var_DP[i,:,:] = Matrice PHI della (i+1)esima NIW della misturaDP
 
-    mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0)
-    #print('mu_var_DP', mu_var_DP)
+    #mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0) #todo old chec se era sbagliato visto che vogliamo matrice Txp
+    mu_var_DP = np.tile(mu_0_DP, (T,1))
+    # print('mu_0_DP', mu_0_DP)
+    # print('mu_var_DP', mu_var_DP)
 
     nu_var_DP = np.multiply(np.ones(T), nu_0_DP)
     nu_var_DP = np.reshape(nu_var_DP, T)
@@ -131,8 +134,10 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     #           -> PHI_VAR_MIX[i,:,:] = Matrice PHI della (i+1)esima NIW della mistura
 
     mu_VAR_MIX = copy.deepcopy(mu_0_MIX)
+    #print(mu_VAR_MIX)
 
     nu_VAR_MIX = copy.deepcopy(nu_0_MIX)
+    #print('nu_VAR_MIX', nu_VAR_MIX)
 
     lambda_VAR_MIX = copy.deepcopy(lambda_0_MIX)
 
