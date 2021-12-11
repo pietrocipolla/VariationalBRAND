@@ -206,18 +206,25 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     J = hyperparameters.J
     M = hyperparameters.M
     #si accede così?
-    mu0_DP = hyperparameters.nIW_DP_0.mu.T             # Txp
-    mu0_MIX = hyperparameters.nIW_MIX_0.mu.T            # Jx1
+    mu0_DP = hyperparameters.nIW_DP_0.mu.T              # px1
+    mu0_MIX = hyperparameters.nIW_MIX_0.mu.T            # pxJ
     lambda0_DP = hyperparameters.nIW_DP_0.lambdA        # 1
     lambda0_MIX = hyperparameters.nIW_MIX_0.lambdA      # J
     PHI0_DP = hyperparameters.nIW_DP_0.phi              # 1xpxp
     PHI0_MIX = hyperparameters.nIW_MIX_0.phi            # Jxpxp
 
+    # print(mu0_DP.shape)
+    # print(mu0_MIX.shape)
+    # print(lambda0_DP.shape)
+    # print(lambda0_MIX.shape)
+    # print(PHI0_DP.shape)
+    # print(PHI0_MIX.shape)
+
 #    y_bar_matrix = jnp.repeat(y_bar[:, jnp.newaxis, :], M, axis=1)
     one_vec = jnp.ones((1, T_true))
 
     mu0_DP_vec = jnp.repeat(mu0_DP[:, :], T_true, axis=1)  # pxT_true
-    mu0 = jnp.concatenate((mu0_MIX, mu0_DP_vec), axis=1)  #J+T_true x p
+    mu0 = jnp.concatenate((mu0_MIX, mu0_DP_vec), axis=1)  # pxJ+T_true
 
     # print(mu0_DP_vec.shape)
     # print(mu0.shape)
@@ -233,14 +240,24 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     PHI0_DP_vec = jnp.repeat(PHI0_DP[jnp.newaxis, :, :], T_true, axis=0) #T_true x p x p
     PHI0 = jnp.concatenate((PHI0_MIX, PHI0_DP_vec), axis=0)  #J+T_true x p x p
 
+    # print(PHI0_DP_vec.shape)
+    # print(PHI0.shape)
 
     comp_2 = jnp.zeros(PHI0.shape)
     comp_3 = jnp.zeros(PHI0.shape)
     for k in range(J+T_true):
-        curr_y_bar = y_bar[:, k] #Save the kth column of the matrix of the means
+        curr_y_bar = y_bar[:, k] #Save the kth column of the matrix of the means    px1
         y_bar_matrix = jnp.repeat(curr_y_bar[:, jnp.newaxis], M, axis=1) #Build a matrix where the columns are the same mean repeated M times
         diff_y = y.T-y_bar_matrix
-        comp_2 = comp_2.at[k, :, :].set(diff_y @ (diff_y * phi_mk[:, k]).T) #Do the final operation, where phi_mk[:, k] is the M-dimensional column where we have the probs of being in the kth cluster
+        # comp_2 = comp_2.at[k, :, :].set(diff_y @ (diff_y * phi_mk[:, k]).T) #Do the final operation, where phi_mk[:, k] is the M-dimensional column where we have the probs of being in the kth cluster
+
+
+        for m in range(M):
+            vector = diff_y[:, m]
+            comp_2 = comp_2.at[k, :, :].set(comp_2[k,:,:] + vector @ vector.T * phi_mk[m, k])
+
+        # print('comp_2', comp_2)
+        # print('comp_2, shape', comp_2.shape)
 
         # diff_y = diff_y[:, jnp.newaxis, :]
         # diff_y_T = jnp.transpose(diff_y, axes =  (1,2,0))
@@ -335,13 +352,18 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
     dig_a = digamma(a_k + b_k)
     dig_diff = dig_b - dig_a
     diff = jnp.cumsum(dig_diff)
+#    print(diff.shape)
+
     diff = jnp.reshape(diff, (1,len(diff)))
+    print(diff.shape)
+
     z = jnp.zeros((1,1))
     dig_cumsum = jnp.concatenate((z, diff), axis=1)
 
     for k in range(T):
         e_beta = digamma(a_k[k]) + digamma(a_k[k] + b_k[k])
-
+        # todo
+        # Questo è coerente con la formula?
         e_res = dig_cumsum[0,k]
 
         e_norm = -1 / 2 * (-jnp.sum(digamma((nu_DP[k] - l) / 2))
