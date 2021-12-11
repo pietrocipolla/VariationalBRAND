@@ -1,5 +1,5 @@
 class UserInputModel:
-    def __init__(self, J,T,M,n_iter,tol,
+    def __init__(self, J,T,n_iter,tol,
                  gamma, a_dir_k,
                  mu_0_DP,nu_0_DP,lambda_0_DP,PHI_0_DP,
                  mu_0_MIX,nu_0_MIX,lambda_0_MIX,PHI_0_MIX,
@@ -9,7 +9,6 @@ class UserInputModel:
 
         self.J = J
         self.T = T
-        self.M = M
 
         self.n_iter = n_iter
         self.tol = tol

@@ -9,8 +9,6 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     J = 3
     # Numero di classi massime nel Dirichlet Process
     T = 5
-    # Numero totale di dati (size data frame ossia numero di righe)
-    M = 500
 
     # Num iteration and tolerancecavi
     n_iter = 100
@@ -64,6 +62,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
+    M = 500
     phi_m_k_temp = np.zeros((M, J + T))
 
     for m in range(M):
@@ -146,7 +145,6 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     return UserInputModel(
         J = J,
         T = T,
-        M = M,
 
         n_iter = n_iter,
         tol = tol,
