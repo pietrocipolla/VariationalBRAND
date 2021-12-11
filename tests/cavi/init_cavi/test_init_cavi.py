@@ -20,9 +20,9 @@ class Test(TestCase):
         #check conversion to jnp array
         self.assertEqual(type(variational_parameters.phi_m_k), type(jnp.array([])))
 
-        print(user_input_parameters.eta_k)
+        #print(user_input_parameters.eta_k)
 
-        print(variational_parameters.eta_k)
+        #print(variational_parameters.eta_k)
 
         self.assertEqual(variational_parameters.phi_m_k.shape, (500, 8))
         self.assertEqual(len(variational_parameters.eta_k), 4)
@@ -32,13 +32,11 @@ class Test(TestCase):
 
         # NIW_DP_VAR
         self.assertEqual(len(variational_parameters.nIW_DP_VAR.mu), 5)
-        self.assertEqual(variational_parameters.nIW_DP_VAR.mu[0].shape, (1, 2))
+        self.assertEqual(variational_parameters.nIW_DP_VAR.mu[0].shape, (2,))
 
-        self.assertEqual(len(variational_parameters.nIW_DP_VAR.nu), 1)
-        self.assertEqual(variational_parameters.nIW_DP_VAR.nu[0].shape, (5,))
+        self.assertEqual(len(variational_parameters.nIW_DP_VAR.nu), 5)
 
-        self.assertEqual(len(variational_parameters.nIW_DP_VAR.lambdA), 1)
-        self.assertEqual(variational_parameters.nIW_DP_VAR.lambdA[0].shape, (5,))
+        self.assertEqual(len(variational_parameters.nIW_DP_VAR.lambdA), 5)
 
         self.assertEqual(len(variational_parameters.nIW_DP_VAR.phi), 5)
         self.assertEqual(variational_parameters.nIW_DP_VAR.phi[0].shape, (2, 2))

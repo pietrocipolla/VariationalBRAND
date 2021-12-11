@@ -27,6 +27,9 @@ class Test(TestCase):
         self.assertEqual(len(hyperparameters_model.a_dir_k), 4)
 
         self.assertEqual(hyperparameters_model.nIW_DP_0.mu[0].shape, user_input_parameters.mu_0_DP[0].shape)
+        print(hyperparameters_model.nIW_DP_0.mu)
+        print(hyperparameters_model.nIW_DP_0.mu.shape)
+
         self.assertEqual(len(hyperparameters_model.nIW_DP_0.mu), len(user_input_parameters.mu_0_DP))
         self.assertEqual(hyperparameters_model.nIW_DP_0.nu[0].shape, user_input_parameters.nu_0_DP[0].shape)
         self.assertEqual(len(hyperparameters_model.nIW_DP_0.nu), len(user_input_parameters.nu_0_DP))

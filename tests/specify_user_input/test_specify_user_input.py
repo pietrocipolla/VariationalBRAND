@@ -20,7 +20,6 @@ class Test(TestCase):
 
         self.assertEqual(user_input.J, 3)
         self.assertEqual(user_input.T, 5)
-        self.assertEqual(user_input.M, 500)
 
         self.assertEqual(user_input.n_iter, 100)
         self.assertEqual(user_input.tol, 10e-6)
@@ -30,6 +29,7 @@ class Test(TestCase):
 
         #O_DP
         self.assertEqual(len(user_input.mu_0_DP), 2)
+        #print(user_input.mu_0_DP)
         self.assertEqual(user_input.nu_0_DP.shape, (1,))
         self.assertEqual(user_input.lambda_0_DP.shape, (1, ))
         self.assertEqual(user_input.PHI_0_DP.shape, (2,2))

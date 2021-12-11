@@ -17,7 +17,7 @@ from jax._src.scipy.special import gammaln as jgammaln
 from jax import numpy as jnp
 
 from controller.cavi.utils import useful_functions
-from controller.cavi.utils.useful_functions import  E_log_dens_dir_J
+from controller.cavi.utils.useful_functions import E_log_dens_dir_J, E_log_norm_aneurism
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
@@ -62,11 +62,16 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     # #f1 e f2
     f1=0
     f2=0
-    for m in range(0,M):
-        for k in range(0,J):
-            f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p)
-        for k in range(0,T):
-            f2 += phi_m_k[m,k+J]*useful_functions.E_log_norm(data[m,:],mu_dp[k],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p)
+    #for m in range(0,M):
+    #    for k in range(0,J):
+    #        f1 += phi_m_k[m,k]*useful_functions.E_log_norm(data[m,:],mu_mix[k],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p, l)
+    #    for k in range(0,T):
+    #        f2 += phi_m_k[m,k+J]*useful_functions.E_log_norm(data[m,:],mu_dp[k],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p, l)
+    for k in range(0, J):
+        f1 += E_log_norm_aneurism(phi_m_k[, :k], data, mu_mix[k], nu_mix[k], lam_mix[k], psi_mix[k], p, l, M)
+    for k in range(0, T):
+        f1 += E_log_norm_aneurism(phi_m_k[, :k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
+
     # k = 0
     # m = 0
     #out = useful_functions.E_log_norm(data[m, :], mu_dp[k,:], nu_dp[k], lam_dp[k], psi_dp[k, :, :], p)
@@ -94,24 +99,27 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     # Versione Jacopo
     f5_bis = 0
     for k in range(0, J):
-        f5_bis += jnp.sum(phi_m_k[, :]) * E_log_dens_dir_J(eta_k[k], eta_bar, J)
-    print('f5_bis done', f5_bis)
+        f5 += jnp.sum(phi_m_k[:, k]) * E_log_dens_dir_J(eta_k[k], eta_bar)
+    print('f5 done', f5)
 
 
-    #f6
-    f6=0
-    for m in range(0,M):
-        for k in range(0,T-1):
-            s=0
-            for h in range(0,k-J-1):
-                s=float(s+jdgamma(b_k_beta[h])-jdgamma(a_k_beta[h]+b_k_beta[h]))
-            f6 += float(phi_m_k[m,k]*(jdgamma(eta_k[0])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s))
-    # m = 0
-    # k = 0
-    # print(phi_m_k[m,k])
-    # print(jdgamma(eta_k), jdgamma(eta_bar))
-    # print(jdgamma(a_k_beta[k-J]), jdgamma(a_k_beta[k-J]+b_k_beta[k-J]))
-    # print(eta_k)
+    #f6 old
+    # f6=0
+    # for m in range(0,M):
+    #     for k in range(0,T-1):
+    #         s=0
+    #         for h in range(0,k-J-1):
+    #             s=float(s+jdgamma(b_k_beta[h])-jdgamma(a_k_beta[h]+b_k_beta[h]))
+    #         f6 += float(phi_m_k[m,k]*(jdgamma(eta_k[0])-jdgamma(eta_bar)+jdgamma(a_k_beta[k-J])-jdgamma(a_k_beta[k-J]+b_k_beta[k-J])+s))
+
+    # f6
+    f6 = 0
+    for k in range(J, J + T - 1):
+        s = 0
+        for h in range(0, k - J - 1):
+            s = float(s + jdgamma(b_k_beta[h]) - jdgamma(a_k_beta[h] + b_k_beta[h]))
+        f6 += float(jnp.sum(phi_m_k[:, k]) * (jdgamma(eta_k[0]) - jdgamma(eta_bar) + jdgamma(a_k_beta[k - J]) - jdgamma(
+            a_k_beta[k - J] + b_k_beta[k - J]) + s))
 
     print('f6 done', f6)
 

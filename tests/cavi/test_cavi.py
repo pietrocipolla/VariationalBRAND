@@ -33,5 +33,5 @@ class Test(TestCase):
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
         cavi(Y, hyperparameters_model, user_input_parameters)
-        print(variational_parameters.nIW_DP_VAR.mu)
-        print(variational_parameters.nIW_MIX_VAR.mu)
+        # print(variational_parameters.nIW_DP_VAR.mu)
+        # print(variational_parameters.nIW_MIX_VAR.mu)

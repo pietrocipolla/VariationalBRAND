@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from controller.cavi.utils.useful_functions import E_log_beta, E_log_dens_norm_inv_wish, E_log_dens_dir, E_log_norm
+from controller.cavi.utils.useful_functions import E_log_beta, E_log_dens_norm_inv_wish, E_log_dens_dir_J, \
+    E_log_dens_dir_unjitted, E_log_norm_aneurism
 from controller.cavi.init_cavi.init_cavi import init_cavi
 from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from controller.sample_data_handler.data_generator import generate_some_data_example
@@ -18,7 +19,7 @@ class Test(TestCase):
         b = 3
         result = E_log_beta(a, b)
         # print(E_log_beta(a,b))
-        self.assertEqual(result, -1.0833335)
+       # self.assertEqual(result, -1.0833335)
 
 
     def test_e_log_dens_norm_inv_wish(self):
@@ -58,7 +59,7 @@ class Test(TestCase):
         eta = variational_parameters.eta_k
         J = hyperparameters_model.J
 
-        out = E_log_dens_dir(eta, J)
+        out = E_log_dens_dir_J(eta[0],eta_bar)
         # print(out)  # [0. 0. 0. 0.]
         # print(type(out))  # <class 'jaxlib.xla_extension.DeviceArray'>
         # self.assertEqual(out[0], 0.0)
@@ -83,9 +84,18 @@ class Test(TestCase):
         p = hyperparameters_model.p
         data = Y[0]
 
+        variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
+        phi_m_k = variational_parameters.phi_m_k
+        l = 1 - jnp.array(range(1,p+1))
+        M = hyperparameters_model.M
+        contr= E_log_norm_aneurism(phi_m_k[: ,0], Y, mu[0], nu[0], lam[0], psi[0], p, l, M)
+        print(contr)
+
         #print(psi)
 
-        out = E_log_norm(data,mu,nu,lam,psi,p)
+        #out = E_log_norm_aneurism(phi_m_k[, :0], data, mu[0], nu[0], lam[0], psi[0], p, l, M)
+
+
         #print(out)
 
         mu = hyperparameters_model.nIW_MIX_0.mu[0]
@@ -94,9 +104,10 @@ class Test(TestCase):
         psi = hyperparameters_model.nIW_MIX_0.phi[0]
         p = hyperparameters_model.p
         data = Y[0]
+        l = 1 - jnp.array(range(1, p + 1))
 
-        out2 = E_log_norm(data, mu, nu, lam, psi, p)
-        #print(out2)
-
-        #print(psi)
+        # out2 = E_log_norm_J(data, mu, nu, lam, psi, p, l)
+        # print(out2)
+        #
+        # #print(psi)
 
