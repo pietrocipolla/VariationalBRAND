@@ -18,7 +18,13 @@ class Test(TestCase):
 
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
-        print(hyperparameters_model.nIW_DP_0.mu[0].shape)
+        self.assertEqual(hyperparameters_model.J, 3)
+        self.assertEqual(hyperparameters_model.T, 5)
+        self.assertEqual(hyperparameters_model.M, 500)
+        self.assertEqual(hyperparameters_model.p, 2)
+
+        self.assertEqual(hyperparameters_model.gamma, 5)
+        self.assertEqual(len(hyperparameters_model.a_dir_k), 4)
 
         self.assertEqual(hyperparameters_model.nIW_DP_0.mu[0].shape, user_input_parameters.mu_0_DP[0].shape)
         self.assertEqual(len(hyperparameters_model.nIW_DP_0.mu), len(user_input_parameters.mu_0_DP))

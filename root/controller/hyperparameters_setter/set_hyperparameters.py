@@ -9,7 +9,7 @@ def set_hyperparameters(user_input_parameters: UserInputModel, Y):
     return HyperparametersModel(
         J=user_input_parameters.J,
         T=user_input_parameters.T,
-        M=user_input_parameters.M,
+        M=Y.shape[0],
         p=Y.shape[1],  # number of data coordinates
         n_iter=user_input_parameters.n_iter,
         tol=user_input_parameters.tol,

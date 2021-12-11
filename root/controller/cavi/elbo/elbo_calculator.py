@@ -94,10 +94,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     # Versione Jacopo
     f5_bis = 0
     for k in range(0, J):
-        temp = 0
-        for m in range(0, M):
-            temp += phi_m_k[m, k]
-        f5_bis += temp * E_log_dens_dir_J(eta_k[k], eta_bar, J)
+        f5_bis += jnp.sum(phi_m_k[, :]) * E_log_dens_dir_J(eta_k[k], eta_bar, J)
     print('f5_bis done', f5_bis)
 
 
