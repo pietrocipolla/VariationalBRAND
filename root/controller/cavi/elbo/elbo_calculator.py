@@ -17,6 +17,7 @@ from jax._src.scipy.special import gammaln as jgammaln
 from jax import numpy as jnp
 
 from controller.cavi.utils import useful_functions
+from controller.cavi.utils.useful_functions import E_log_dens_dir
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
@@ -90,13 +91,15 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #                                                                         #all internero di elogdens ancora eta[]
     # print('f5 done',f5)
 
-    #f5
-    f5=0
-    #print(eta_k)
-    for k in range(0,J):
-        for m in range(0,M):
-            f5 += useful_functions.E_log_dens_dir(eta_k,J)*phi_m_k[m,k] #ora passata la eta invece di eta[k]
-    print('f5 done',f5)
+    # Versione Jacopo
+    f5_bis = 0
+    for k in range(0, J):
+        temp = 0
+        for m in range(0, M):
+            temp += phi_m_k[m, k]
+        f5_bis += temp * E_log_dens_dir(eta_k[k], eta_bar, J)
+    print('f5_bis done', f5_bis)
+
 
     #f6
     f6=0
