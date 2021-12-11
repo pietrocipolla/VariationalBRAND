@@ -61,7 +61,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
 def E_log_dens_dir_unjitted(eta : float ,s_eta : float,J : int):
    ret = (eta-1)*(jdigamma(eta)-jdigamma(s_eta))
    return ret
-E_log_dens_dir = jax.jit(E_log_dens_dir)
+E_log_dens_dir_J = jax.jit(E_log_dens_dir_unjitted)
 
 # val atteso log densità beta 
 def E_log_dens_beta(a,b):

@@ -17,7 +17,7 @@ from jax._src.scipy.special import gammaln as jgammaln
 from jax import numpy as jnp
 
 from controller.cavi.utils import useful_functions
-from controller.cavi.utils.useful_functions import E_log_dens_dir
+from controller.cavi.utils.useful_functions import  E_log_dens_dir_J
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 
@@ -97,7 +97,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
         temp = 0
         for m in range(0, M):
             temp += phi_m_k[m, k]
-        f5_bis += temp * E_log_dens_dir(eta_k[k], eta_bar, J)
+        f5_bis += temp * E_log_dens_dir_J(eta_k[k], eta_bar, J)
     print('f5_bis done', f5_bis)
 
 

@@ -7,6 +7,13 @@ from model.user_input_model import UserInputModel
 
 def set_hyperparameters(user_input_parameters: UserInputModel, Y):
     return HyperparametersModel(
+        J=user_input_parameters.J,
+        T=user_input_parameters.T,
+        M=user_input_parameters.M,
+        p=Y.shape[1],  # number of data coordinates
+        n_iter=user_input_parameters.n_iter,
+        tol=user_input_parameters.tol,
+
         gamma = user_input_parameters.gamma,
 
         a_dir_k = jnp.array(user_input_parameters.a_dir_k),
@@ -24,9 +31,4 @@ def set_hyperparameters(user_input_parameters: UserInputModel, Y):
             lambdA = jnp.array(user_input_parameters.lambda_0_MIX),
             phi = jnp.array(user_input_parameters.PHI_0_MIX)
         ),
-
-        J=user_input_parameters.J,
-        T=user_input_parameters.T,
-        M=user_input_parameters.M,
-        p = Y.shape[1] #number of data coordinates
     )
