@@ -72,14 +72,13 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
     remaining_probs = jnp.cumsum(jnp.flip(sum_phi_k[J:]))
     remaining_probs = jnp.flip(remaining_probs)
 
-    # print(variational_parameters.a_k_beta)
-    # print(variational_parameters.a_k_beta.shape)
-    #
-    # print(variational_parameters.b_k_beta)
-    # print(variational_parameters.b_k_beta.shape)
+    print(remaining_probs)
+    print(variational_parameters.a_k_beta[T])
+    print(variational_parameters.b_k_beta[T])
 
-    variational_parameters.a_k_beta = jnp.add(sum_phi_k[J:J+T-1], 1)
-    variational_parameters.b_k_beta = jnp.add(hyperparameters.gamma, remaining_probs[0:T-1])
+
+    variational_parameters.a_k_beta = variational_parameters.a_k_beta.at[0:T-1].set(jnp.add(sum_phi_k[J:J+T-1], 1))
+    variational_parameters.b_k_beta = variational_parameters.b_k_beta.at[0:T-1].set(jnp.add(hyperparameters.gamma, remaining_probs[0:T-1]))
 
     # print(variational_parameters.a_k_beta)
     # print(variational_parameters.a_k_beta.shape)
@@ -310,6 +309,10 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
 
     variational_parameters.nIW_MIX_VAR.phi = (PHI0 + comp_2 + comp_3)[:J, :, :]
     variational_parameters.nIW_DP_VAR.phi = (PHI0 + comp_2 + comp_3)[J:, :, :]
+
+    print(jdet(variational_parameters.nIW_MIX_VAR.phi))
+    print(jdet(variational_parameters.nIW_DP_VAR.phi))
+
 
     # print(variational_parameters.nIW_MIX_VAR.phi.shape)
     # print(variational_parameters.nIW_MIX_VAR.phi)
