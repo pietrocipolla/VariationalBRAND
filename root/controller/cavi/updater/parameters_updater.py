@@ -3,6 +3,7 @@ from jax._src.scipy.special import jdigamma as digamma
 from jax import numpy as jnp
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
+import numpy as np
 
 # Use jit and vectorization!
 
@@ -258,9 +259,20 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
         # comp_2 = comp_2.at[k, :, :].set(diff_y @ (diff_y * phi_mk[:, k]).T) #Do the final operation, where phi_mk[:, k] is the M-dimensional column where we have the probs of being in the kth cluster
 
 
-        for m in range(M):
-            vector = diff_y[:, m]
-            comp_2 = comp_2.at[k, :, :].set(comp_2[k,:,:] + vector @ vector.T * phi_mk[m, k])
+        # for m in range(M):
+        #     vector = diff_y[:, m]
+        #     comp_2 = comp_2.at[k, :, :].set(comp_2[k,:,:] + vector @ vector.T * phi_mk[m, k])
+
+        # alternative code todo check
+        tensor_y = create_tensor(diff_y.T,hyperparameters)
+        #print(diff_y.shape)
+        #print(tensor_y.shape)
+        diff_y *= phi_mk[:,k]
+        prod = jnp.dot(diff_y, jnp.transpose(tensor_y, (2,0,1))) # (pxM)x(pxMxM) = pxpxM
+        #print(prod.shape)
+        comp_2 = comp_2.at[k, :, :].set(jnp.sum(prod, axis = 2))
+
+        #res = jnp.sum(prod, axis=2)
 
         # print('comp_2', comp_2)
         # print('comp_2, shape', comp_2.shape)
@@ -415,4 +427,19 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
 
     print('2',variational_parameters.phi_m_k.shape)
 
+def create_tensor_wrong(phi_mk):
+    expanded = np.zeros(phi_mk.shape + phi_mk.shape[-1:], dtype=phi_mk.dtype)
+    diagonals = np.diagonal(expanded, axis1=-2, axis2=-1)
+    diagonals.setflags(write=True)
+    diagonals[:] = phi_mk
+    return jnp.array(expanded)
+
+def create_tensor(diff, hyperparameters):
+     #
+    temp = jnp.repeat(diff[:, :, jnp.newaxis], hyperparameters.M, axis=2)
+
+    transf = np.eye(hyperparameters.M)
+    transf = np.repeat(transf[:, :, np.newaxis], hyperparameters.p, axis=2)
+
+    return jnp.transpose(temp, (0,2,1)) * transf
 
