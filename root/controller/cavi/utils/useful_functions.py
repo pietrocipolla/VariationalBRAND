@@ -45,7 +45,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
     ret = ret - p*nu/2
     return ret
 
-# val atteso log densità dirichlet 
+# val atteso log densità dirichlet
 # def E_log_dens_dir(eta,J):
 #     #print(eta)
 #     s_eta = jnp.sum(eta)
