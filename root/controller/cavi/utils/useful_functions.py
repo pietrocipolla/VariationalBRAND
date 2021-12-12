@@ -26,21 +26,20 @@ def E_log_beta_unjitted(a,b):
     # a,b coeffs logbeta
     return jdigamma(a)-jdigamma(a+b)
 E_log_beta = jax.jit(E_log_beta_unjitted)
-# val atteso log densità normal inverse wishart 
-def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
+# val atteso log densità normal inverse wishart
+
+def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
     # p dim of mu
     ret = -jnp.log(jdet(jinv(psi)))
-    for i in range(1,p+1):
-        ret = ret - jdigamma((nu-i+1)/2)
+    ret = ret -jnp.sum(jdigamma((nu - l) / 2))
     ret = ret - jnp.log(lam**p)
 
     em = jnp.exp(js.special.multigammaln(nu/2,p))
     ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
 
     brut = p*jnp.log(2) + jnp.log(jdet(jinv(psi)))
-    for k in range(1,p+1):
-        brut = brut + jdigamma((nu-k+1)/2)
-    
+
+    brut = brut + jnp.sum(jdigamma((nu - l) / 2))
     ret = ret - brut*(nu+p+1)/2
     ret = ret - p*nu/2
     return ret
@@ -58,16 +57,16 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p):
 #     return ret
 
 #Versione Jacopo
-def E_log_dens_dir_unjitted(eta : float ,s_eta : float,):
-   ret = (eta-1)*(jdigamma(eta)-jdigamma(s_eta))
-   return ret
-E_log_dens_dir_J = jax.jit(E_log_dens_dir_unjitted)
+#def E_log_dens_dir_unjitted(eta : float ,s_eta : float,):
+#   ret = (eta-1)*(jdigamma(eta)-jdigamma(s_eta))
+#   return ret
+#E_log_dens_dir_J = jax.jit(E_log_dens_dir_unjitted)
 
 # val atteso log densità beta 
-def E_log_dens_beta_unjitted(a:float,b:float):
-    b = jnp.exp(jgamma(a)*jgamma(b)/jgamma(a+b))
-    return (a-1)*E_log_beta(a,b) + (b-1)*E_log_beta(b,a) - jnp.log(b)
-E_log_dens_beta = jax.jit(E_log_dens_beta_unjitted)
+#def E_log_dens_beta_unjitted(a:float,b:float):
+#    b = jnp.exp(jgamma(a)*jgamma(b)/jgamma(a+b))
+#    return (a-1)*E_log_beta(a,b) + (b-1)*E_log_beta(b,a) - jnp.log(b)
+#E_log_dens_beta = jax.jit(E_log_dens_beta_unjitted)
 
 #val atteso log normale dati
 #def E_log_norm(data,mu,nu,lam,psi,p):
@@ -98,16 +97,17 @@ E_log_dens_beta = jax.jit(E_log_dens_beta_unjitted)
 #
 #    return ret
 #E_log_norm = jax.jit(E_log_norm_unjitted)
+#
 
 
-
-def E_log_norm_aneurism(phi, data,mu,nu,lam,psi,p, l,M):
-    #mu = jnp.reshape(mu, p)
-    #data = jnp.reshape(data, p)
-    #psi = jnp.reshape(psi, (p,p))
+def E_log_norm(phi, data,mu,nu,lam,psi,p, l,M):
+    mu = jnp.reshape(mu, p)
+    data = jnp.reshape(data, (M,p))
+    psi = jnp.reshape(psi, (p,p))
+    phi = jnp.reshape(phi, M)
 
     ret = jnp.multiply(-jnp.sum(jdigamma((nu-l)/2)) + jnp.log(jdet(psi)) + p/lam,jnp.ones(M))
-    ret+= nu*(jnp.diag((data - mu).T @ jinv(psi) @(data - mu)))
+    ret+= nu*(jnp.diag((data - mu) @ jinv(psi) @(data - mu).T))
     ret = jnp.dot(phi,ret)
     return ret
 
