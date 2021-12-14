@@ -1,11 +1,11 @@
 from unittest import TestCase
 from jax import numpy as jnp
-from controller.cavi.init_cavi.init_cavi import init_cavi
-from controller.sample_data_handler.data_generator import generate_some_data_example
-from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
-from controller.sample_data_handler.utils import get_training_set_example
-from controller.specify_user_input.specify_user_input import specify_user_input
-from model.variational_parameters import VariationalParameters
+from root.controller.cavi.init_cavi.init_cavi import init_cavi
+from root.controller.sample_data_handler.data_generator import generate_some_data_example
+from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from root.controller.sample_data_handler.utils import get_training_set_example
+from root.controller.specify_user_input.specify_user_input import specify_user_input
+from root.model.variational_parameters import VariationalParameters
 
 
 class Test(TestCase):

@@ -1,5 +1,4 @@
 from unittest import TestCase
-
 from root.controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.sample_data_handler.utils import get_labels_cluster_kmeans, get_training_set_example
 

@@ -1,5 +1,3 @@
-from jax import numpy as jnp
-
 class NIW:
     def __init__(self, mu, nu, lambdA, phi):
         self.mu = mu   #n_elem x p

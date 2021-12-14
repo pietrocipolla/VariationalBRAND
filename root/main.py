@@ -1,10 +1,10 @@
-from controller.sample_data_handler.data_generator import generate_some_data_example
-from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
-from controller.cavi.cavi import cavi
-from controller.sample_data_handler.utils import get_training_set_example
-from controller.specify_user_input.specify_user_input import specify_user_input
-from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
-from model.hyperparameters_model import HyperparametersModel
+from root.controller.sample_data_handler.data_generator import generate_some_data_example
+from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from root.controller.cavi.cavi import cavi
+from root.controller.sample_data_handler.utils import get_training_set_example
+from root.controller.specify_user_input.specify_user_input import specify_user_input
+from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
+from root.model.hyperparameters_model import HyperparametersModel
 
 if __name__ == '__main__':
     #STEP 1

@@ -1,8 +1,7 @@
 from unittest import TestCase
-
-from controller.sample_data_handler.data_generator import generate_some_data_example
-from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
-from controller.sample_data_handler.utils import get_training_set_example
+from root.controller.sample_data_handler.data_generator import generate_some_data_example
+from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from root.controller.sample_data_handler.utils import get_training_set_example
 
 
 class Test(TestCase):

@@ -1,19 +1,20 @@
 from unittest import TestCase
 from jax import numpy as jnp
+from root.controller.cavi.init_cavi.init_cavi import init_cavi
+from root.controller.sample_data_handler.data_generator import generate_some_data_example
+from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from root.controller.sample_data_handler.utils import get_training_set_example
+from root.controller.specify_user_input.specify_user_input import specify_user_input
+from root.model.variational_parameters import VariationalParameters
+
 
 class Test(TestCase):
     def test_init_cavi(self):
-        from controller.sample_data_handler.data_generator import generate_some_data_example
         Y = generate_some_data_example()
-        from controller.sample_data_handler.utils import get_training_set_example
         Y_training, num_classes_training = get_training_set_example(Y)
 
-        from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
-        from controller.specify_user_input.specify_user_input import specify_user_input
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
-        from controller.cavi.init_cavi.init_cavi import init_cavi
-        from model.variational_parameters import VariationalParameters
         variational_parameters : VariationalParameters = init_cavi(user_input_parameters)
 
         #check conversion to jnp array

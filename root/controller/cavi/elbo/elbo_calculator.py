@@ -1,23 +1,8 @@
-#import jax.numpy.log as jlog
-#import jax.scipy.special.digamma as jdgamma
-#import jax.scipy.special.gamma as jgamma
-# from VariationalBRAND.root.controller.cavi.utils import useful_functions
-# from VariationalBRAND.root.model.hyperparameters_model.hyperparameters_model import HyperparametersModel
-# from VariationalBRAND.root.model.variational_parameters.variational_parameters import VariationalParameters
-
-import jax
-import jax.numpy as jnp
-import jax.scipy as js
-from jax._src.numpy.linalg import jdet, jinv
-
 from jax.numpy import log as jlog
 from jax._src.scipy.special import jdigamma as jdgamma
 from jax._src.scipy.special import gammaln as jgammaln
-
 from jax import numpy as jnp
-
 from controller.cavi.utils import useful_functions
-#from controller.cavi.utils.useful_functions import E_log_dens_dir_J, E_log_norm_aneurism
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 

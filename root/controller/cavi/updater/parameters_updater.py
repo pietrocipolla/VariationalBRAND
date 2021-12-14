@@ -1,8 +1,8 @@
 from jax._src.numpy.linalg import jdet, jinv
 from jax._src.scipy.special import jdigamma as digamma
 from jax import numpy as jnp
-from model.hyperparameters_model import HyperparametersModel
-from model.variational_parameters import VariationalParameters
+from root.model.hyperparameters_model import HyperparametersModel
+from root.model.variational_parameters import VariationalParameters
 import numpy as np
 
 # Use jit and vectorization!
