@@ -20,7 +20,7 @@ class Test(TestCase):
         #check conversion to jnp array
         self.assertEqual(type(variational_parameters.phi_m_k), type(jnp.array([])))
 
-        #print(user_input_parameters.eta_k)
+        print(user_input_parameters.eta_k)
 
         #print(variational_parameters.eta_k)
 
