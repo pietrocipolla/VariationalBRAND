@@ -1,5 +1,10 @@
-from jax._src.numpy.linalg import jdet, jinv
-from jax._src.scipy.special import jdigamma as digamma
+# from jax._src.numpy.linalg import jdet, jinv
+# from jax._src.scipy.special import jdigamma as digamma
+from jax.numpy.linalg import det as jdet, inv as jinv
+from jax.scipy.special import digamma as digamma
+from jax.scipy.special import digamma as jdigamma
+from jax.scipy.special import gammaln as jgammaln
+
 from jax import numpy as jnp
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.variational_parameters import VariationalParameters

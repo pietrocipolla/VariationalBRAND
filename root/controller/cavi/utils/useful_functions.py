@@ -16,8 +16,10 @@ import jax
 
 import jax.numpy as jnp
 import jax.scipy as js
-from jax._src.numpy.linalg import jdet, jinv
-from jax._src.scipy.special import jdigamma
+from jax.numpy.linalg import det as jdet, inv as jinv
+from jax.scipy.special import digamma as digamma
+from jax.scipy.special import digamma as jdigamma
+from jax.scipy.special import gammaln as jgammaln
 from jax.scipy.stats.gamma import pdf as gamma
 from jax.scipy.stats.gamma import pdf as jgamma
 

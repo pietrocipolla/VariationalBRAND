@@ -1,6 +1,8 @@
 from jax.numpy import log as jlog
-from jax._src.scipy.special import jdigamma as jdgamma
-from jax._src.scipy.special import gammaln as jgammaln
+# from jax._src.scipy.special import jdigamma as jdgamma
+# from jax._src.scipy.special import gammaln as jgammaln
+from jax.scipy.special import digamma as jdgamma
+from jax.scipy.special import gammaln as jgammaln
 from jax import numpy as jnp
 from controller.cavi.utils import useful_functions
 from model.hyperparameters_model import HyperparametersModel
