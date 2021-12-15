@@ -27,7 +27,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     nIW_MIX_VAR = var_param.nIW_MIX_VAR
     nIW_DP_VAR = var_param.nIW_DP_VAR
 
-eta_bar=jnp.sum(eta_k)
+    eta_bar=jnp.sum(eta_k)
 
     mu_mix=nIW_MIX_VAR.mu
     nu_mix=nIW_MIX_VAR.nu
