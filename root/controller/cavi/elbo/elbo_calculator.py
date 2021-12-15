@@ -24,10 +24,10 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     eta_k=var_param.eta_k
     a_k_beta=var_param.a_k_beta
     b_k_beta=var_param.b_k_beta
-    nIW_MIX_VAR=var_param.nIW_MIX_VAR
-    nIW_DP_VAR=var_param.nIW_DP_VAR
+    nIW_MIX_VAR = var_param.nIW_MIX_VAR
+    nIW_DP_VAR = var_param.nIW_DP_VAR
 
-    eta_bar=jnp.sum(eta_k)
+eta_bar=jnp.sum(eta_k)
 
     mu_mix=nIW_MIX_VAR.mu
     nu_mix=nIW_MIX_VAR.nu
@@ -135,7 +135,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #
 
     #f7
-    f7=0
+    #f7=0
     #for k in range(0,J+1):
     #    f7 += float((a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar)))
     #
@@ -150,8 +150,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #    f8 += float((gamma-1)*(jdgamma(b_k_beta[l])-jdgamma(a_k_beta[l]+b_k_beta[l])))
 
     f8 = jnp.sum(jnp.multiply((gamma-1),(diga_b-diga_ab)))
-    # E_log_p = f1+f2+f3+f4+f5+f6+f7+f8
     print('f8 done',f8)
+
+    E_log_p = f1 + f2 + f3 + f4 + f5 + f6 + f7 + f8
 
     #val atteso log q
 
@@ -204,5 +205,5 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     E_log_q= h1+h2+h3+h4+h5
     print('h4 h5 done', h4,h5)
 
-    # return E_log_p-E_log_q
+    return E_log_p-E_log_q
 

@@ -37,7 +37,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
     ret = ret - jnp.log(lam**p)
 
     #em = jnp.exp(js.special.multigammaln(nu/2,p))
-    ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
+    #ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
     #
     ret = ret + nu*jnp.log(jdet(psi))/2 - (nu*p/2)*jnp.log(2) - js.special.multigammaln(nu/2,p)
 
@@ -115,4 +115,5 @@ def E_log_norm(phi, data,mu,nu,lam,psi,p, l,M):
     ret+= nu*(jnp.diag((data - mu) @ jinv(psi) @(data - mu).T))
     ret = jnp.dot(phi,ret)
     return ret
+
 
