@@ -205,5 +205,5 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     E_log_q= h1+h2+h3+h4+h5
     print('h4 h5 done', h4,h5)
 
-    return E_log_p-E_log_q
+    return float(E_log_p-E_log_q)
 

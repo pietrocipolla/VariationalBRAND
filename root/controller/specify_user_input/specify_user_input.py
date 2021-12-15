@@ -10,8 +10,8 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     T = 5
 
     # Num iteration and tolerancecavi
-    n_iter = 100
-    tol = 10e-6
+    n_iter = 10
+    tol = 0.1
 
     #HYPERPARAMETERS
     gamma = 5
@@ -61,7 +61,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
-    M = 500
+    M = 1000 #num_samples
     phi_m_k_temp = np.zeros((M, J + T))
 
     for m in range(M):

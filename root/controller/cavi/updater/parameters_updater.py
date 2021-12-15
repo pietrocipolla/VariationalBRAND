@@ -34,8 +34,8 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     # Multinomial_phi
     update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J)
 
-    #update jax array
-    return variational_parameters
+    # #update jax array
+    # return variational_parameters
 
 
 ############# UTILS ##############
@@ -78,9 +78,9 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
     remaining_probs = jnp.cumsum(jnp.flip(sum_phi_k[J:]))
     remaining_probs = jnp.flip(remaining_probs)
 
-    print(remaining_probs)
-    print(variational_parameters.a_k_beta[T])
-    print(variational_parameters.b_k_beta[T])
+    # print(remaining_probs)
+    # print(variational_parameters.a_k_beta[T])
+    # print(variational_parameters.b_k_beta[T])
 
 
     variational_parameters.a_k_beta = variational_parameters.a_k_beta.at[0:T-1].set(jnp.add(sum_phi_k[J:J+T-1], 1))
@@ -327,8 +327,8 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     variational_parameters.nIW_MIX_VAR.phi = (PHI0 + comp_2 + comp_3)[:J, :, :]
     variational_parameters.nIW_DP_VAR.phi = (PHI0 + comp_2 + comp_3)[J:, :, :]
 
-    print(jdet(variational_parameters.nIW_MIX_VAR.phi))
-    print(jdet(variational_parameters.nIW_DP_VAR.phi))
+    # print(jdet(variational_parameters.nIW_MIX_VAR.phi))
+    # print(jdet(variational_parameters.nIW_DP_VAR.phi))
 
 
     # print(variational_parameters.nIW_MIX_VAR.phi.shape)
@@ -394,7 +394,7 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
 #    print(diff.shape)
 
     diff = jnp.reshape(diff, (1,len(diff)))
-    print(diff.shape)
+    # print(diff.shape)
 
     z = jnp.zeros((1,1))
     dig_cumsum = jnp.concatenate((z, diff), axis=1)
@@ -424,13 +424,13 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
     phi_mk = phi_mk.at[:, T + J-1].set(jnp.exp(e_dir + e_res_T + e_norm_T))
     norm_phi = jnp.reshape(jnp.sum(phi_mk, axis=1), (phi_mk.shape[0], 1))
 
-    print('norm_phi', norm_phi.shape)
-
-    print('2', variational_parameters.phi_m_k.shape)
+    # print('norm_phi', norm_phi.shape)
+    #
+    # print('2', variational_parameters.phi_m_k.shape)
 
     variational_parameters.phi_m_k = phi_mk / norm_phi
 
-    print('2',variational_parameters.phi_m_k.shape)
+    # print('2',variational_parameters.phi_m_k.shape)
 
 def create_tensor_wrong(phi_mk):
     expanded = np.zeros(phi_mk.shape + phi_mk.shape[-1:], dtype=phi_mk.dtype)
