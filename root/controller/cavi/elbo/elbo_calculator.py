@@ -190,8 +190,8 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
    #    h3 += float((a_k_beta[k]-1)*(jdgamma(a_k_beta[k])-jdgamma(b_k_beta[k]+a_k_beta[k])))
    #    h3 += float((b_k_beta[k]-1)*(jdgamma(b_k_beta[k])-jdgamma(a_k_beta[k]+b_k_beta[k]))-jlog(beta))
    #
-    beta_AB = (jnp.exp(jgammaln(a_k_beta)) * jnp.exp(jgammaln(b_k_beta)) / jnp.exp(jgammaln(a_k_beta + b_k_beta)))
-    h3 = jnp.sum(jnp.multiply(a_k_beta-1,diga_a - diga_ab)) + jnp.sum(jnp.multiply(b_k_beta-1,diga_b - diga_ab)) - jnp.sum(jnp.log(beta_AB))
+    beta_AB = jgammaln(a_k_beta) + jgammaln(b_k_beta) -  jgammaln(a_k_beta + b_k_beta)
+    h3 = jnp.sum(jnp.multiply(a_k_beta-1,diga_a - diga_ab)) + jnp.sum(jnp.multiply(b_k_beta-1,diga_b - diga_ab)) - jnp.sum(beta_AB)
     print('h3 done', h3)
 
     #h4 e h5
