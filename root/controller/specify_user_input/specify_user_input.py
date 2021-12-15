@@ -68,7 +68,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
         for k in range(J):
             phi_m_k_temp[m, k] = 1 / (J + 1)
         for k in range(J, J + T):
-            phi_m_k_temp[m, k] = (1 / (J + 1)) * (0.5 ** (k - J)) * (1 / (1 - 0.5 ** T))
+            phi_m_k_temp[m, k] = (1 / (J + 1)) * (0.5 ** (k - J + 1)) * (1 / (1 - 0.5 ** T))
 
     Phi_m_k = phi_m_k_temp
     # > parametri delle multinomiali -> matrice (Mx(J+T))
