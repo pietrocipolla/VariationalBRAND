@@ -8,6 +8,7 @@ from root.controller.cavi.utils import useful_functions
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.variational_parameters import VariationalParameters
 
+from jax.scipy.special import logsumexp as jse
 
 def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalParameters, p, psi_dp=None):
     M=hyper.M
@@ -94,9 +95,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     # Versione Jacopo
     # for k in range(1,J+1):
     #    f5 += (diga_eta[k] - diga_e_b)*jnp.sum(phi_m_k[:,k])
-    # f5 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k,axis = 0)[0:J], (diga_eta - diga_e_b)[1:]))
+    f5 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k,axis = 0)[0:J], (diga_eta - diga_e_b)[1:]))
 
-    f5 = jnp.exp(jse(jnp.log(jnp.multiply(jnp.sum(phi_m_k, axis=0)[0:J], (diga_eta - diga_e_b)[1:]))))
+    #f5 = jnp.exp(jse(jnp.log(jnp.multiply(jnp.sum(phi_m_k, axis=0)[0:J], (diga_eta - diga_e_b)[1:]))))
 
     #    jnp.sum(jnp.multiply(eta_k-1, diga_eta - diga_e_b))
     #    jnp.exp(jse(jnp.log((jnp.multiply(eta_k-1, diga_eta - diga_e_b)))))
@@ -128,6 +129,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
         f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k-J] + parsum[k-J])
     print('f6 done', f6)
 
+#    jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
+    f6 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
+    print('f6 vec', f6)
     #
 
     #f7
@@ -136,9 +140,10 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #    f7 += float((a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar)))
     #
     #
-    f7 = jnp.sum((a_dir_k-1)*(diga_eta-diga_e_b))
+    f7 = jnp.sum(jnp.multiply((a_dir_k-1),(diga_eta-diga_e_b)))
     #
     print('f7 done', f7)
+
     #f8
     #f8 = 0
     #for l in range(0,T-1):
@@ -147,6 +152,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     f8 = jnp.sum(jnp.multiply((gamma-1),(diga_b-diga_ab)))
     # E_log_p = f1+f2+f3+f4+f5+f6+f7+f8
     print('f8 done',f8)
+
     #val atteso log q
 
     #h1
