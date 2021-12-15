@@ -82,21 +82,24 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
         f4 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p,l)
     print('f3 f4 done',f3,f4)
 
-    #f5 #old version
+    # f5 #old version
     # f5=0
     # print(eta_k)
-    # for k in range(0,J):
+    # for k in range(1,J):
     #     for m in range(0,M):
     #         f5 += useful_functions.E_log_dens_dir(eta_k[k],J)*phi_m_k[m,k] #todo occhio che passa eta[k], ma poi
     #                                                                         #all internero di elogdens ancora eta[]
     # print('f5 done',f5)
 
     # Versione Jacopo
-    #f5 = 0
-    #for k in range(0, J):
-    #    f5 += jnp.sum(phi_m_k[:, k]) * E_log_dens_dir_J(eta_k[k], eta_bar)#(eta-1)*(jdigamma(eta)-jdigamma(s_eta))
-    f5 = jnp.sum(jnp.multiply(eta_k-1, diga_eta - diga_e_b))
-    print('f5 done', f5)
+    # for k in range(1,J+1):
+    #    f5 += (diga_eta[k] - diga_e_b)*jnp.sum(phi_m_k[:,k])
+    # f5 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k,axis = 0)[0:J], (diga_eta - diga_e_b)[1:]))
+
+    f5 = jnp.exp(jse(jnp.log(jnp.multiply(jnp.sum(phi_m_k, axis=0)[0:J], (diga_eta - diga_e_b)[1:]))))
+
+    #    jnp.sum(jnp.multiply(eta_k-1, diga_eta - diga_e_b))
+    #    jnp.exp(jse(jnp.log((jnp.multiply(eta_k-1, diga_eta - diga_e_b)))))
 
     #f6 old
     # f6=0
