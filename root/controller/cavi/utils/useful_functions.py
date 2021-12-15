@@ -34,7 +34,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
     # p dim of mu
     ret = -jnp.log(jdet(jinv(psi)))
     ret = ret -jnp.sum(jdigamma((nu - l) / 2))
-    ret = ret - jnp.log(lam**p)
+    ret = ret - p*jnp.log(lam)
 
     #em = jnp.exp(js.special.multigammaln(nu/2,p))
     #ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
@@ -42,7 +42,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
     ret = ret + nu*jnp.log(jdet(psi))/2 - (nu*p/2)*jnp.log(2) - js.special.multigammaln(nu/2,p)
 
 
-    brut = p*jnp.log(2) + jnp.log(jdet(jinv(psi)))
+    brut = p*jnp.log(2) - jnp.log(jdet(psi))
 
     brut = brut + jnp.sum(jdigamma((nu - l) / 2))
     ret = ret - brut*(nu+p+1)/2

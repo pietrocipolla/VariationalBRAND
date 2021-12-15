@@ -167,7 +167,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #print('h1 done', h1)
 
     #
-    h1 = jnp.sum(jnp.multiply(phi_m_k,jlog(phi_m_k)))
+    h1 = jnp.sum(jnp.log(phi_m_k**phi_m_k))
     print('h1 done', h1)
 
     #h2
