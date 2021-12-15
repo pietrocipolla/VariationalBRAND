@@ -44,7 +44,7 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
 
     brut = p*jnp.log(2) + jnp.log(jdet(jinv(psi)))
 
-    brut = brut + jnp.exp(jse(jnp.log((jdigamma((nu - l) / 2)))))
+    brut = brut + jnp.sum(jdigamma((nu - l) / 2))
     ret = ret - brut*(nu+p+1)/2
     ret = ret - p*nu/2
     return ret
