@@ -9,7 +9,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # Numero di classi massime nel Dirichlet Process
     T = 5
 
-    # Num iteration and tolerancecavi
+    # Num iteration and tolerance cavi
     n_iter = 8
     tol = 0.1
 

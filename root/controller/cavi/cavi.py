@@ -21,19 +21,17 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
         elbo_values.append(elbo_calculator(Y, hyperparameters_model, variational_parameters, p))
 
         print('\nelbo: ',i, elbo_values,)
-        #print(variational_parameters.toString())
 
         print('out: ', variational_parameters.sum_phi_k)
 
-        # if (i > 0) & ((elbo_values[i]) ** 2 < tol):
+        # if (i > 0) & ((elbo_values[-1]-elbo_values[-2]) ** 2 < tol):
         #     print('convergence of elbo')
         #     return variational_parameters, elbo_values
 
-    X = load_data_nupy()
     ll = []
     for i in range(1000):
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
-    plt.scatter(X[:, 0], X[:, 1], c=ll, s=40, cmap='viridis')
+    plt.scatter(Y[:, 0], Y[:, 1], c=ll, s=40, cmap='viridis')
     #plt.show()
     plt.savefig('figure.png')
     print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")
