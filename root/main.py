@@ -1,5 +1,4 @@
 from controller.partition_inducer.partition_inducer import generate_induced_partition
-from controller.specify_user_input.specify_user_input_our import specify_user_input_our
 from model.variational_parameters import VariationalParameters
 from root.controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
