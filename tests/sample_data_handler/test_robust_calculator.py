@@ -11,8 +11,9 @@ class Test(TestCase):
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
 
-        #print(list_robust_mean)
-        #print(list_inv_cov_mat)
+        print(list_robust_mean)
+        # print(list_inv_cov_mat)
 
         self.assertEqual(list_robust_mean[1].shape, (2,))
-        self.assertEqual(list_inv_cov_mat[1].shape, (2,2))
+        self.assertEqual(list_inv_cov_mat[1].shape, (2, 2))
+

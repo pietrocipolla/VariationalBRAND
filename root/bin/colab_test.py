@@ -24,7 +24,7 @@ class Test(TestCase):
 
         #print(variational_parameters.eta_k)
 
-        self.assertEqual(variational_parameters.phi_m_k.shape, (500, 8))
+        self.assertEqual(variational_parameters.phi_m_k.shape, (750, 8))
         self.assertEqual(len(variational_parameters.eta_k), 4)
 
         self.assertEqual(len(variational_parameters.a_k_beta), 4)
