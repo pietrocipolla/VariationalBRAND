@@ -1,3 +1,4 @@
+from controller.partition_inducer.partition_inducer import generate_induced_partition
 from model.variational_parameters import VariationalParameters
 from root.controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
@@ -27,3 +28,7 @@ if __name__ == '__main__':
 
     # CAVI (init + update + elbo)
     variational_parameters : VariationalParameters =  cavi(Y, hyperparameters_model, user_input_parameters)
+
+    # INDUCED PARTITION
+    generate_induced_partition(Y, robust_mean, variational_parameters)
+

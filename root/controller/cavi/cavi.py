@@ -6,7 +6,6 @@ from root.controller.cavi.updater.parameters_updater import update_parameters, i
 from jax import numpy as jnp
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.user_input_model import UserInputModel
-import matplotlib.pyplot as plt
 
 
 def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel):
@@ -29,14 +28,6 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
         # if (i > 0) & ((elbo_values[-1]-elbo_values[-2]) ** 2 < tol):
         #     print('convergence of elbo')
         #     return variational_parameters, elbo_values
-
-    ll = []
-    for i in range(750):
-        ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
-    plt.scatter(Y[:, 0], Y[:, 1], c=ll, s=40, cmap='viridis')
-    #plt.show()
-    plt.savefig('figure.png')
-    print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")
 
     return variational_parameters
 
