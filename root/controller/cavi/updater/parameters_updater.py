@@ -12,22 +12,6 @@ import numpy as np
 
 # Use jit and vectorization!
 
-def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
-    init_update_parameters(hyperparameters, variational_parameters)
-
-    # Define function for each family update:
-    # Dirichlet_eta
-    update_dirichlet(variational_parameters, hyperparameters)
-    # Beta_V
-    update_beta(variational_parameters, hyperparameters)
-    # NIW_mu_nu_lamda_Phi
-    update_NIW(data, variational_parameters, hyperparameters)
-    # Multinomial_phi
-    update_phi_mk(data, variational_parameters, hyperparameters)
-
-    # #update jax array
-    # return variational_parameters
-
 def init_update_parameters(hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
     variational_parameters.sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=0)
     # print(sum_phi_k.shape)
@@ -35,6 +19,22 @@ def init_update_parameters(hyperparameters: HyperparametersModel, variational_pa
     # mask = create_mask(sum_phi_k, J)
     # sum_phi_k = sum_phi_k[mask]
     variational_parameters.T_true = len(variational_parameters.sum_phi_k) - hyperparameters.J
+
+def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
+    # Define function for each family update:
+    # Dirichlet_eta
+    update_dirichlet(variational_parameters, hyperparameters)
+    # Beta_V
+    update_beta(variational_parameters, hyperparameters)
+    # NIW_mu_nu_lamda_Phi
+    init_update_NIW(data, variational_parameters)
+    update_NIW(data, variational_parameters, hyperparameters)
+    # Multinomial_phi
+    update_phi_mk(data, variational_parameters, hyperparameters)
+
+    # #update jax array
+    # return variational_parameters
+
 
 ############# UTILS ##############
 def create_mask(sum_phi_k,J):
@@ -78,20 +78,16 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
 ###############################################################
 
 ############# UPDATE NIW ##############à
-def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel):
-
-    init_update_NIW(y, variational_parameters)
-
-    update_NIW_mu(variational_parameters, hyperparameters)
-    update_NIW_lambda(variational_parameters, hyperparameters)
-    update_NIW_nu(variational_parameters, hyperparameters)
-    update_NIW_PHI(y, variational_parameters, hyperparameters)
-
 def init_update_NIW(y, variational_parameters : VariationalParameters):
     # supponendo y Mxp
     variational_parameters.sum_y_phi = y.T @ variational_parameters.phi_m_k                         # pxM*(M*(J+T_true)) = px(J+T_true)
     variational_parameters.y_bar = eval_y_bar(variational_parameters.sum_phi_k, variational_parameters.sum_y_phi)                # px(J+T_true)
 
+def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel):
+    update_NIW_mu(variational_parameters, hyperparameters)
+    update_NIW_lambda(variational_parameters, hyperparameters)
+    update_NIW_nu(variational_parameters, hyperparameters)
+    update_NIW_PHI(y, variational_parameters, hyperparameters)
 
 def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel):
     # Estrazione parametri
