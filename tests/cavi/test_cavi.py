@@ -25,7 +25,7 @@ class Test(TestCase):
         print(variational_parameters.toString())
         print('variational_parameters.toString()')
 
-        cavi(Y, hyperparameters_model, user_input_parameters)
+        variational_parameters = cavi(Y, hyperparameters_model, user_input_parameters)
 
         print('variational_parameters.toString()')
         print(variational_parameters.toString())
