@@ -34,5 +34,7 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     for i in range(1000):
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
     plt.scatter(X[:, 0], X[:, 1], c=ll, s=40, cmap='viridis')
-    plt.show()
+    #plt.show()
+    plt.savefig('figure.png')
+    print("ploat available in content/var_brand/figure.png")
 
