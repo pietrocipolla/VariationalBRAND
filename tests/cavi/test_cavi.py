@@ -1,4 +1,6 @@
 from unittest import TestCase
+
+from controller.partition_inducer.partition_inducer import generate_induced_partition
 from root.controller.cavi.cavi import cavi
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
@@ -27,3 +29,6 @@ class Test(TestCase):
 
         print('variational_parameters.toString()')
         print(variational_parameters.toString())
+
+        # INDUCED PARTITION
+        generate_induced_partition(Y, list_robust_mean, variational_parameters)
