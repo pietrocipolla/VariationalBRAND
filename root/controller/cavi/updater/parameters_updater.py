@@ -13,16 +13,7 @@ import numpy as np
 # Use jit and vectorization!
 
 def update_parameters(data, hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
-    #update parameters
-    J = hyperparameters.J
-
-    variational_parameters.sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=0)
-    # print(sum_phi_k.shape)
-    # print(sum_phi_k)
-
-    #mask = create_mask(sum_phi_k, J)
-    #sum_phi_k = sum_phi_k[mask]
-    T_true = len(variational_parameters.sum_phi_k) - J
+    init_update_parameters(hyperparameters, variational_parameters)
 
     # Define function for each family update:
     # Dirichlet_eta
@@ -30,13 +21,20 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     # Beta_V
     update_beta(variational_parameters, hyperparameters)
     # NIW_mu_nu_lamda_Phi
-    update_NIW(data, variational_parameters, hyperparameters, T_true)
+    update_NIW(data, variational_parameters, hyperparameters)
     # Multinomial_phi
-    update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J)
+    update_phi_mk(data, variational_parameters, hyperparameters)
 
     # #update jax array
     # return variational_parameters
 
+def init_update_parameters(hyperparameters: HyperparametersModel, variational_parameters: VariationalParameters):
+    variational_parameters.sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=0)
+    # print(sum_phi_k.shape)
+
+    # mask = create_mask(sum_phi_k, J)
+    # sum_phi_k = sum_phi_k[mask]
+    variational_parameters.T_true = len(variational_parameters.sum_phi_k) - hyperparameters.J
 
 ############# UTILS ##############
 def create_mask(sum_phi_k,J):
@@ -57,17 +55,7 @@ def update_dirichlet(variational_parameters : VariationalParameters, hyperparame
     temporary_phi_k = temporary_phi_k.at[0:-1].set(variational_parameters.sum_phi_k[:J])
     temporary_phi_k = temporary_phi_k.at[-1].set(jnp.sum(variational_parameters.sum_phi_k[J:]))
 
-    # print(hyperparameters.a_dir_k)
-    # print(hyperparameters.a_dir_k.shape)
-    #
-    # print(variational_parameters.eta_k)
-    # print(variational_parameters.eta_k.shape)
-
     variational_parameters.eta_k = hyperparameters.a_dir_k + temporary_phi_k
-
-    # print(variational_parameters.eta_k)
-    # print(variational_parameters.eta_k.shape)
-
 
 
 ############# UPDATE BETA ##############
@@ -79,18 +67,10 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
     remaining_probs = jnp.flip(remaining_probs)
 
     # print(remaining_probs)
-    # print(variational_parameters.a_k_beta[T])
-    # print(variational_parameters.b_k_beta[T])
-
 
     variational_parameters.a_k_beta = variational_parameters.a_k_beta.at[0:T-1].set(jnp.add(variational_parameters.sum_phi_k[J:J+T-1], 1))
     variational_parameters.b_k_beta = variational_parameters.b_k_beta.at[0:T-1].set(jnp.add(hyperparameters.gamma, remaining_probs[0:T-1]))
 
-    # print(variational_parameters.a_k_beta)
-    # print(variational_parameters.a_k_beta.shape)
-    #
-    # print(variational_parameters.b_k_beta)
-    # print(variational_parameters.b_k_beta.shape)
 
 
 ###############################################################
@@ -98,25 +78,22 @@ def update_beta(variational_parameters : VariationalParameters, hyperparameters 
 ###############################################################
 
 ############# UPDATE NIW ##############à
-def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel, T_true):
-    phi_mk = variational_parameters.phi_m_k
+def update_NIW(y, variational_parameters : VariationalParameters, hyperparameters: HyperparametersModel):
 
+    init_update_NIW(y, variational_parameters)
+
+    update_NIW_mu(variational_parameters, hyperparameters)
+    update_NIW_lambda(variational_parameters, hyperparameters)
+    update_NIW_nu(variational_parameters, hyperparameters)
+    update_NIW_PHI(y, variational_parameters, hyperparameters)
+
+def init_update_NIW(y, variational_parameters : VariationalParameters):
     # supponendo y Mxp
-    sum_y_phi = y.T @ phi_mk                         # pxM*(M*(J+T_true)) = px(J+T_true)
-    y_bar = eval_y_bar(variational_parameters.sum_phi_k, sum_y_phi)                # px(J+T_true)
-
-    # print(sum_y_phi)
-    # print(sum_y_phi.shape)
-    # print(y_bar)
-    # print(y_bar.shape)
-
-    update_NIW_mu(variational_parameters, hyperparameters, sum_y_phi, T_true)
-    update_NIW_lambda(variational_parameters, hyperparameters, T_true)
-    update_NIW_nu(variational_parameters, hyperparameters, T_true)
-    update_NIW_PHI(variational_parameters, hyperparameters, y_bar, y, phi_mk, hyperparameters.T)
+    variational_parameters.sum_y_phi = y.T @ variational_parameters.phi_m_k                         # pxM*(M*(J+T_true)) = px(J+T_true)
+    variational_parameters.y_bar = eval_y_bar(variational_parameters.sum_phi_k, variational_parameters.sum_y_phi)                # px(J+T_true)
 
 
-def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, sum_y_phi, T_true):
+def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel):
     # Estrazione parametri
     J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambdA
@@ -124,7 +101,7 @@ def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameter
     mu0_DP = hyperparameters_model.nIW_DP_0.mu.T           # pxT
     mu0_MIX = hyperparameters_model.nIW_MIX_0.mu.T        # pxJ
 
-    one_vec = jnp.ones((1, T_true))
+    one_vec = jnp.ones((1, variational_parameters.T_true))
 
     # LAMBDA
     lambda0_MIX = jnp.reshape(lambda0_MIX, (1, len(lambda0_MIX)))
@@ -132,36 +109,25 @@ def update_NIW_mu(variational_parameters: VariationalParameters , hyperparameter
     lambda0 = jnp.concatenate((lambda0_MIX, lambda0_DP_vec), axis=1)          # J+T_true
 
     # MU
-    mu0_DP_vec = jnp.repeat(mu0_DP, T_true, axis=1)
+    mu0_DP_vec = jnp.repeat(mu0_DP, variational_parameters.T_true, axis=1)
     # pxT_true
     mu0 = jnp.concatenate((mu0_MIX, mu0_DP_vec), axis=1)        # px(J+T_tr
 
     # CALCOLI AGGIORNAMENTO
-    num = lambda0 * mu0 + sum_y_phi      # px(J+T_true)
+    num = lambda0 * mu0 + variational_parameters.sum_y_phi      # px(J+T_true)
     den = lambda0 + variational_parameters.sum_phi_k
     mu_k = num/den                                                          # px(J+T_true)
-
-    # print(variational_parameters.nIW_MIX_VAR.mu.shape)
-    # print(variational_parameters.nIW_MIX_VAR.mu)
-    #
-    # print(variational_parameters.nIW_DP_VAR.mu.shape)
-    # print(variational_parameters.nIW_DP_VAR.mu)
 
     variational_parameters.nIW_MIX_VAR.mu = mu_k[:, :J].T
     variational_parameters.nIW_DP_VAR.mu = mu_k[:, J:].T
 
-    # print(variational_parameters.nIW_MIX_VAR.mu.shape)
-    # print(variational_parameters.nIW_MIX_VAR.mu)
-    #
-    # print(variational_parameters.nIW_DP_VAR.mu.shape)
-    # print(variational_parameters.nIW_DP_VAR.mu)
 
-def update_NIW_lambda(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel, T_true):
+def update_NIW_lambda(variational_parameters: VariationalParameters , hyperparameters_model: HyperparametersModel):
     J = hyperparameters_model.J
     lambda0_DP = hyperparameters_model.nIW_DP_0.lambdA
     lambda0_MIX = hyperparameters_model.nIW_MIX_0.lambdA
 
-    one_vec = jnp.ones((1, T_true))
+    one_vec = jnp.ones((1, variational_parameters.T_true))
 
     # LAMBDA
     lambda0_MIX = jnp.reshape(lambda0_MIX, (1, len(lambda0_MIX)))
@@ -170,51 +136,29 @@ def update_NIW_lambda(variational_parameters: VariationalParameters , hyperparam
 
     # NON cambio ora i nomi ma forse meglio non chiamare con 0 i parametri variazionali (eg lambda_0_mix o mu_0_mix)
 
-    # print(variational_parameters.nIW_MIX_VAR.lambdA.shape)
-    # print(variational_parameters.nIW_MIX_VAR.lambdA)
-    #
-    # print(variational_parameters.nIW_DP_VAR.lambdA.shape)
-    # print(variational_parameters.nIW_DP_VAR.lambdA)
-
     variational_parameters.nIW_MIX_VAR.labmdA= (lambda0 + variational_parameters.sum_phi_k)[0,:J].T
     variational_parameters.nIW_DP_VAR.lambdA = (lambda0 + variational_parameters.sum_phi_k)[0,J:].T
 
-    # print(variational_parameters.nIW_MIX_VAR.lambdA.shape)
-    # print(variational_parameters.nIW_MIX_VAR.lambdA)
-    #
-    # print(variational_parameters.nIW_DP_VAR.lambdA.shape)
-    # print(variational_parameters.nIW_DP_VAR.lambdA)
 
-def update_NIW_nu(variational_parameters: VariationalParameters,hyperparameters_model: HyperparametersModel, T_true):
+def update_NIW_nu(variational_parameters: VariationalParameters,hyperparameters_model: HyperparametersModel):
     J = hyperparameters_model.J
     nu0_DP = hyperparameters_model.nIW_DP_0.nu
     nu0_MIX = hyperparameters_model.nIW_MIX_0.nu
 
-    one_vec = jnp.ones((1, T_true))
+    one_vec = jnp.ones((1, variational_parameters.T_true))
 
     # NU
     nu0_MIX = jnp.reshape(nu0_MIX, (1, len(nu0_MIX)))
     nu0_DP_vec = nu0_DP * one_vec  # T_true
     nu0 = jnp.concatenate((nu0_MIX, nu0_DP_vec), axis=1)  # J+T_true
 
-    # print(variational_parameters.nIW_MIX_VAR.nu.shape)
-    # print(variational_parameters.nIW_MIX_VAR.nu)
-    #
-    # print(variational_parameters.nIW_DP_VAR.nu.shape)
-    # print(variational_parameters.nIW_DP_VAR.nu)
-
     variational_parameters.nIW_MIX_VAR.nu = (nu0 + variational_parameters.sum_phi_k)[0,:J]
     variational_parameters.nIW_DP_VAR.nu = (nu0 + variational_parameters.sum_phi_k)[0,J:]
 
-    # print(variational_parameters.nIW_MIX_VAR.nu.shape)
-    # print(variational_parameters.nIW_MIX_VAR.nu)
-    #
-    # print(variational_parameters.nIW_DP_VAR.nu.shape)
-    # print(variational_parameters.nIW_DP_VAR.nu)
 
 # modified until here
 
-def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters: HyperparametersModel, y_bar,y, phi_mk, T_true):
+def update_NIW_PHI(y, variational_parameters: VariationalParameters,hyperparameters: HyperparametersModel):
     J = hyperparameters.J
     M = hyperparameters.M
     #si accede così?
@@ -233,9 +177,9 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     # print(PHI0_MIX.shape)
 
 #    y_bar_matrix = jnp.repeat(y_bar[:, jnp.newaxis, :], M, axis=1)
-    one_vec = jnp.ones((1, T_true))
+    one_vec = jnp.ones((1, variational_parameters.T_true))
 
-    mu0_DP_vec = jnp.repeat(mu0_DP[:, :], T_true, axis=1)  # pxT_true
+    mu0_DP_vec = jnp.repeat(mu0_DP[:, :], variational_parameters.T_true, axis=1)  # pxT_true
     mu0 = jnp.concatenate((mu0_MIX, mu0_DP_vec), axis=1)  # pxJ+T_true
 
     # print(mu0_DP_vec.shape)
@@ -249,7 +193,7 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     # print(lambda0.shape)
 
 
-    PHI0_DP_vec = jnp.repeat(PHI0_DP[jnp.newaxis, :, :], T_true, axis=0) #T_true x p x p
+    PHI0_DP_vec = jnp.repeat(PHI0_DP[jnp.newaxis, :, :], variational_parameters.T_true, axis=0) #T_true x p x p
     PHI0 = jnp.concatenate((PHI0_MIX, PHI0_DP_vec), axis=0)  #J+T_true x p x p
 
     # print(PHI0_DP_vec.shape)
@@ -257,8 +201,8 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
 
     comp_2 = jnp.zeros(PHI0.shape)
     comp_3 = jnp.zeros(PHI0.shape)
-    for k in range(J+T_true):
-        curr_y_bar = y_bar[:, k] #Save the kth column of the matrix of the means    px1
+    for k in range(J+variational_parameters.T_true):
+        curr_y_bar = variational_parameters.y_bar[:, k] #Save the kth column of the matrix of the means    px1
         y_bar_matrix = jnp.repeat(curr_y_bar[:, jnp.newaxis], M, axis=1) #Build a matrix where the columns are the same mean repeated M times
         diff_y = y.T-y_bar_matrix
         # comp_2 = comp_2.at[k, :, :].set(diff_y @ (diff_y * phi_mk[:, k]).T) #Do the final operation, where phi_mk[:, k] is the M-dimensional column where we have the probs of being in the kth cluster
@@ -272,7 +216,7 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
         tensor_y = create_tensor(diff_y.T,hyperparameters)
         #print(diff_y.shape)
         #print(tensor_y.shape)
-        diff_y *= phi_mk[:,k]
+        diff_y *= variational_parameters.phi_m_k[:,k]
         prod = jnp.dot(diff_y, jnp.transpose(tensor_y, (2,0,1))) # (pxM)x(pxMxM) = pxpxM
         #print(prod.shape)
         comp_2 = comp_2.at[k, :, :].set(jnp.sum(prod, axis = 2))
@@ -318,11 +262,6 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
 
         # print(comp_3.shape)
 
-    # print(variational_parameters.nIW_MIX_VAR.phi.shape)
-    # print(variational_parameters.nIW_MIX_VAR.phi)
-    #
-    # print(variational_parameters.nIW_DP_VAR.phi.shape)
-    # print(variational_parameters.nIW_DP_VAR.phi)
 
     variational_parameters.nIW_MIX_VAR.phi = (PHI0 + comp_2 + comp_3)[:J, :, :]
     variational_parameters.nIW_DP_VAR.phi = (PHI0 + comp_2 + comp_3)[J:, :, :]
@@ -331,14 +270,7 @@ def update_NIW_PHI(variational_parameters: VariationalParameters,hyperparameters
     # print(jdet(variational_parameters.nIW_DP_VAR.phi))
 
 
-    # print(variational_parameters.nIW_MIX_VAR.phi.shape)
-    # print(variational_parameters.nIW_MIX_VAR.phi)
-    #
-    # print(variational_parameters.nIW_DP_VAR.phi.shape)
-    # print(variational_parameters.nIW_DP_VAR.phi)
-
-
-def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
+def update_phi_mk(y, variational_parameters : VariationalParameters, hyperparameter: HyperparametersModel):
     p = y.shape[1]
 
     phi_mk = variational_parameters.phi_m_k
@@ -368,6 +300,7 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
 
     # out = ((y - mu_MIX[0,:]).T @ jinv(PHI_MIX[0, :, :]) @ (y - mu_MIX[0,:]))
     # print( 'scalare?',out)
+    J = hyperparameter.J
 
     for k in range(J):
         e_dir = digamma(eta_k[k]) - digamma(eta_signed)
@@ -398,6 +331,9 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T, J):
 
     z = jnp.zeros((1,1))
     dig_cumsum = jnp.concatenate((z, diff), axis=1)
+
+    T = hyperparameter.T
+    J = hyperparameter.J
 
     for k in range(0,T-1):
         e_beta = digamma(a_k[k]) + digamma(a_k[k] + b_k[k])

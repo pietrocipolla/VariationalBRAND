@@ -21,7 +21,9 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
         elbo_values.append(elbo_calculator(Y, hyperparameters_model, variational_parameters, p))
 
         print('\nelbo: ',i, elbo_values,)
-        print(variational_parameters.toString())
+        #print(variational_parameters.toString())
+
+        print('out: ', variational_parameters.sum_phi_k)
 
         # if (i > 0) & ((elbo_values[i]) ** 2 < tol):
         #     print('convergence of elbo')

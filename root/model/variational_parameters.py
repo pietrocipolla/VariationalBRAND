@@ -12,6 +12,10 @@ class VariationalParameters:
         self.nIW_DP_VAR : NIW = nIW_DP_VAR
 
         self.sum_phi_k :jnp.array = jnp.array([])
+        self.sum_y_phi: jnp.array = jnp.array([])
+        self.y_bar: jnp.array = jnp.array([])
+        self.T_true: jnp.array = jnp.array([])
+
 
     def toString(self):
         out = 'nIW_MIX_VAR.mu: \n'
