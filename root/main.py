@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     # STEP 2
     #modify specify_user_input to change hyperparameters_setter to match your data
-    user_input_parameters = specify_user_input_our(robust_mean, robust_inv_cov_mat)
+    user_input_parameters = specify_user_input(robust_mean, robust_inv_cov_mat)
 
     #the rest of the code is automatic
     hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
