@@ -1,4 +1,4 @@
-from bin.save_load_numpy import load_data_nupy
+from root.bin.save_load_numpy import load_data_nupy
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.cavi.updater.parameters_updater import update_parameters
