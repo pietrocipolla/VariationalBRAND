@@ -1,3 +1,4 @@
+from model.variational_parameters import VariationalParameters
 from root.controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
 from root.controller.cavi.cavi import cavi
@@ -25,4 +26,4 @@ if __name__ == '__main__':
     hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
     # CAVI (init + update + elbo)
-    cavi(Y, hyperparameters_model, user_input_parameters)
+    variational_parameters : VariationalParameters =  cavi(Y, hyperparameters_model, user_input_parameters)

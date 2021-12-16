@@ -43,6 +43,9 @@ def create_mask(sum_phi_k,J):
     return mask
 
 def eval_y_bar(sum_phi_k, sum_y_phi):
+    # print('sum_phi_k.shape')
+    # print(sum_phi_k.shape)
+    # print(sum_phi_k)
     y_bar = sum_y_phi * 1/sum_phi_k            #(px(J+1t-true))*((J+T_true)x(J+T_true)) = px(J+T_true)
     return y_bar
 

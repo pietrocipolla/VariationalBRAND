@@ -19,6 +19,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # iperparametro tra 1 e 50 tipo oppure buttarci su una distribuzione e una prior
 
     a_dir_k = np.ones(3 + 1)
+    a_dir_k[0] = .1
 
     # a_dir_k -> vettore delle componenti della Dir0ichlet -> vettore di (J+1) componenti
     # J = num_classes_learning
@@ -29,13 +30,15 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # 	lambda_0_DP -> scalare
     # 	PHI_0_DP -> Matrice (pxp)
 
-    mu_0_DP = np.ones(2)  # così che sia comunque della forma n_elems x p
+    mu_0_DP = np.zeros(2)  # così che sia comunque della forma n_elems x p
 
-    nu_0_DP = np.array([2])
+    nu_0_DP = np.array([10])
+    # v_H = 10,
 
-    lambda_0_DP = np.array([1])
+    lambda_0_DP = np.array([0.01])
+    #k_H = .01,
 
-    PHI_0_DP = np.identity(2)
+    PHI_0_DP = np.multiply(np.identity(2), 10)
 
 
     #NIW_MIX_0
@@ -61,7 +64,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
-    M = 1000 #num_samples
+    M = 750 #num_samples
     phi_m_k_temp = np.zeros((M, J + T))
 
     for m in range(M):

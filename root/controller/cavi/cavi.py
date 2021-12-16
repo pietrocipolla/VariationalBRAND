@@ -1,3 +1,4 @@
+from model.variational_parameters import VariationalParameters
 from root.bin.save_load_numpy import load_data_nupy
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
@@ -13,7 +14,7 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     tol = user_input_parameters.tol
     p = hyperparameters_model.p
 
-    variational_parameters = init_cavi(user_input_parameters)
+    variational_parameters : VariationalParameters = init_cavi(user_input_parameters)
     elbo_values = []
 
     for i in range(n_iter):
@@ -30,10 +31,12 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
         #     return variational_parameters, elbo_values
 
     ll = []
-    for i in range(1000):
+    for i in range(750):
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
     plt.scatter(Y[:, 0], Y[:, 1], c=ll, s=40, cmap='viridis')
     #plt.show()
     plt.savefig('figure.png')
     print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")
+
+    return variational_parameters
 

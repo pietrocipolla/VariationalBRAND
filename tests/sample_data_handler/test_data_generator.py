@@ -11,11 +11,11 @@ from root.controller.sample_data_handler.data_generator import generate_some_dat
 class Test(TestCase):
     def test_generate_some_data_example(self):
         X = generate_some_data_example()
-        # print(X.shape)
+        print(X.shape)
         #print(X.shape[1])
-        self.assertEqual(X.shape, (1000, 2))
+        #self.assertEqual(X.shape, (1000, 2))
 
-        savetxt('data.csv', X, delimiter=',')
+        #savetxt('data.csv', X, delimiter=',')
 
         X = load_data_nupy()
         num_clusters = 5

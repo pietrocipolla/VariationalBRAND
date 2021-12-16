@@ -20,6 +20,10 @@ class Test(TestCase):
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
+        print(variational_parameters.toString())
+        print('variational_parameters.toString()')
+
         cavi(Y, hyperparameters_model, user_input_parameters)
-        # print(variational_parameters.nIW_DP_VAR.mu)
-        # print(variational_parameters.nIW_MIX_VAR.mu)
+
+        print('variational_parameters.toString()')
+        print(variational_parameters.toString())
