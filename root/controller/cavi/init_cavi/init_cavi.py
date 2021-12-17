@@ -15,14 +15,14 @@ def init_cavi(user_input_parameters : UserInputModel):
             mu = jnp.concatenate((jnp.array(user_input_parameters.mu_VAR_MIX),
                                  jnp.array(user_input_parameters.mu_var_DP)),
                                  axis=0),
-            nu = jnp.concatenate((jnp.array(user_input_parameters.nu_var_DP),
-                                 jnp.array(user_input_parameters.nu_VAR_MIX)),
+            nu = jnp.concatenate((jnp.array(user_input_parameters.nu_VAR_MIX),
+                                  jnp.array(user_input_parameters.nu_var_DP)),
                                  axis=0),
-            lambdA = jnp.concatenate((jnp.array(user_input_parameters.lambda_var_DP),
-                                     jnp.array(user_input_parameters.lambda_VAR_MIX)),
+            lambdA = jnp.concatenate((jnp.array(user_input_parameters.lambda_VAR_MIX),
+                                     jnp.array(user_input_parameters.lambda_var_DP)),
                                      axis=0),
-            phi = jnp.concatenate((jnp.array(user_input_parameters.PHI_var_DP),
-                                  jnp.array(user_input_parameters.PHI_VAR_MIX)),
+            phi = jnp.concatenate((jnp.array(user_input_parameters.PHI_VAR_MIX),
+                                   jnp.array(user_input_parameters.PHI_var_DP)),
                                   axis=0)
         )
     )

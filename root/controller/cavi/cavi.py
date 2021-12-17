@@ -11,7 +11,7 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     p = hyperparameters_model.p
 
     variational_parameters = init_cavi(user_input_parameters)
-    starting_parameters = variational_parameters
+    starting_parameters = init_cavi(user_input_parameters)
     elbo_values = []
 
     for i in range(n_iter):

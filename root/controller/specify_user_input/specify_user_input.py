@@ -7,10 +7,10 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # Numero di classi nel training set
     J = 3
     # Numero di classi massime nel Dirichlet Process
-    T = 5
+    T = 20
 
-    # Num iteration and tolerancecavi
-    n_iter = 100
+    # Num iteration and tolerance cavi
+    n_iter = 5
     tol = 10e-6
 
     #HYPERPARAMETERS
@@ -18,7 +18,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     # gamma -> parametro dello Stick Breaking -> scalare
     # iperparametro tra 1 e 50 tipo oppure buttarci su una distribuzione e una prior
 
-    a_dir_k = np.ones(3 + 1)
+    a_dir_k = np.ones(J + 1)*2
 
     # a_dir_k -> vettore delle componenti della Dir0ichlet -> vettore di (J+1) componenti
     # J = num_classes_learning
@@ -31,7 +31,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     mu_0_DP = np.ones(2)  # così che sia comunque della forma n_elems x p
 
-    nu_0_DP = np.array([2])
+    nu_0_DP = np.array([0.1])
 
     lambda_0_DP = np.array([1])
 
@@ -54,14 +54,14 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     mu_0_MIX = robust_mean
 
-    nu_0_MIX = np.multiply(np.ones(3), 2)
+    nu_0_MIX = np.multiply(np.ones(3), 5)
 
     lambda_0_MIX = np.ones(3)*100
 
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
-    M = 500
+    M = 750
     phi_m_k_temp = np.zeros((M, J + T))
 
     # for k in range(J):
@@ -96,6 +96,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     #mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0) #todo old chec se era sbagliato visto che vogliamo matrice Txp
     mu_var_DP = np.tile(mu_0_DP, (T,1))
+
     # print('mu_0_DP', mu_0_DP)
     # print('mu_var_DP', mu_var_DP)
 
