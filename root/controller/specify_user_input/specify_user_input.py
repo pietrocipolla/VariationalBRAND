@@ -56,7 +56,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
 
     nu_0_MIX = np.multiply(np.ones(3), 2)
 
-    lambda_0_MIX = np.ones(3)
+    lambda_0_MIX = np.ones(3)*100
 
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
@@ -64,11 +64,10 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     M = 500
     phi_m_k_temp = np.zeros((M, J + T))
 
-    for m in range(M):
-        for k in range(J):
-            phi_m_k_temp[m, k] = 1 / (J + 1)
-        for k in range(J, J + T):
-            phi_m_k_temp[m, k] = (1 / (J + 1)) * (0.5 ** (k - J)) * (1 / (1 - 0.5 ** T))
+    # for k in range(J):
+    #         phi_m_k_temp[:, k] = 1 / (J + 1)
+    # for k in range(J, J + T):
+    #         phi_m_k_temp[:, k] = (1 / (J + 1)) * (0.5 ** (k - J + 1)) * (1 / (1 - 0.5 ** T))
 
     Phi_m_k = phi_m_k_temp
     # > parametri delle multinomiali -> matrice (Mx(J+T))

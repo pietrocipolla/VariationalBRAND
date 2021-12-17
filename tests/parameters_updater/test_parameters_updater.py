@@ -1,13 +1,13 @@
 from unittest import TestCase
-from root.controller.cavi.init_cavi.init_cavi import init_cavi
-from root.controller.cavi.updater.parameters_updater import update_parameters, create_mask
-from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
-from root.controller.sample_data_handler.data_generator import generate_some_data_example
-from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
-from root.controller.sample_data_handler.utils import get_training_set_example
-from root.controller.specify_user_input.specify_user_input import specify_user_input
-from root.model.hyperparameters_model import HyperparametersModel
-from root.model.variational_parameters import VariationalParameters
+from controller.cavi.init_cavi.init_cavi import init_cavi
+from controller.cavi.updater.parameters_updater import update_parameters
+from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
+from controller.sample_data_handler.data_generator import generate_some_data_example
+from controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from controller.sample_data_handler.utils import get_training_set_example
+from controller.specify_user_input.specify_user_input import specify_user_input
+from model.hyperparameters_model import HyperparametersModel
+from model.variational_parameters import VariationalParameters
 
 
 class Test(TestCase):
@@ -19,11 +19,12 @@ class Test(TestCase):
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
+        starting_parameters: VariationalParameters = init_cavi(user_input_parameters)
 
         #print(hyperparameters_model.nIW_DP_0.phi)
         #print(hyperparameters_model.nIW_DP_0.mu.shape)
 
-        out = update_parameters(Y, hyperparameters_model, variational_parameters)
+        out = update_parameters(Y, hyperparameters_model, variational_parameters, starting_parameters)
         #print(out.nIW_DP_VAR.phi)
 
         #print(variational_parameters)
