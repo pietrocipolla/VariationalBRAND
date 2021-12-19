@@ -4,6 +4,7 @@ from unittest import TestCase
 import decorator
 import matplotlib
 
+from controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.cavi.cavi import cavi
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
@@ -19,7 +20,7 @@ def generate_induced_partition(Y, robust_mean, variational_parameters: Variation
     import matplotlib.pyplot as plt
     from jax import numpy as jnp
     ll = []
-    for i in range(750):
+    for i in range(Y.shape[0]):
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
 
 
@@ -45,7 +46,8 @@ def generate_induced_partition(Y, robust_mean, variational_parameters: Variation
 class Test(TestCase):
     def test_cavi(self):
         from numpy import loadtxt
-        data = loadtxt('data.csv', delimiter=',')
+        #data = loadtxt('data.csv', delimiter=',')
+        data = generate_some_data_example()
         Y = data
 
         num_clusters= 5

@@ -31,11 +31,11 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     mu_0_DP = np.ones(2)  # così che sia comunque della forma n_elems x p
 
-    nu_0_DP = np.array([0.1])
+    nu_0_DP = np.array([1])
 
-    lambda_0_DP = np.array([1])
+    lambda_0_DP = np.array([0.1])
 
-    PHI_0_DP = np.identity(2)
+    PHI_0_DP = np.multiply(np.identity(2), 10)
 
 
     #NIW_MIX_0
