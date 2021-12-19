@@ -25,4 +25,4 @@ if __name__ == '__main__':
     hyperparameters_model : HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
     # CAVI (init + update + elbo)
-    variational_parameters, elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)
+    variational_parameters = cavi(Y, hyperparameters_model, user_input_parameters)

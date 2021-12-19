@@ -10,8 +10,8 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     T = 20
 
     # Num iteration and tolerance cavi
-    n_iter = 5
-    tol = 10e-6
+    n_iter = 100
+    tol = 1e-3
 
     #HYPERPARAMETERS
     gamma = 5

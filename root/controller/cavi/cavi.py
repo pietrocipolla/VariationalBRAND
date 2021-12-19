@@ -14,12 +14,29 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     starting_parameters = init_cavi(user_input_parameters)
     elbo_values = []
 
-    for i in range(n_iter):
+    i = 0
+    stop = False
+
+    print('\n')
+    while ((i<n_iter) and (stop == False)):
         variational_parameters = update_parameters(Y, hyperparameters_model, variational_parameters, starting_parameters)
         elbo_values.append(elbo_calculator(Y, hyperparameters_model, variational_parameters, p))
-        print('elbo :',i, elbo_values[i])
-        # if (i > 0) & ((elbo_values[-1] - elbo_values[-2]) ** 2 < tol):
-        #     print('convergence of elbo')
-        #     return variational_parameters, elbo_values
+        print('iter' ,i,' elbo: ',elbo_values[i])
 
-    return variational_parameters#, elbo_values
+        if (i > 0) and (abs(elbo_values[i] - elbo_values[i-1]) < tol):
+            print('\nConvergence of elbo in ', i, ' iterations')
+            stop = True
+
+        i += 1
+
+    print('\n')
+    print('mu = ', variational_parameters.nIW.mu)
+    print('lambda = ', variational_parameters.nIW.lambdA)
+    print('nu = ', variational_parameters.nIW.nu)
+    print('PHI = ', variational_parameters.nIW.phi)
+    print('a_beta = ', variational_parameters.a_k_beta)
+    print('b_beta = ', variational_parameters.b_k_beta)
+    print('phi_m = ', variational_parameters.phi_m_k)
+    print('eta = ', variational_parameters.eta_k)
+
+    return variational_parameters
