@@ -8,10 +8,8 @@ def get_labels_cluster_kmeans(X, num_clusters):
     # plt.show()
     return labels
 
-def get_training_set_example(X):
+def get_training_set_example(X, num_clusters, num_classes_learning):
     # example get data from 3 of the 5 clusters
-    num_clusters = 5
-    num_classes_learning = 3
     labels = get_labels_cluster_kmeans(X, num_clusters)
     X = np.array(X)
     Y_learning = X[np.where(labels < num_classes_learning)]

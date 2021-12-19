@@ -25,11 +25,12 @@ def generate_induced_partition(Y, robust_mean, variational_parameters: Variation
 
     print('Clusters\' numerosity')
     unique_clusters = np.unique(np.array(ll))
+    num_clusters = len(unique_clusters)
 
     for i in unique_clusters:
         print('cluster ', i, ': ',ll.count(i))
 
-    plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / 5) for i in ll])
+    plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / num_clusters) for i in ll])
 
 
     print(robust_mean)
@@ -46,10 +47,13 @@ class Test(TestCase):
         from numpy import loadtxt
         data = loadtxt('data.csv', delimiter=',')
         Y = data
-        Y_training, num_classes_training = get_training_set_example(Y)
+
+        num_clusters= 5
+        num_classes_learning = 3
+        Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_learning)
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
-        user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat)
+        user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat, Y)
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         # variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
 

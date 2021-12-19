@@ -3,7 +3,7 @@ import numpy as np
 from root.model.user_input_model import UserInputModel
 
 
-def specify_user_input(robust_mean, robust_inv_cov_mat):
+def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     # Numero di classi nel training set
     J = 3
     # Numero di classi massime nel Dirichlet Process
@@ -61,7 +61,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat):
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
     #VARIATIONAL PARAMETERS
-    M = 750
+    M = Y.shape[0]
     phi_m_k_temp = np.zeros((M, J + T))
 
     # for k in range(J):
