@@ -4,8 +4,10 @@ from root.model.user_input_model import UserInputModel
 
 
 def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
+    # Numero di componenti
+    p = Y.shape[1]
     # Numero di classi nel training set
-    J = 3
+    J = 2
     # Numero di classi massime nel Dirichlet Process
     T = 20
 
@@ -29,13 +31,13 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     # 	lambda_0_DP -> scalare
     # 	PHI_0_DP -> Matrice (pxp)
 
-    mu_0_DP = np.ones(2)  # così che sia comunque della forma n_elems x p
+    mu_0_DP = np.ones(p)  # così che sia comunque della forma n_elems x p
 
     nu_0_DP = np.array([1])
 
     lambda_0_DP = np.array([0.1])
 
-    PHI_0_DP = np.multiply(np.identity(2), 10)
+    PHI_0_DP = np.multiply(np.identity(p), 10)
 
 
     #NIW_MIX_0
@@ -54,9 +56,9 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     mu_0_MIX = robust_mean
 
-    nu_0_MIX = np.multiply(np.ones(3), 5)
+    nu_0_MIX = np.multiply(np.ones(J), 5)
 
-    lambda_0_MIX = np.ones(3)*100
+    lambda_0_MIX = np.ones(J)*100
 
     PHI_0_MIX = robust_inv_cov_mat # TODO trovare inizializzazione più furba di 0_MIX
 
@@ -109,7 +111,6 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     lambda_var_DP = np.reshape(lambda_var_DP, T)
     #print('lambda_var_DP', lambda_var_DP)
 
-    p = 2
     PHI_var_DP = np.repeat(copy.deepcopy(PHI_0_DP)[None,:], repeats = T, axis = 0)
     PHI_var_DP = np.reshape(PHI_var_DP, (T, p, p))
     #print('PHI_var_DP', PHI_var_DP)

@@ -3,7 +3,10 @@ from unittest import TestCase
 
 import decorator
 import matplotlib
+import numpy
+from numpy import tile
 
+from controller.plotter.generate_induced_partition import generate_induced_partition
 from controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.cavi.cavi import cavi
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
@@ -16,43 +19,20 @@ from root.model.variational_parameters import VariationalParameters
 from jax import numpy as jnp
 import numpy as np
 
-def generate_induced_partition(Y, robust_mean, variational_parameters: VariationalParameters):
-    import matplotlib.pyplot as plt
-    from jax import numpy as jnp
-    ll = []
-    for i in range(Y.shape[0]):
-        ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
-
-
-    print('Clusters\' numerosity')
-    unique_clusters = np.unique(np.array(ll))
-    num_clusters = len(unique_clusters)
-
-    for i in unique_clusters:
-        print('cluster ', i, ': ',ll.count(i))
-
-    plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / num_clusters) for i in ll])
-
-
-    print(robust_mean)
-    for i in range(3):
-        plt.scatter(robust_mean[i][0], robust_mean[i][1], color='red')
-    for i in range(13):
-        plt.scatter(variational_parameters.nIW.mu[i, 0], variational_parameters.nIW.mu[i, 1], color='black')
-    # plt.show()
-    plt.savefig('figure.png')
-    print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")
-
 class Test(TestCase):
     def test_cavi(self):
         from numpy import loadtxt
         #data = loadtxt('data.csv', delimiter=',')
-        data = generate_some_data_example()
+        data = loadtxt('Data_Luca.csv', delimiter=',')
+        #data = generate_some_data_example()
         Y = data
 
-        num_clusters= 5
-        num_classes_learning = 3
-        Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_learning)
+        # num_clusters= 5
+        # num_classes_training = 3
+        #Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
+
+        num_classes_training = 2
+        Y_training = numpy.vstack([Y[0:299,:], Y[600:899,:]])
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat, Y)
@@ -65,4 +45,4 @@ class Test(TestCase):
 
         variational_parameters = cavi(Y, hyperparameters_model, user_input_parameters)
 
-        generate_induced_partition(Y, list_robust_mean, variational_parameters)
+        generate_induced_partition(Y, list_robust_mean,hyperparameters_model, variational_parameters)
