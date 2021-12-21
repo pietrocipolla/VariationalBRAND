@@ -1,6 +1,7 @@
 import matplotlib
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
+import numpy as np
 
 
 def generate_induced_partition(Y, robust_mean, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters):

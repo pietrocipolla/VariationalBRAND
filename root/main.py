@@ -12,7 +12,7 @@ from root.controller.sample_data_handler.utils import get_training_set_example
 if __name__ == '__main__':
     #STEP 1
     #modify to generate_some_data or load your own data
-    # data = generate_some_data_example()
+    #data = generate_some_data_example()
     # data = loadtxt('data.csv', delimiter=',')
     data = loadtxt('Data_Luca.csv', delimiter=',')
     Y = data
