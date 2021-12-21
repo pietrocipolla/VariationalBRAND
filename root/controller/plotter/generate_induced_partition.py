@@ -1,10 +1,12 @@
 import matplotlib
+
+from controller.plotter.plot_covariance_ellipses import  plot_cov_ellipse
 from model.hyperparameters_model import HyperparametersModel
 from model.variational_parameters import VariationalParameters
 import numpy as np
 
 
-def generate_induced_partition(Y, robust_mean, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters):
+def generate_induced_partition(Y, robust_mean, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
     import matplotlib.pyplot as plt
     from jax import numpy as jnp
     ll = []
@@ -27,7 +29,19 @@ def generate_induced_partition(Y, robust_mean, hyperparameters_model: Hyperparam
         plt.scatter(robust_mean[i][0], robust_mean[i][1], color='red')
     for i in unique_clusters:
         plt.scatter(variational_parameters.nIW.mu[i, 0], variational_parameters.nIW.mu[i, 1], color='black')
-    # plt.show()
-    plt.savefig('figure.png')
+        if(hyperparameters_model.p == 2):
+            print(variational_parameters.nIW.phi[i],variational_parameters.nIW.mu[i, :] )
+            if cov_ellipse:
+                plt.title('Ellipses\' axes reduced to 20% of the original values')
+                plot_cov_ellipse(variational_parameters.nIW.mu[i], variational_parameters.nIW.phi[i])    # plt.show()
+
+    figure_name = 'figure'
+    figure_filetype = '.png'
+    if(cov_ellipse):
+        figure_name = figure_name + '-ellipses' + figure_filetype
+    else:
+        figure_name = figure_name + figure_filetype
+
+    plt.savefig(figure_name)
     plt.close()
     print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")

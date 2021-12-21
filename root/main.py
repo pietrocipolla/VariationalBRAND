@@ -41,7 +41,8 @@ if __name__ == '__main__':
     variational_parameters , elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)
 
     #Generate figure of induced partition
-    generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters)
+    generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=False)
+    generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True)
 
     #Plot elbo
     generate_elbo_plot(elbo_values)
