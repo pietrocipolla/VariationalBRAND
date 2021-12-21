@@ -39,4 +39,4 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     print('phi_m = ', variational_parameters.phi_m_k)
     print('eta = ', variational_parameters.eta_k)
 
-    return variational_parameters
+    return variational_parameters, elbo_values

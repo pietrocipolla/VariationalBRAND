@@ -25,8 +25,9 @@ def generate_induced_partition(Y, robust_mean, hyperparameters_model: Hyperparam
     print(robust_mean)
     for i in range(hyperparameters_model.J):
         plt.scatter(robust_mean[i][0], robust_mean[i][1], color='red')
-    for i in range(13):
+    for i in unique_clusters:
         plt.scatter(variational_parameters.nIW.mu[i, 0], variational_parameters.nIW.mu[i, 1], color='black')
     # plt.show()
     plt.savefig('figure.png')
+    plt.close()
     print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")

@@ -1,5 +1,6 @@
 import numpy
 from controller.plotter.generate_induced_partition import generate_induced_partition
+from controller.plotter.generate_elbo_plot import generate_elbo_plot
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
 from root.controller.cavi.cavi import cavi
 from root.controller.specify_user_input.specify_user_input import specify_user_input
@@ -37,7 +38,11 @@ if __name__ == '__main__':
     hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
 
     #CAVI (init + update + elbo)
-    variational_parameters = cavi(Y, hyperparameters_model, user_input_parameters)
+    variational_parameters , elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)
 
     #Generate figure of induced partition
     generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters)
+
+    #Plot elbo
+    generate_elbo_plot(elbo_values)
+

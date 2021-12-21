@@ -6,6 +6,7 @@ import matplotlib
 import numpy
 from numpy import tile
 
+from controller.plotter.generate_elbo_plot import generate_elbo_plot
 from controller.plotter.generate_induced_partition import generate_induced_partition
 from controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.cavi.cavi import cavi
@@ -43,6 +44,8 @@ class Test(TestCase):
         # print(variational_parameters.nIW_DP_VAR.mu)
         # print(variational_parameters.nIW_MIX_VAR.mu)
 
-        variational_parameters = cavi(Y, hyperparameters_model, user_input_parameters)
+        variational_parameters, elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)
 
         generate_induced_partition(Y, list_robust_mean,hyperparameters_model, variational_parameters)
+
+        generate_elbo_plot(elbo_values)
