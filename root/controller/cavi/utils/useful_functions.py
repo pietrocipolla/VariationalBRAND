@@ -30,12 +30,13 @@ def E_log_beta_unjitted(a,b):
 E_log_beta = jax.jit(E_log_beta_unjitted)
 # val atteso log densità normal inverse wishart
 
-def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
+def E_log_dens_norm_inv_wish_q(mu,nu,lam,psi,p,l):
     # p dim of mu
-    ret = -jnp.log(jdet(jinv(psi)))
+    ret = +jnp.log(jdet(psi))
     ret = ret -jnp.sum(jdigamma((nu - l) / 2))
     ret = ret - p*jnp.log(lam)
 
+    ret = -0.5*ret
     #em = jnp.exp(js.special.multigammaln(nu/2,p))
     #ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
     #
@@ -45,8 +46,34 @@ def E_log_dens_norm_inv_wish(mu,nu,lam,psi,p,l):
     brut = p*jnp.log(2) - jnp.log(jdet(psi))
 
     brut = brut + jnp.sum(jdigamma((nu - l) / 2))
-    ret = ret - brut*(nu+p+1)/2
+    ret = ret + brut*(nu+p+1)/2
     ret = ret - p*nu/2
+    return ret
+
+def E_log_dens_norm_inv_wish_p(mu_var,nu_var,lam_var,psi_var,mu_0,nu_0,lam_0,psi_0,p,l):
+    # p dim of mu
+    mu_var = jnp.reshape(mu_var, p)
+    mu_0 = jnp.reshape(mu_0, p)
+    psi_0 = jnp.reshape(psi_0, (p,p))
+    nu_0 = float(nu_0)
+    lam_0 = float(lam_0)
+    ret = +jnp.log(jdet(psi_var))
+    ret = ret -jnp.sum(jdigamma((nu_var - l) / 2))
+    ret = ret - p*jnp.log(lam_0) + p*lam_0/lam_var
+    ret = ret + lam_0*nu_var*((mu_var-mu_0).T@jinv(psi_var)@(mu_var-mu_0))
+
+    ret = -0.5*ret
+
+    #em = jnp.exp(js.special.multigammaln(nu/2,p))
+    #ret = ret + jnp.log((jdet(psi)**(nu/2))/((2**(nu*p/2))*em))
+    #
+
+
+    brut = p*jnp.log(2) - jnp.log(jdet(psi_var))
+
+    brut = brut + jnp.sum(jdigamma((nu - l) / 2))
+    ret = ret + brut*(nu_0+p+1)/2
+    ret = ret - 0.5*nu_var*jnp.trace(psi_0@jniv(psi_var))
     return ret
 
 # val atteso log densità dirichlet
@@ -113,6 +140,7 @@ def E_log_norm(phi, data,mu,nu,lam,psi,p, l,M):
 
     ret = jnp.multiply(-jnp.sum(jdigamma((nu-l)/2)) + jnp.log(jdet(psi)) + p/lam,jnp.ones(M))
     ret+= nu*(jnp.diag((data - mu) @ jinv(psi) @(data - mu).T))
+    ret = -0.5*ret
     ret = jnp.dot(phi,ret)
     return ret
 
