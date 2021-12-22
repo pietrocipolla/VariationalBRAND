@@ -11,18 +11,18 @@ def init_cavi(user_input_parameters : UserInputModel):
         a_k_beta = jnp.array(user_input_parameters.a_k_beta),
         b_k_beta = jnp.array(user_input_parameters.b_k_beta),
 
-        nIW_DP_VAR=NIW(
-            mu = jnp.array(user_input_parameters.mu_var_DP),
-            nu = jnp.array(user_input_parameters.nu_var_DP),
-            lambdA = jnp.array(user_input_parameters.lambda_var_DP),
-            phi = jnp.array(user_input_parameters.PHI_var_DP)
-        ),
-
-        nIW_MIX_VAR = NIW(
-            mu=jnp.array(user_input_parameters.mu_VAR_MIX),
-            nu=jnp.array(user_input_parameters.nu_VAR_MIX),
-            lambdA=jnp.array(user_input_parameters.lambda_VAR_MIX),
-            phi=jnp.array(user_input_parameters.PHI_VAR_MIX),
+        nIW_VAR=NIW(
+            mu = jnp.concatenate((jnp.array(user_input_parameters.mu_VAR_MIX),
+                                 jnp.array(user_input_parameters.mu_var_DP)),
+                                 axis=0),
+            nu = jnp.concatenate((jnp.array(user_input_parameters.nu_VAR_MIX),
+                                  jnp.array(user_input_parameters.nu_var_DP)),
+                                 axis=0),
+            lambdA = jnp.concatenate((jnp.array(user_input_parameters.lambda_VAR_MIX),
+                                     jnp.array(user_input_parameters.lambda_var_DP)),
+                                     axis=0),
+            phi = jnp.concatenate((jnp.array(user_input_parameters.PHI_VAR_MIX),
+                                   jnp.array(user_input_parameters.PHI_var_DP)),
+                                  axis=0)
         )
-
     )

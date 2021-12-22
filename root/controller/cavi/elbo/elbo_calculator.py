@@ -11,36 +11,35 @@ from root.model.variational_parameters import VariationalParameters
 from jax.scipy.special import logsumexp as jse
 
 def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalParameters, p, psi_dp=None):
-    M=hyper.M
-    J=hyper.J
-    T=hyper.T
+    M = hyper.M
+    J = hyper.J
+    T = hyper.T
 
-    gamma=hyper.gamma
-    a_dir_k=hyper.a_dir_k
-    nIW_DP_0=hyper.nIW_DP_0
-    nIW_MIX_0=hyper.nIW_MIX_0
+    gamma = hyper.gamma
+    a_dir_k = hyper.a_dir_k
+    nIW_DP_0 = hyper.nIW_DP_0
+    nIW_MIX_0 = hyper.nIW_MIX_0
 
-    phi_m_k=var_param.phi_m_k
-    eta_k=var_param.eta_k
-    a_k_beta=var_param.a_k_beta
-    b_k_beta=var_param.b_k_beta
-    nIW_MIX_VAR = var_param.nIW_MIX_VAR
-    nIW_DP_VAR = var_param.nIW_DP_VAR
+    phi_m_k = var_param.phi_m_k
+    eta_k = var_param.eta_k
+    a_k_beta = var_param.a_k_beta
+    b_k_beta = var_param.b_k_beta
+    nIW = var_param.nIW
 
-    eta_bar=jnp.sum(eta_k)
+    eta_bar = jnp.sum(eta_k)
 
-    mu_mix=nIW_MIX_VAR.mu
-    nu_mix=nIW_MIX_VAR.nu
-    lam_mix=nIW_MIX_VAR.lambdA
-    psi_mix=nIW_MIX_VAR.phi
+    mu_mix = nIW.mu[:J, :]
+    nu_mix = nIW.nu[:J]
+    lam_mix = nIW.lambdA[:J]
+    psi_mix = nIW.phi[:J, :, :]
 
     # print('psi_mix')
     # print(psi_mix)
 
-    mu_dp=nIW_DP_VAR.mu
-    nu_dp=nIW_DP_VAR.nu
-    lam_dp=nIW_DP_VAR.lambdA
-    psi_dp=nIW_DP_VAR.phi
+    mu_dp = nIW.mu[J:, :]
+    nu_dp = nIW.nu[J:]
+    lam_dp = nIW.lambdA[J:]
+    psi_dp = nIW.phi[J:, :]
 
     diga_a = jdgamma(a_k_beta)
     diga_b = jdgamma(b_k_beta)
@@ -66,7 +65,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     for k in range(0, J):
         f1 += useful_functions.E_log_norm(phi_m_k[:,k], data, mu_mix[k], nu_mix[k], lam_mix[k], psi_mix[k], p, l, M)
     for k in range(0, T):
-        f1 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
+        f2 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
 
     # k = 0
     # m = 0
@@ -140,6 +139,10 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #    f7 += float((a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar)))
     #
     #
+    #TOLTO MULTIPLY
+    print('diga_eta = ', diga_eta)
+    print('diga_e_b = ', diga_e_b)
+    print('a_dir = ', a_dir_k)
     f7 = jnp.sum(jnp.multiply((a_dir_k-1),(diga_eta-diga_e_b)))
     #
     print('f7 done', f7)
