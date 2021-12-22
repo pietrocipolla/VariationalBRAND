@@ -65,7 +65,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     for k in range(0, J):
         f1 += useful_functions.E_log_norm(phi_m_k[:,k], data, mu_mix[k], nu_mix[k], lam_mix[k], psi_mix[k], p, l, M)
     for k in range(0, T):
-        f1 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
+        f2 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
 
     # k = 0
     # m = 0
@@ -77,9 +77,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     f3=0
     f4=0
     for k in range(0,J):
-        f3 += useful_functions.E_log_dens_norm_inv_wish_p(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],nIW_MIX_0.mu[k,:], nIW_MIX_0.nu[k], nIW_MIX_0.lambdA[k], nIW_MIX_0.phi[k,:,:] ,p,l)
+        f3 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p,l)
     for k in range(0,T):
-        f4 += useful_functions.E_log_dens_norm_inv_wish_p(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],nIW_DP_0.mu, nIW_DP_0.nu, nIW_DP_0.lambdA, nIW_DP_0.phi,p,l)
+        f4 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p,l)
     print('f3 f4 done',f3,f4)
 
     # f5 #old version
@@ -124,9 +124,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #
     parsum = jnp.cumsum(diga_b - diga_ab)
 
-    #for k in range(J, J + T - 1):
-    #    f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k-J] + parsum[k-J])
-    #print('f6 done', f6)
+    for k in range(J, J + T - 1):
+        f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k-J] + parsum[k-J])
+    print('f6 done', f6)
 
 #    jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
     f6 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:(J+T-1)],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
@@ -139,6 +139,10 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #    f7 += float((a_dir_k[k]-1)*(jdgamma(eta_k[k])-jdgamma(eta_bar)))
     #
     #
+    #TOLTO MULTIPLY
+    print('diga_eta = ', diga_eta)
+    print('diga_e_b = ', diga_e_b)
+    print('a_dir = ', a_dir_k)
     f7 = jnp.sum(jnp.multiply((a_dir_k-1),(diga_eta-diga_e_b)))
     #
     print('f7 done', f7)
@@ -189,20 +193,20 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
    #    h3 += float((a_k_beta[k]-1)*(jdgamma(a_k_beta[k])-jdgamma(b_k_beta[k]+a_k_beta[k])))
    #    h3 += float((b_k_beta[k]-1)*(jdgamma(b_k_beta[k])-jdgamma(a_k_beta[k]+b_k_beta[k]))-jlog(beta))
    #
-    beta_AB = jgammaln(a_k_beta) + jgammaln(b_k_beta) - jgammaln(a_k_beta + b_k_beta)
+    beta_AB = jgammaln(a_k_beta) + jgammaln(b_k_beta) -  jgammaln(a_k_beta + b_k_beta)
     h3 = jnp.sum(jnp.multiply(a_k_beta-1,diga_a - diga_ab)) + jnp.sum(jnp.multiply(b_k_beta-1,diga_b - diga_ab)) - jnp.sum(beta_AB)
     print('h3 done', h3)
 
     #h4 e h5
     h4=0
     for k in range(0,J):
-        h4 += useful_functions.E_log_dens_norm_inv_wish_q(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p,l)
+        h4 += useful_functions.E_log_dens_norm_inv_wish(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],p,l)
     h5 = 0
     for k in range(0, T):
-        h5 += useful_functions.E_log_dens_norm_inv_wish_q(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p,l)
+        h5 += useful_functions.E_log_dens_norm_inv_wish(mu_dp[k,:],nu_dp[k],lam_dp[k],psi_dp[k,:,:],p,l)
 
     E_log_q= h1+h2+h3+h4+h5
     print('h4 h5 done', h4,h5)
 
-    return float(E_log_p-E_log_q)
+    return E_log_p-E_log_q
 

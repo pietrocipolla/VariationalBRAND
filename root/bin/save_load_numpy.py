@@ -14,5 +14,4 @@ def load_data_nupy():
     # load array
     data = loadtxt('data.csv', delimiter=',')
     # print the array
-    #print(data)
-    return  data
+    print(data)

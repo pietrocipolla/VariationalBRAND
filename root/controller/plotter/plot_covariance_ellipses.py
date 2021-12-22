@@ -31,7 +31,7 @@ def get_cov_ellipse(cov, centre, nstd, **kwargs):
 
 def plot_cov_ellipse(mu,cov):
     ax = plt.gca()
-    e = get_cov_ellipse(cov, mu, 0.2, alpha=0.4)
+    e = get_cov_ellipse(cov, mu, 1, alpha=0.4)
     ax.add_artist(e)
 
     # ax.set_xlim(-15, 15)

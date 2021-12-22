@@ -30,7 +30,7 @@ class Test(TestCase):
 
         # num_clusters= 5
         # num_classes_training = 3
-        #Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
+        # Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
 
         num_classes_training = 2
         Y_training = numpy.vstack([Y[0:299,:], Y[600:899,:]])

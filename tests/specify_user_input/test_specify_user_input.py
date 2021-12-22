@@ -18,7 +18,7 @@ class Test(TestCase):
         self.assertEqual(user_input.J, 3)
         self.assertEqual(user_input.T, 5)
 
-        self.assertEqual(user_input.n_iter, 10)
+        self.assertEqual(user_input.n_iter, 100)
         self.assertEqual(user_input.tol, 10e-6)
 
         self.assertEqual(user_input.gamma, 5)

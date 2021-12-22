@@ -7,7 +7,7 @@ from root.controller.sample_data_handler.utils import get_training_set_example
 from root.controller.specify_user_input.specify_user_input import specify_user_input
 from root.model.variational_parameters import VariationalParameters
 
-#test
+
 class Test(TestCase):
     def test_init_cavi(self):
         Y = generate_some_data_example()
@@ -24,7 +24,7 @@ class Test(TestCase):
 
         #print(variational_parameters.eta_k)
 
-        self.assertEqual(variational_parameters.phi_m_k.shape, (750, 8))
+        self.assertEqual(variational_parameters.phi_m_k.shape, (500, 8))
         self.assertEqual(len(variational_parameters.eta_k), 4)
 
         self.assertEqual(len(variational_parameters.a_k_beta), 4)

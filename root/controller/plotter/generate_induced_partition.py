@@ -32,8 +32,9 @@ def generate_induced_partition(Y, robust_mean, hyperparameters_model: Hyperparam
         if(hyperparameters_model.p == 2):
             print(variational_parameters.nIW.phi[i],variational_parameters.nIW.mu[i, :] )
             if cov_ellipse:
-                plt.title('Ellipses\' axes reduced to 20% of the original values')
-                plot_cov_ellipse(variational_parameters.nIW.mu[i], variational_parameters.nIW.phi[i])    # plt.show()
+                plot_cov_ellipse(variational_parameters.nIW.mu[i],
+                                 variational_parameters.nIW.phi[i]/(variational_parameters.nIW.nu[i] - hyperparameters_model.p -1))
+
 
     figure_name = 'figure'
     figure_filetype = '.png'
