@@ -19,7 +19,7 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
 
     print('\n')
     while ((i<n_iter) and (stop == False)):
-        variational_parameters = update_parameters(Y, hyperparameters_model, variational_parameters, starting_parameters)
+        update_parameters(Y, hyperparameters_model, variational_parameters, starting_parameters)
         elbo_values.append(elbo_calculator(Y, hyperparameters_model, variational_parameters, p))
         print('iter' ,i,' elbo: ',elbo_values[i])
 

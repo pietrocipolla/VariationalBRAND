@@ -35,7 +35,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
     update_NIW(data, starting_parameters, variational_parameters, hyperparameters, sum_phi_k)
 
     #update jax array
-    return variational_parameters
+    #return variational_parameters
 
 
 ############# UTILS ##############
