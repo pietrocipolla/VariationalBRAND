@@ -79,8 +79,9 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     for k in range(0,J):
         f3 += useful_functions.E_log_dens_norm_inv_wish_p(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],nIW_MIX_0.mu[k,:], nIW_MIX_0.nu[k], nIW_MIX_0.lambdA[k], nIW_MIX_0.phi[k,:,:] ,p,l)
     for k in range(0,T):
-        f4 += useful_functions.E_log_dens_norm_inv_wish_p(mu_mix[k,:],nu_mix[k],lam_mix[k],psi_mix[k,:,:],nIW_DP_0.mu, nIW_DP_0.nu, nIW_DP_0.lambdA, nIW_DP_0.phi,p,l)
-    print('f3 f4 done',f3,f4)
+        f4 += useful_functions.E_log_dens_norm_inv_wish_p(mu_dp[k, :], nu_dp[k], lam_dp[k], psi_dp[k, :, :],
+                                                          nIW_DP_0.mu, nIW_DP_0.nu, nIW_DP_0.lambdA, nIW_DP_0.phi, p, l)
+        print('f3 f4 done',f3,f4)
 
     # f5 #old version
     # f5=0
