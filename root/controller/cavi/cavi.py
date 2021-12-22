@@ -1,3 +1,5 @@
+import copy
+
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.cavi.updater.parameters_updater import update_parameters
@@ -11,7 +13,7 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
     p = hyperparameters_model.p
 
     variational_parameters = init_cavi(user_input_parameters)
-    starting_parameters = init_cavi(user_input_parameters)
+    starting_parameters = copy.deepcopy(variational_parameters)
     elbo_values = []
 
     i = 0
