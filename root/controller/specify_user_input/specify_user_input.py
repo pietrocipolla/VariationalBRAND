@@ -9,7 +9,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     # Numero di componenti
     p = Y.shape[1]
     # Numero di classi nel training set
-    J = 3
+    J = 2
     # Numero di classi massime nel Dirichlet Process
     T = 20
 
