@@ -130,8 +130,13 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     #print('f6 done', f6)
 
 #    jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
-    f6 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:(J+T-1)],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
-    print('f6 vec', f6)
+#     f6 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:(J+T-1)],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
+#     print('f6 vec', f6)
+    f6 = jnp.sum(phi_m_k[:, J]) * (diga_eta[0] - diga_e_b + diga_a[0] - diga_ab[0])
+    for k in range(J + 1, J + T - 1):
+        f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k - J] + parsum[k - J - 1])
+    f6 += jnp.sum(phi_m_k[:, J + T - 1]) * (diga_eta[0] - diga_e_b + parsum[T - 2])
+    print('f6 done', f6)
     #
 
     #f7

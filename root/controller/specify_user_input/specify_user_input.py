@@ -9,7 +9,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     # Numero di componenti
     p = Y.shape[1]
     # Numero di classi nel training set
-    J = 2
+    J = 3
     # Numero di classi massime nel Dirichlet Process
     T = 20
 
@@ -101,9 +101,9 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     #mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0) #todo old chec se era sbagliato visto che vogliamo matrice Txp
 
 
-    #mu_var_DP = np.tile(mu_0_DP, (T,1))
-    print(np.tile(mu_0_DP, (T,1)))
-    mu_var_DP = test_mu_var_DP_init()
+    mu_var_DP = np.tile(mu_0_DP, (T,1))
+    # print(np.tile(mu_0_DP, (T,1)))
+    # mu_var_DP = test_mu_var_DP_init()
 
     # print('mu_0_DP', mu_0_DP)
     # print('mu_var_DP', mu_var_DP)

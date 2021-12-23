@@ -30,8 +30,8 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
             print('\nConvergence of elbo in ', i, ' iterations')
             stop = True
 
-        generate_induced_partition(Y, list_robust_mean,i, hyperparameters_model, variational_parameters,
-                                   cov_ellipse=True)
+        # generate_induced_partitions(Y, list_robust_mean,i, hyperparameters_model, variational_parameters,
+        #                            cov_ellipse=True)
         i += 1
 
     print('\n')
