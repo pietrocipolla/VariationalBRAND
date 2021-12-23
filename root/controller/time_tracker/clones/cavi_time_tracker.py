@@ -1,6 +1,6 @@
 import copy
 
-from controller.time_tracker.time_tracker import TimeTracker
+from root.controller.time_tracker.time_tracker import TimeTracker
 from root.controller.plotter.generate_induced_partition import generate_induced_partition, generate_induced_partition_iter
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi

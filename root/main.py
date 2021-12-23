@@ -13,6 +13,7 @@ from root.controller.sample_data_handler.data_generator import generate_some_dat
 from root.controller.sample_data_handler.utils import get_training_set_example
 import time
 
+
 if __name__ == '__main__':
     #STEP 1
     #modify to generate_some_data or load your own data

@@ -1,7 +1,8 @@
 import numpy
 
-from controller.time_tracker.clones.cavi_time_tracker import cavi_time_tracker
-from controller.time_tracker.time_tracker import TimeTracker
+from root.controller.sample_data_handler.utils import get_training_set_example
+from root.controller.time_tracker.clones.cavi_time_tracker import cavi_time_tracker
+from root.controller.time_tracker.time_tracker import TimeTracker
 from root.controller.plotter.generate_induced_partition import generate_induced_partition
 from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
@@ -16,8 +17,8 @@ def main_time_tracker():
 
     #modify to generate_some_data or load your own data
     #data = generate_some_data_example()
-    # data = loadtxt('data.csv', delimiter=',')
-    data = loadtxt('Data_Luca.csv', delimiter=',')
+    data = loadtxt('data.csv', delimiter=',')
+    #data = loadtxt('Data_Luca.csv', delimiter=',')
     Y = data
 
     TimeTracker.stop_and_save('load_data', tic)
@@ -26,11 +27,11 @@ def main_time_tracker():
     #modify and pick a subset of Y for calculating robust parameters on Y_training
     tic = TimeTracker.start()
 
-    # num_clusters= 5
-    # num_classes_training = 3
-    #Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
-    num_classes_training = 2
-    Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
+    num_clusters= 5
+    num_classes_training = 3
+    Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
+    # num_classes_training = 2
+    # Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
 
     TimeTracker.stop_and_save('get_training_set', tic)
 

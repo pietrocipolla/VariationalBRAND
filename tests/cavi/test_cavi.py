@@ -1,7 +1,7 @@
 import random
 from unittest import TestCase
 
-import decorator
+
 import matplotlib
 import numpy
 from numpy import tile

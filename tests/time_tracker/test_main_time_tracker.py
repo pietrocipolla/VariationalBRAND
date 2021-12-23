@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from controller.time_tracker.clones.main_time_tracker import main_time_tracker
+from root.controller.time_tracker.clones.main_time_tracker import main_time_tracker
 
 
 class Test(TestCase):

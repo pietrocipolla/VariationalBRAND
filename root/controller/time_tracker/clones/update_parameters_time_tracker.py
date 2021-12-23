@@ -4,7 +4,7 @@ from jax.scipy.special import digamma
 from jax.scipy.special import logsumexp
 from jax import numpy as jnp
 
-from controller.time_tracker.time_tracker import TimeTracker
+from root.controller.time_tracker.time_tracker import TimeTracker
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.variational_parameters import VariationalParameters
 import numpy as np
