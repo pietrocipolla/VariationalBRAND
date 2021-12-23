@@ -28,6 +28,7 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
 
         if (i > 0) and (abs(elbo_values[i] - elbo_values[i-1]) < tol):
             print('\nConvergence of elbo in ', i, ' iterations')
+            print(abs(elbo_values[i] - elbo_values[i-1]))
             stop = True
 
         # generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,

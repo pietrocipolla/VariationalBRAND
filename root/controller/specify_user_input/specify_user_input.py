@@ -14,7 +14,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     T = 20
 
     # Num iteration and tolerance cavi
-    n_iter = 33
+    n_iter = 100
     tol = 1e-3
 
     #HYPERPARAMETERS
