@@ -1,6 +1,6 @@
 import copy
 
-from controller.plotter.generate_induced_partition import generate_induced_partition
+from root.controller.plotter.generate_induced_partition import generate_induced_partition, generate_induced_partition_iter
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.cavi.updater.parameters_updater import update_parameters
@@ -30,8 +30,8 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
             print('\nConvergence of elbo in ', i, ' iterations')
             stop = True
 
-        # generate_induced_partitions(Y, list_robust_mean,i, hyperparameters_model, variational_parameters,
-        #                            cov_ellipse=True)
+        # generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,
+        #                                 cov_ellipse=True)
         i += 1
 
     print('\n')

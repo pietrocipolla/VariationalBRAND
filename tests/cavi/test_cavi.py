@@ -6,9 +6,9 @@ import matplotlib
 import numpy
 from numpy import tile
 
-from controller.plotter.generate_elbo_plot import generate_elbo_plot
-from controller.plotter.generate_induced_partition import generate_induced_partition
-from controller.sample_data_handler.data_generator import generate_some_data_example
+from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
+from root.controller.plotter.generate_induced_partition import generate_induced_partition
+from root.controller.sample_data_handler.data_generator import generate_some_data_example
 from root.controller.cavi.cavi import cavi
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters

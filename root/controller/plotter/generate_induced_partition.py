@@ -1,7 +1,7 @@
 import matplotlib
-from controller.plotter.plot_covariance_ellipses import  plot_cov_ellipse
-from model.hyperparameters_model import HyperparametersModel
-from model.variational_parameters import VariationalParameters
+from root.controller.plotter.plot_covariance_ellipses import  plot_cov_ellipse
+from root.model.hyperparameters_model import HyperparametersModel
+from root.model.variational_parameters import VariationalParameters
 import numpy as np
 
 
@@ -47,7 +47,7 @@ def generate_induced_partition(Y, robust_mean, hyperparameters_model: Hyperparam
     print("\n\nPLOT available in /content/VariationalBRAND/tests/figure.png")
 
 
-def generate_induced_partitions(Y, robust_mean,iter, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
+def generate_induced_partition_iter(Y, robust_mean, iter, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
     import matplotlib.pyplot as plt
     from jax import numpy as jnp
     ll = []
