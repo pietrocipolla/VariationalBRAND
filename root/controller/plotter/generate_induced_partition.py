@@ -6,7 +6,7 @@ from model.variational_parameters import VariationalParameters
 import numpy as np
 
 
-def generate_induced_partition(Y, robust_mean, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
+def generate_induced_partition(Y, robust_mean,iter, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
     import matplotlib.pyplot as plt
     from jax import numpy as jnp
     ll = []
@@ -36,7 +36,7 @@ def generate_induced_partition(Y, robust_mean, hyperparameters_model: Hyperparam
                                  variational_parameters.nIW.phi[i]/(variational_parameters.nIW.nu[i] - hyperparameters_model.p -1))
 
 
-    figure_name = 'figure'
+    figure_name = str(iter)
     figure_filetype = '.png'
     if(cov_ellipse):
         figure_name = figure_name + '-ellipses' + figure_filetype

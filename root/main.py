@@ -27,6 +27,7 @@ if __name__ == '__main__':
 
     #automatic robust parameters from y_training and num of training classes
     list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
+    print('list_robust_mean' ,list_robust_mean)
 
     # STEP 2
     #modify specify_user_input to change hyperparameters_setter to match your data

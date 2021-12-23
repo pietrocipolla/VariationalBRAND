@@ -1,5 +1,7 @@
 import copy
 import numpy as np
+
+from controller.sample_data_handler.test_init import test_mu_var_DP_init
 from root.model.user_input_model import UserInputModel
 
 
@@ -12,7 +14,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     T = 20
 
     # Num iteration and tolerance cavi
-    n_iter = 100
+    n_iter = 33
     tol = 1e-3
 
     #HYPERPARAMETERS
@@ -97,7 +99,11 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     # -> PHI_var_DP[i,:,:] = Matrice PHI della (i+1)esima NIW della misturaDP
 
     #mu_var_DP = np.repeat(mu_0_DP, repeats=T, axis=0) #todo old chec se era sbagliato visto che vogliamo matrice Txp
-    mu_var_DP = np.tile(mu_0_DP, (T,1))
+
+
+    #mu_var_DP = np.tile(mu_0_DP, (T,1))
+    print(np.tile(mu_0_DP, (T,1)))
+    mu_var_DP = test_mu_var_DP_init()
 
     # print('mu_0_DP', mu_0_DP)
     # print('mu_var_DP', mu_var_DP)

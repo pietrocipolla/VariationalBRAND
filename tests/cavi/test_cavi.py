@@ -36,6 +36,7 @@ class Test(TestCase):
         Y_training = numpy.vstack([Y[0:299,:], Y[600:899,:]])
 
         list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
+        #print('list_robust_mean', list_robust_mean)
         user_input_parameters = specify_user_input(list_robust_mean, list_inv_cov_mat, Y)
         hyperparameters_model: HyperparametersModel = set_hyperparameters(user_input_parameters, Y)
         # variational_parameters: VariationalParameters = init_cavi(user_input_parameters)
@@ -44,11 +45,9 @@ class Test(TestCase):
         # print(variational_parameters.nIW_DP_VAR.mu)
         # print(variational_parameters.nIW_MIX_VAR.mu)
 
-        variational_parameters, elbo_values = cavi(Y, hyperparameters_model, user_input_parameters)
+        variational_parameters, elbo_values = cavi(Y,list_robust_mean, hyperparameters_model, user_input_parameters)
 
-        generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters,
-                                   cov_ellipse=False)
-        generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True)
+        #generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True)
 
         # Plot elbo
         generate_elbo_plot(elbo_values)

@@ -1,5 +1,6 @@
 import copy
 
+from controller.plotter.generate_induced_partition import generate_induced_partition
 from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
 from root.controller.cavi.init_cavi.init_cavi import init_cavi
 from root.controller.cavi.updater.parameters_updater import update_parameters
@@ -7,7 +8,7 @@ from jax import numpy as jnp
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.user_input_model import UserInputModel
 
-def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel):
+def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel):
     n_iter = user_input_parameters.n_iter
     tol = user_input_parameters.tol
     p = hyperparameters_model.p
@@ -29,6 +30,8 @@ def cavi(Y: jnp.array, hyperparameters_model : HyperparametersModel, user_input_
             print('\nConvergence of elbo in ', i, ' iterations')
             stop = True
 
+        generate_induced_partition(Y, list_robust_mean,i, hyperparameters_model, variational_parameters,
+                                   cov_ellipse=True)
         i += 1
 
     print('\n')
