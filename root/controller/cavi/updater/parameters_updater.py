@@ -1,3 +1,4 @@
+import jax
 from jax.numpy.linalg import det as jdet
 from jax.numpy.linalg import inv as jinv
 from jax.scipy.special import digamma
@@ -218,8 +219,9 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
     e_dir = digamma(eta_k) - digamma(eta_signed)
 
     for k in range(J):
-        e_norm = -1/2 * (-jnp.sum(digamma((nu[k] - l)/2)) + jnp.log(jdet(PHI[k, :, :]))
-                         + p/lambdA[k] + nu[k] * jnp.diag((y - mu[k, :]) @ jinv(PHI[k, :, :]) @ (y - mu[k,:]).T))
+        #e_norm = -1/2 * (-jnp.sum(digamma((nu[k] - l)/2)) + jnp.log(jdet(PHI[k, :, :]))
+        #                 + p/lambdA[k] + nu[k] * jnp.diag((y - mu[k, :]) @ jinv(PHI[k, :, :]) @ (y - mu[k,:]).T))
+        e_norm = enorm_calc_J(nu[k], PHI[k,:,:],lambdA[k],y,mu[k,:],l,p)
 
         phi_mk = phi_mk.at[:, k].set(jnp.exp(e_dir[k+1] + e_norm))
 
@@ -238,11 +240,12 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
 
         e_res = dig_cumsum[0,k]
 
-        e_norm = -1 / 2 * (-jnp.sum(digamma((nu[k+J] - l) / 2))
-                           + jnp.log(jdet(PHI[k+J, :, :]))
-                           + p / lambdA[k+J]
-                           + nu[k+J] * jnp.diag(((y - mu[k+J, :]) @ jinv(PHI[k+J, :, :]) @ (
-                                       y - mu[k+J, :]).T)))
+        e_norm = enorm_calc_T(nu[k+J],l,PHI[k+J,:,:],p,lambdA[k+J],y,mu[k+J,:])
+        #e_norm = -1 / 2 * (-jnp.sum(digamma((nu[k+J] - l) / 2))
+        #                   + jnp.log(jdet(PHI[k+J, :, :]))
+        #                   + p / lambdA[k+J]
+        #                   + nu[k+J] * jnp.diag(((y - mu[k+J, :]) @ jinv(PHI[k+J, :, :]) @ (
+        #                               y - mu[k+J, :]).T)))
 
         phi_mk = phi_mk.at[:, k+J].set(jnp.exp(e_dir[0] + e_beta + e_res + e_norm))
 
@@ -259,6 +262,15 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
 
     return phi_mk / norm_phi
 
+def enorm_calc_J_unjitted(nu, PHI,lambdA,y,mu,l,p):
+   return -1/2 * (-jnp.sum(digamma((nu - l)/2)) + jnp.log(jdet(PHI))
+                         + p/lambdA + nu * jnp.diag((y - mu) @ jinv(PHI) @ (y - mu).T))
+enorm_calc_J = jax.jit(enorm_calc_J_unjitted)
 
 
-
+def enorm_calc_T_unjitted(nu,l,PHI,p,lambdA,y,mu):
+  return -1 / 2 * (-jnp.sum(digamma((nu - l) / 2))
+            + jnp.log(jdet(PHI))
+            + p / lambdA
+            + nu * jnp.diag(((y - mu) @ jinv(PHI) @ (y - mu).T)))
+enorm_calc_T = jax.jit(enorm_calc_T_unjitted)

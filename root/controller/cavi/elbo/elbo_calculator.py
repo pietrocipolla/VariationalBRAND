@@ -1,3 +1,4 @@
+import jax
 from jax.numpy import log as jlog
 # from jax._src.scipy.special import jdigamma as jdgamma
 # from jax._src.scipy.special import gammaln as jgammaln
@@ -65,8 +66,8 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     for k in range(0, J):
         f1 += useful_functions.E_log_norm(phi_m_k[:,k], data, mu_mix[k], nu_mix[k], lam_mix[k], psi_mix[k], p, l, M)
     for k in range(0, T):
-        f1 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
-
+        f2 += useful_functions.E_log_norm(phi_m_k[:,k+J], data, mu_dp[k], nu_dp[k], lam_dp[k], psi_dp[k], p, l, M)
+        
     # k = 0
     # m = 0
     #out = useful_functions.E_log_norm(data[m, :], mu_dp[k,:], nu_dp[k], lam_dp[k], psi_dp[k, :, :], p)
@@ -81,7 +82,7 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     for k in range(0,T):
         f4 += useful_functions.E_log_dens_norm_inv_wish_p(mu_dp[k, :], nu_dp[k], lam_dp[k], psi_dp[k, :, :],
                                                           nIW_DP_0.mu, nIW_DP_0.nu, nIW_DP_0.lambdA, nIW_DP_0.phi, p, l)
-        print('f3 f4 done',f3,f4)
+    print('f3 f4 done',f3,f4)
 
     # f5 #old version
     # f5=0
@@ -133,9 +134,16 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
 #     f6 = jnp.sum(jnp.multiply(jnp.sum(phi_m_k, axis = 0)[J:(J+T-1)],diga_eta[0]-diga_e_b + diga_a -diga_ab +parsum))
 #     print('f6 vec', f6)
     f6 = jnp.sum(phi_m_k[:, J]) * (diga_eta[0] - diga_e_b + diga_a[0] - diga_ab[0])
-    for k in range(J + 1, J + T - 1):
-        f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k - J] + parsum[k - J - 1])
+    #f6_bis = f6
+    #for k in range(J + 1, J + T - 1):
+    #    f6 += jnp.sum(phi_m_k[:, k]) * (diga_eta[0] - diga_e_b + diga_a[k - J] - diga_ab[k - J] + parsum[k - J - 1])
+    f6 += jnp.sum(jnp.multiply(jnp.sum(phi_m_k[:, (J+1):(J+T-1)],axis = 0), (diga_eta[0] - diga_e_b + diga_a[1:(T-1)] - diga_ab[1:(T-1)] + parsum[0:(T-2)])))
+    #f6 += jnp.sum(phi_m_k[:, J + T - 1]) * (diga_eta[0] - diga_e_b + parsum[T - 2])
     f6 += jnp.sum(phi_m_k[:, J + T - 1]) * (diga_eta[0] - diga_e_b + parsum[T - 2])
+   # print('f6: ', f6)
+  #  print('f6_bis: ', f6_bis)
+ #   print(f6 - f6_bis)
+#    assert(f6 == f6_bis)
     print('f6 done', f6)
     #
 
@@ -211,4 +219,3 @@ def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalPar
     print('h4 h5 done', h4,h5)
 
     return E_log_p-E_log_q
-
