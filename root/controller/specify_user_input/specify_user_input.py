@@ -44,7 +44,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     #mu_0_DP = np.ones(p)  # così che sia comunque della forma n_elems x p
     mu_0_DP = np.zeros(p)
 
-    nu_0_DP = np.array([2])
+    nu_0_DP = np.array([10])
 
     lambda_0_DP = np.array([0.1])
 
