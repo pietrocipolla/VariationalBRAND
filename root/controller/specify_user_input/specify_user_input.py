@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 
+from controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
 from root.controller.sample_data_handler.test_init import test_mu_var_DP_init
 from root.model.user_input_model import UserInputModel
 
@@ -195,7 +196,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     # Num iteration and tolerance cavi
     n_iter = 100
-    tol = 1e-5
+    tol = 1e-1
 
     #HYPERPARAMETERS
     gamma = 5
@@ -219,7 +220,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     nu_0_DP = np.array([10])
 
-    lambda_0_DP = np.array([0.4])
+    lambda_0_DP = np.array([0.9])
 
     PHI_0_DP = np.multiply(np.identity(p), 10)
 
@@ -264,7 +265,8 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     a_k_beta = np.ones(T - 1)
 
-    b_k_beta = np.multiply(np.ones(T - 1), gamma)
+    #b_k_beta = np.multiply(np.ones(T - 1), gamma)
+    b_k_beta = np.multiply(np.ones(T - 1), 1)
 
     # NIW_DP_VAR
     # mu_var_DP -> matrice (Txp)
@@ -285,7 +287,8 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     #mu_var_DP = np.tile(mu_0_DP, (T,1))
     # print(np.tile(mu_0_DP, (T,1)))
-    mu_var_DP = test_mu_var_DP_init()
+    #mu_var_DP = test_mu_var_DP_init()
+    mu_var_DP = test_mu_var_DP_init_kmeans(Y, T)
 
     # print('mu_0_DP', mu_0_DP)
     # print('mu_var_DP', mu_var_DP)
