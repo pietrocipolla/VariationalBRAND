@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # data = loadtxt('data.csv', delimiter=',')
 
     tic = TimeTracker.start()
-    data = loadtxt('not_small_brand.csv', delimiter=',')
+    data = loadtxt('Y_testing.csv', delimiter=',')
     Y = data
 
     #modify and pick a subset of Y for calculating robust parameters on Y_training
@@ -35,8 +35,12 @@ if __name__ == '__main__':
     # Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
 
     #not_small_brand
-    num_classes_training = 3
-    Y_training = numpy.vstack([Y[0:199, :], Y[200:499, :],Y[500:749, :]])
+    # num_classes_training = 3
+    # Y_training = numpy.vstack([Y[0:199, :], Y[200:499, :],Y[500:749, :]])
+
+    #small_brand
+    num_classes_training = 2
+    Y_training = loadtxt('X_training.csv', delimiter=',')
 
     #automatic robust parameters from y_training and num of training classes
     list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
