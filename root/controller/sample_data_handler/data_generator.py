@@ -47,3 +47,4 @@ def generate_some_data_example():
     savetxt('data.csv', X, delimiter=',')
 
     return jnp.array(X)
+

@@ -19,15 +19,24 @@ if __name__ == '__main__':
     #modify to generate_some_data or load your own data
     #data = generate_some_data_example()
     # data = loadtxt('data.csv', delimiter=',')
-    data = loadtxt('Data_Luca.csv', delimiter=',')
+
+    tic = TimeTracker.start()
+    data = loadtxt('not_small_brand.csv', delimiter=',')
     Y = data
 
     #modify and pick a subset of Y for calculating robust parameters on Y_training
+    #data.csv
     # num_clusters= 5
     # num_classes_training = 3
     #Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
-    num_classes_training = 2
-    Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
+
+    #luca
+    # num_classes_training = 2
+    # Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
+
+    #not_small_brand
+    num_classes_training = 3
+    Y_training = numpy.vstack([Y[0:199, :], Y[200:499, :],Y[500:749, :]])
 
     #automatic robust parameters from y_training and num of training classes
     list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
@@ -45,6 +54,9 @@ if __name__ == '__main__':
     #CAVI (init + update + elbo)
     variational_parameters, elbo_values = cavi(Y, list_robust_mean, hyperparameters_model, user_input_parameters)
 
+    TimeTracker.stop_and_save('main', tic)
+    TimeTracker.plot_main_performance()
+    TimeTracker.print_performance()
     #Generate figure of induced partition
     generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=False)
     generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True)

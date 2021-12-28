@@ -26,8 +26,9 @@ def test_init(mu_0_DP, PHI_0_DP):
 
 def test_mu_var_DP_init():
     p = 2
-    T = 20
+    T = 30
     mu_0_DP = np.ones(p)
+    #mu_0_DP = np.zeros(p)
     PHI_0_DP = np.multiply(np.identity(p), 10)
 
     gauss_realizations = []
