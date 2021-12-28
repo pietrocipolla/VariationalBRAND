@@ -16,21 +16,21 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     J = 2
     # Numero di classi massime nel Dirichlet Process
     #T = 20
-    T = 50
+    T = 30
 
     # Num iteration and tolerance cavi
     n_iter = 1000
     tol = 1e-4
 
     #HYPERPARAMETERS
-    gamma = 25
+    gamma = 5
     # gamma -> parametro dello Stick Breaking -> scalare
     # iperparametro tra 1 e 50 tipo oppure buttarci su una distribuzione e una prior
 
     #a_dir_k = np.ones(J + 1)*2
     #a_dir_k = np.ones(J + 1) * 0.1
-    a_dir_k = np.ones(J) * 0.1
-    a_dir_k = np.append(a_dir_k, 1)
+    a_dir_k = np.ones(J+1)
+    a_dir_k[0] = 0.1
 
     # a_dir_k -> vettore delle componenti della Dir0ichlet -> vettore di (J+1) componenti
     # J = num_classes_learning
@@ -44,12 +44,12 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     #mu_0_DP = np.ones(p)  # così che sia comunque della forma n_elems x p
     mu_0_DP = np.zeros(p)
 
-    nu_0_DP = np.array([10])
+    nu_0_DP = np.array([2])
 
     lambda_0_DP = np.array([0.1])
 
 
-    PHI_0_DP = np.multiply(np.identity(p), 1)
+    PHI_0_DP = np.multiply(np.identity(p), 5)
 
 
     #NIW_MIX_0

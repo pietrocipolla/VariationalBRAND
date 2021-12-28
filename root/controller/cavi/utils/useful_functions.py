@@ -29,8 +29,8 @@ def E_log_beta_unjitted(a,b):
     return jdigamma(a)-jdigamma(a+b)
 E_log_beta = jax.jit(E_log_beta_unjitted)
 # val atteso log densità normal inverse wishart
-
-#def E_log_dens_norm_inv_wish_q(mu,nu,lam,psi,p,l):
+#
+# def E_log_dens_norm_inv_wish_q(mu,nu,lam,psi,p,l):
 #    # p dim of mu
 #    ret = +jnp.log(jdet(psi))
 #    ret = ret -jnp.sum(jdigamma((nu - l) / 2))

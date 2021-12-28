@@ -25,6 +25,15 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
         update_parameters(Y, hyperparameters_model, variational_parameters, starting_parameters)
         elbo_values.append(elbo_calculator(Y, hyperparameters_model, variational_parameters, p))
         print('iter' ,i,' elbo: ',elbo_values[i])
+        print('\n')
+        print('mu = ', variational_parameters.nIW.mu)
+        print('lambda = ', variational_parameters.nIW.lambdA)
+        print('nu = ', variational_parameters.nIW.nu)
+        print('PHI = ', variational_parameters.nIW.phi)
+        print('a_beta = ', variational_parameters.a_k_beta)
+        print('b_beta = ', variational_parameters.b_k_beta)
+        print('phi_m = ', variational_parameters.phi_m_k)
+        print('eta = ', variational_parameters.eta_k)
 
         if (i > 0) and (abs(elbo_values[i] - elbo_values[i-1]) < tol):
             print('\nConvergence of elbo in ', i, ' iterations')
