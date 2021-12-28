@@ -30,7 +30,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     #a_dir_k = np.ones(J + 1)*2
     #a_dir_k = np.ones(J + 1) * 0.1
     a_dir_k = np.ones(J) * 0.1
-    a_dir_k = np.append(a_dir_k, 0.5)
+    a_dir_k = np.append(a_dir_k, 1)
 
     # a_dir_k -> vettore delle componenti della Dir0ichlet -> vettore di (J+1) componenti
     # J = num_classes_learning
@@ -46,7 +46,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     nu_0_DP = np.array([10])
 
-    lambda_0_DP = np.array([0.08])
+    lambda_0_DP = np.array([0.1])
 
 
     PHI_0_DP = np.multiply(np.identity(p), 1)

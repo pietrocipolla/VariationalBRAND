@@ -3,7 +3,8 @@ import numpy
 from controller.time_tracker.time_tracker import TimeTracker
 from root.controller.plotter.generate_induced_partition import generate_induced_partition
 from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
-from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
+from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters, \
+    calculate_robust_parameters_labels
 from root.controller.cavi.cavi import cavi
 from root.controller.specify_user_input.specify_user_input import specify_user_input
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
@@ -42,9 +43,15 @@ if __name__ == '__main__':
     num_classes_training = 2
     Y_training = loadtxt('X_training.csv', delimiter=',')
 
-    #automatic robust parameters from y_training and num of training classes
-    list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
+    # seed dataset
+    labels = loadtxt('labels.csv', delimiter=',')
+    list_robust_mean, list_inv_cov_mat = calculate_robust_parameters_labels(Y_training, num_classes_training, labels)
     print('list_robust_mean' ,list_robust_mean)
+
+    #automatic robust parameters from y_training and num of training classes
+    # list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
+    # print('list_robust_mean' ,list_robust_mean)
+
 
     # STEP 2
     #modify specify_user_input to change hyperparameters_setter to match your data

@@ -15,6 +15,17 @@ def calculate_robust_parameters(X, num_classes):
         i+=1
     return  list_robust_mean, list_inv_cov_mat
 
+def calculate_robust_parameters_labels(X, num_classes, labels):
+    list_inv_cov_mat = []
+    list_robust_mean = []
+    i = 1
+    while i< num_classes+1:
+        X_cluster_i = X[jnp.where(labels == i)]
+        temp_inv_cov_mat, temp_robust_mean = mcd(X_cluster_i)
+        list_inv_cov_mat.append(jnp.array(temp_inv_cov_mat))
+        list_robust_mean.append(jnp.array(temp_robust_mean))
+        i+=1
+    return  list_robust_mean, list_inv_cov_mat
 
 def mcd(X):
     # Load libraries
