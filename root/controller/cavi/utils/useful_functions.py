@@ -61,7 +61,7 @@ def callable_1_q_unjitted(mu,nu,lam,psi,p,l):
     # p dim of mu
     ret = +jnp.log(jdet(psi))
     ret = ret -jnp.sum(jdigamma((nu - l) / 2))
-    ret = ret - jnp.log(lam**p)
+    ret = ret - p*jnp.log(lam)
 
     ret = -0.5*ret
     #em = jnp.exp(js.special.multigammaln(nu/2,p))
@@ -94,7 +94,7 @@ def callable_p_unjitted(mu_var,nu_var,lam_var,psi_var,mu_0,nu_0,lam_0,psi_0,p,l)
     # p dim of mu
     ret = +jnp.log(jdet(psi_var))
     ret = ret -jnp.sum(jdigamma((nu_var - l) / 2))
-    ret = ret - jnp.log(lam_0**p) + p*lam_0/lam_var
+    ret = ret - p*jnp.log(lam_0) + p*lam_0/lam_var
     ret = ret + lam_0*nu_var*((mu_var-mu_0).T@jinv(psi_var)@(mu_var-mu_0))
 
     ret = -0.5*ret
