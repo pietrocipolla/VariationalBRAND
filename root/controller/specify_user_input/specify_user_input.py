@@ -16,7 +16,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
     J = 2
     # Numero di classi massime nel Dirichlet Process
     #T = 20
-    T = 30
+    T = 50
 
     # Num iteration and tolerance cavi
     n_iter = 1000

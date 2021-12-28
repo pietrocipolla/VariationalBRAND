@@ -39,11 +39,11 @@ if __name__ == '__main__':
     # num_classes_training = 3
     # Y_training = numpy.vstack([Y[0:199, :], Y[200:499, :],Y[500:749, :]])
 
-    #small_brand
+    #seed_data y training
     num_classes_training = 2
     Y_training = loadtxt('X_training.csv', delimiter=',')
 
-    # seed dataset
+    # seed dataset robust parameters
     labels = loadtxt('labels.csv', delimiter=',')
     list_robust_mean, list_inv_cov_mat = calculate_robust_parameters_labels(Y_training, num_classes_training, labels)
     print('list_robust_mean' ,list_robust_mean)
