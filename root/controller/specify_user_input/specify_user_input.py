@@ -220,7 +220,7 @@ def specify_user_input(robust_mean, robust_inv_cov_mat, Y):
 
     nu_0_DP = np.array([10])
 
-    lambda_0_DP = np.array([0.9])
+    lambda_0_DP = np.array([0.7])
 
     PHI_0_DP = np.multiply(np.identity(p), 10)
 
