@@ -1,5 +1,5 @@
-from controller.specify_user_input.specify_user_input import specify_user_input
-from controller.time_tracker.time_tracker import TimeTracker
+from root.controller.specify_user_input.specify_user_input import specify_user_input
+from root.controller.time_tracker.time_tracker import TimeTracker
 from root.controller.plotter.generate_induced_partition import generate_induced_partition
 from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters_labels
