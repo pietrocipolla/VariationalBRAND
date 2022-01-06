@@ -9,7 +9,7 @@ from root.model.hyperparameters_model import HyperparametersModel
 from numpy import loadtxt
 import copy
 import numpy as np
-from controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
+from root.controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
 from root.model.user_input_model import UserInputModel
 from unittest import TestCase
 
