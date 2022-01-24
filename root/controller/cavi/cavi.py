@@ -40,18 +40,18 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
             print(abs(elbo_values[i] - elbo_values[i-1]))
             stop = True
 
-        # generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,
-        #                                 cov_ellipse=True)
+        generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,
+                                        cov_ellipse=True)
         i += 1
 
-    print('\n')
-    print('mu = ', variational_parameters.nIW.mu)
-    print('lambda = ', variational_parameters.nIW.lambdA)
-    print('nu = ', variational_parameters.nIW.nu)
-    print('PHI = ', variational_parameters.nIW.phi)
-    print('a_beta = ', variational_parameters.a_k_beta)
-    print('b_beta = ', variational_parameters.b_k_beta)
-    print('phi_m = ', variational_parameters.phi_m_k)
-    print('eta = ', variational_parameters.eta_k)
+    # print('\n')
+    # print('mu = ', variational_parameters.nIW.mu)
+    # print('lambda = ', variational_parameters.nIW.lambdA)
+    # print('nu = ', variational_parameters.nIW.nu)
+    # print('PHI = ', variational_parameters.nIW.phi)
+    # print('a_beta = ', variational_parameters.a_k_beta)
+    # print('b_beta = ', variational_parameters.b_k_beta)
+    # print('phi_m = ', variational_parameters.phi_m_k)
+    # print('eta = ', variational_parameters.eta_k)
 
     return variational_parameters, elbo_values

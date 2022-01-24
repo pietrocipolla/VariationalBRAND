@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # data = loadtxt('data.csv', delimiter=',')
 
     tic = TimeTracker.start()
-    data = loadtxt('Y_testing.csv', delimiter=',')
+    data = loadtxt('Data_luca.csv', delimiter=',')
     Y = data
 
     #modify and pick a subset of Y for calculating robust parameters on Y_training
@@ -32,24 +32,24 @@ if __name__ == '__main__':
     #Y_training, num_classes_training = get_training_set_example(Y, num_clusters, num_classes_training)
 
     #luca
-    # num_classes_training = 2
-    # Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
+    num_classes_training = 2
+    Y_training = numpy.vstack([Y[0:299, :], Y[600:899, :]])
 
     #not_small_brand
     # num_classes_training = 3
     # Y_training = numpy.vstack([Y[0:199, :], Y[200:499, :],Y[500:749, :]])
 
     #seed_data y training
-    num_classes_training = 2
-    Y_training = loadtxt('X_training.csv', delimiter=',')
+    # num_classes_training = 2
+    # Y_training = loadtxt('X_training.csv', delimiter=',')
 
     # seed dataset robust parameters
-    labels = loadtxt('labels.csv', delimiter=',')
-    list_robust_mean, list_inv_cov_mat = calculate_robust_parameters_labels(Y_training, num_classes_training, labels)
-    print('list_robust_mean' ,list_robust_mean)
+    # labels = loadtxt('labels.csv', delimiter=',')
+    # list_robust_mean, list_inv_cov_mat = calculate_robust_parameters_labels(Y_training, num_classes_training, labels)
+    # print('list_robust_mean' ,list_robust_mean)
 
     #automatic robust parameters from y_training and num of training classes
-    # list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
+    list_robust_mean, list_inv_cov_mat = calculate_robust_parameters(Y_training, num_classes_training)
     # print('list_robust_mean' ,list_robust_mean)
 
 

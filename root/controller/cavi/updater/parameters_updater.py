@@ -1,6 +1,7 @@
 import jax
+from jax.numpy import where
 from jax.numpy.linalg import det as jdet
-from jax.numpy.linalg import inv as jinv
+from jax.numpy.linalg import pinv as jinv
 from jax.scipy.special import digamma
 from jax.scipy.special import logsumexp
 from jax import numpy as jnp
@@ -24,7 +25,7 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
 
     # Define function for each family update:
     # Multinomial_phi
-    variational_parameters.phi_m_k = update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J)
+    variational_parameters.phi_m_k = update_phi_mk(data, variational_parameters, hyperparameters.T, hyperparameters.J, hyperparameters.M)
 
     sum_phi_k = jnp.sum(variational_parameters.phi_m_k, axis=0)
     # print(sum_phi_k)
@@ -41,13 +42,12 @@ def update_parameters(data, hyperparameters: HyperparametersModel, variational_p
 
 ############# UTILS ##############
 def eval_y_bar(sum_phi_k, sum_y_phi):
-    y_bar = sum_y_phi * 1/sum_phi_k            #(px(J+T_true))*((J+T_true)x(J+T_true)) = px(J+T_true)
+    y_bar = where(sum_phi_k == 0, sum_y_phi, sum_y_phi / sum_phi_k)            #(px(J+T_true))*((J+T_true)x(J+T_true)) = px(J+T_true)
     return y_bar
 
 def create_tensor(diff, hyperparameters):
     #Build a 3D pxMxM tensor where we have a p-dimensional array from diff on each element of the MxM matrix
     transf = jnp.eye(hyperparameters.M)
-    # transf = jnp.eye(2)
     transf = jnp.repeat(transf[:, :, np.newaxis], hyperparameters.p, axis=2)
 
     return diff * transf
@@ -87,15 +87,6 @@ def update_NIW(y, starting_parameters : VariationalParameters,
                sum_phi_k):
     phi_mk = variational_parameters.phi_m_k
 
-    # y = jnp.array([[1, 0], [0, 1]])
-    # phi_mk = jnp.array([[0.5, 0.5], [0.5, 0.5]])
-    # sum_phi_k = jnp.sum(phi_mk, axis=0)
-
-    # starting_parameters.nIW.mu = jnp.reshape(jnp.array([1, 1]), (1,2))
-    # starting_parameters.nIW.lambdA = jnp.array([1])
-    # starting_parameters.nIW.nu = jnp.array([1])
-    # starting_parameters.nIW.phi = jnp.reshape(jnp.array([[1,1],[1,2]]), (1,2,2))
-
     # supponendo y Mxp
     sum_y_phi = y.T @ phi_mk                         # pxM*(M*(J+T_true)) = px(J+T_true)
     y_bar = eval_y_bar(sum_phi_k, sum_y_phi)                # px(J+T_true)
@@ -117,24 +108,6 @@ def update_NIW_lambda(starting_parameters : VariationalParameters,
     lambda0 = starting_parameters.nIW.lambdA
 
     return lambda0 + sum_phi_k
-
-
-###TEST NIW
-# mu_0 = jnp.array([1,1])[None,:]
-#lam_0 = jnp.array([1])
-#nu_0 = jnp.array([1])
-#phi_0 = jnp.array([[1,1],[1,2])[None,:]
-#
-#data = jnp.array([[1,0],[0,1]])
-#phi_m_k = jnp.array([[0.5, 0.5],[0.5,0.5])
-#
-#
-#EXPECTED
-#mu_k = [3/4, 3/4]
-#lambda_k = 2
-#nu_k = 2
-#phi_k =    [13/8    5/8]
-#           [5/8    21/8]
 
 
 def update_NIW_mu(starting_parameters : VariationalParameters,
@@ -165,8 +138,6 @@ def update_NIW_PHI(y, starting_parameters : VariationalParameters,
                    sum_phi_k, y_bar, phi_mk):
     J = hyperparameters.J
     T = hyperparameters.T
-    # J = 1
-    # T = 1
     mu0 = starting_parameters.nIW.mu.T           # px(J+T)
     lambda0 = starting_parameters.nIW.lambdA     # J+T
     PHI0 = starting_parameters.nIW.phi           # (J+T)xpxp
@@ -193,15 +164,12 @@ def update_NIW_PHI(y, starting_parameters : VariationalParameters,
 
         comp_3 = comp_3.at[k, :, :].set(coeff*diff_matrix)                      # (J+T)xpxp
 
-    # print('component 2 = ', comp_2)
-    # print('component 3 = ', comp_3)
-
     return PHI0 + comp_2 + comp_3
 
 ######## UPDATE CATEGORIAL ########
 
 
-def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J : int):
+def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J : int, M : int):
     p = y.shape[1]
 
     phi_mk = variational_parameters.phi_m_k
@@ -221,9 +189,11 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
     for k in range(J):
         #e_norm = -1/2 * (-jnp.sum(digamma((nu[k] - l)/2)) + jnp.log(jdet(PHI[k, :, :]))
         #                 + p/lambdA[k] + nu[k] * jnp.diag((y - mu[k, :]) @ jinv(PHI[k, :, :]) @ (y - mu[k,:]).T))
+
         e_norm = enorm_calc_J(nu[k], PHI[k,:,:],lambdA[k],y,mu[k,:],l,p)
 
-        phi_mk = phi_mk.at[:, k].set(jnp.exp(e_dir[k+1] + e_norm))
+        e_tot = e_dir[k+1] + e_norm
+        phi_mk = phi_mk.at[:, k].set(e_tot)
 
     dig_b = digamma(b_k)
     dig_a = digamma(a_k + b_k)
@@ -241,13 +211,16 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
         e_res = dig_cumsum[0,k]
 
         e_norm = enorm_calc_T(nu[k+J],l,PHI[k+J,:,:],p,lambdA[k+J],y,mu[k+J,:])
+
         #e_norm = -1 / 2 * (-jnp.sum(digamma((nu[k+J] - l) / 2))
         #                   + jnp.log(jdet(PHI[k+J, :, :]))
         #                   + p / lambdA[k+J]
         #                   + nu[k+J] * jnp.diag(((y - mu[k+J, :]) @ jinv(PHI[k+J, :, :]) @ (
         #                               y - mu[k+J, :]).T)))
 
-        phi_mk = phi_mk.at[:, k+J].set(jnp.exp(e_dir[0] + e_beta + e_res + e_norm))
+        e_tot = e_dir[0] + e_beta + e_res + e_norm
+
+        phi_mk = phi_mk.at[:, k+J].set(e_tot)
 
     e_res_T = dig_cumsum[0, T-1]
 
@@ -257,10 +230,15 @@ def update_phi_mk(y, variational_parameters : VariationalParameters, T : int, J 
                        * jnp.diag(((y - mu[J+T-1,:]) @ jinv(PHI[J+T-1, :, :]) @ (
                     y - mu[J+T-1,:]).T)))
 
-    phi_mk = phi_mk.at[:, T + J - 1].set(jnp.exp(e_dir[0] + e_res_T + e_norm_T))
-    norm_phi = jnp.reshape(jnp.sum(phi_mk, axis=1), (phi_mk.shape[0], 1))
+    e_tot = e_dir[0] + e_res_T + e_norm_T
+    phi_mk = phi_mk.at[:, T + J - 1].set(e_tot)
 
-    return phi_mk / norm_phi
+    Z = logsumexp(phi_mk, axis=1)
+    Z = jnp.reshape(Z, (M,1))
+
+    # print("Prob distribution: ", jnp.exp(phi_mk - Z))
+
+    return jnp.exp(phi_mk - Z)
 
 def enorm_calc_J_unjitted(nu, PHI,lambdA,y,mu,l,p):
    return -1/2 * (-jnp.sum(digamma((nu - l)/2)) + jnp.log(jdet(PHI))

@@ -58,14 +58,14 @@ def generate_induced_partition_iter(Y, robust_mean, iter, hyperparameters_model:
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
 
 
-    print('Clusters\' numerosity')
-    print(ll)
+#    print('Clusters\' numerosity')
+#    print(ll)
     unique_clusters = np.unique(np.array(ll))
     num_clusters = len(unique_clusters)
 
-    for i in unique_clusters:
-        print('cluster ', i, ': ',ll.count(i))
-        print(robust_mean)
+#    for i in unique_clusters:
+#        print('cluster ', i, ': ',ll.count(i))
+#        print(robust_mean)
 
 
     if (hyperparameters_model.p == 2):
@@ -75,7 +75,7 @@ def generate_induced_partition_iter(Y, robust_mean, iter, hyperparameters_model:
             plt.scatter(robust_mean[i][0], robust_mean[i][1], color='red')
         for i in unique_clusters:
             plt.scatter(variational_parameters.nIW.mu[i, 0], variational_parameters.nIW.mu[i, 1], color='black')
-            print(variational_parameters.nIW.phi[i],variational_parameters.nIW.mu[i, :] )
+        #    print(variational_parameters.nIW.phi[i],variational_parameters.nIW.mu[i, :] )
             if cov_ellipse:
                 plot_cov_ellipse(variational_parameters.nIW.mu[i],
                                  variational_parameters.nIW.phi[i]/(variational_parameters.nIW.nu[i] - hyperparameters_model.p -1))
