@@ -39,5 +39,5 @@ class Test(TestCase):
         update_parameters_time_tracker(Y, hyperparameters_model, variational_parameters, starting_parameters)
 
         # Performance
-        TimeTracker.print_performance()
+        TimeTracker.get_performance()
         TimeTracker.plot_update_parameters_performance()

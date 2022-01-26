@@ -37,5 +37,5 @@ class Test(TestCase):
         elbo_calculator_time_tracker(Y, hyperparameters_model, variational_parameters, hyperparameters_model.p)
 
         # Performance
-        TimeTracker.print_performance()
+        TimeTracker.get_performance()
         TimeTracker.plot_elbo_calculator_performance()

@@ -75,7 +75,7 @@ class Test(TestCase):
 
         TimeTracker.stop_and_save('main', tic)
         TimeTracker.plot_main_performance()
-        TimeTracker.print_performance()
+        TimeTracker.get_performance()
         # Generate figure of induced partition
         generate_induced_partition(Y, list_robust_mean, hyperparameters_model, variational_parameters,
                                    cov_ellipse=False)

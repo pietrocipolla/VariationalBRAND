@@ -1,12 +1,9 @@
-import numpy
-
 from root.controller.sample_data_handler.utils import get_training_set_example
 from root.controller.time_tracker.clones.cavi_time_tracker import cavi_time_tracker
 from root.controller.time_tracker.time_tracker import TimeTracker
 from root.controller.plotter.generate_induced_partition import generate_induced_partition
 from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
 from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters
-from root.controller.specify_user_input.specify_user_input import specify_user_input
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from root.model.hyperparameters_model import HyperparametersModel
 from numpy import loadtxt
@@ -82,5 +79,5 @@ def main_time_tracker():
     TimeTracker.stop_and_save('generate_elbo_plot', tic)
 
     #Performance
-    TimeTracker.print_performance()
+    TimeTracker.get_performance()
     TimeTracker.plot_main_performance()

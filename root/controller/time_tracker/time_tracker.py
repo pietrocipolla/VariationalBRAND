@@ -38,9 +38,14 @@ class TimeTracker:
         print(TimeTracker.records[0].function_name, TimeTracker.records[0].elapsed_time)
 
     @staticmethod
-    def print_performance():
+    def get_performance():
+        main_time = ''
         for record in TimeTracker.records:
             print(record.function_name, record.elapsed_time)
+            if(record.function_name == 'main'):
+                main_time = str(record.function_name) + ': ' + str(record.elapsed_time)
+
+        return main_time
 
     @staticmethod
     def plot_performance():

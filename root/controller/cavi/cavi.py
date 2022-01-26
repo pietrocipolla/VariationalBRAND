@@ -40,8 +40,8 @@ def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : Hyperparameters
             print(abs(elbo_values[i] - elbo_values[i-1]))
             stop = True
 
-        generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,
-                                        cov_ellipse=True)
+        # generate_induced_partition_iter(Y, list_robust_mean, i, hyperparameters_model, variational_parameters,
+        #                                 cov_ellipse=True)
         i += 1
 
     # print('\n')
