@@ -1,8 +1,5 @@
 import copy
 import numpy as np
-import sklearn
-
-from root.model.variational_parameters import VariationalParameters
 from root.controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
 from root.model.user_input_model import UserInputModel
 from root.controller.time_tracker.time_tracker import TimeTracker
@@ -13,6 +10,8 @@ from root.controller.cavi.cavi import cavi
 from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
 from root.model.hyperparameters_model import HyperparametersModel
 from numpy import loadtxt, unique
+from root.utils import calculate_ARI, save_results, generate_labels_pred
+
 
 def main():
     # SPECIFY DATASETS' INFO
@@ -38,7 +37,7 @@ def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
 
     # Num iteration and tolerance cavi
     n_iter = 1000
-    tol = 1e-4
+    tol = 1e-8
 
     #HYPERPARAMETERS
     gamma = 5
@@ -262,36 +261,7 @@ def var_brand(Y_FULL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LA
     ARI = calculate_ARI(labels_tot, labels_pred)
 
     #Save results
-    save_results(hyperparameters_model, main_time, ARI)
-
-def generate_labels_pred(variational_parameters : VariationalParameters, Y):
-    from jax import numpy as jnp
-    labels_pred = []
-    for i in range(Y.shape[0]):
-        labels_pred.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
-
-    return labels_pred
-
-def calculate_ARI(labels_true, labels_pred):
-    return sklearn.metrics.adjusted_rand_score(labels_true, labels_pred)
-
-
-def save_results(hyperparameters_model, main_time, ARI):
-    p = hyperparameters_model.p
-    M = hyperparameters_model.M
-    output_name = 'output_' + str(p) + '_' + str(M) + '.txt'
-
-    line1 = "n\tp\tmain_time_secs\tari"
-
-    line2 = str(hyperparameters_model.M) + '\t' + str(hyperparameters_model.p) + '\t' + \
-            str(main_time) + '\t' + str(ARI)
-
-    lines = [line1, line2]
-    with open(output_name, 'w') as f:
-        for line in lines:
-            f.write(line)
-            f.write('\n')
-
+    save_results(hyperparameters_model, main_time, ARI, np.array(labels_pred))
 
 
 if __name__ == '__main__':

@@ -2,18 +2,20 @@ from root.main import var_brand
 from unittest import TestCase
 import os
 
-class Test(TestCase):
-    def test_main(self):
-        # SPECIFY DATASETS' INFO
-        Y_ALL_FILENAME = 'Y.csv'
-        Y_TRAINING_FILENAME = 'Y_training.csv'
-        LABELS_TRAINING_FILENAME = 'labels_training.csv'
-
-        var_brand(Y_ALL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME)
+# class Test(TestCase):
+#     def test_main(self):
+#         # SPECIFY DATASETS' INFO
+#         Y_ALL_FILENAME = 'Y.csv'
+#         Y_TRAINING_FILENAME = 'Y_training.csv'
+#         LABELS_TRAINING_FILENAME = 'labels_training.csv'
+#         LABELS_TOT_FILENAME = 'labels_tot.csv'
+#
+#         var_brand(Y_ALL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME)
 
 class Test_Multiple(TestCase):
     def test_main(self):
         FOLDER = "/home/eb/brand_tests/mcmc/"
+        #FOLDER = "/home/eb/brand_tests/mcmc_n950_p3/"
         file_list = os.listdir(FOLDER)
 
         #print(file_list)
