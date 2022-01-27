@@ -53,6 +53,6 @@ class Test_Multiple(TestCase):
 
         for list in datasets :
             print(list[0],list[1], list[2])
-            var_brand(Y_FULL_FILENAME=list[0],Y_TRAINING_FILENAME=list[1],
+            var_brand(Y_TOT_FILENAME=list[0], Y_TRAINING_FILENAME=list[1],
                       LABELS_TRAINING_FILENAME=list[2], LABELS_TOT_FILENAME=list[3])
 

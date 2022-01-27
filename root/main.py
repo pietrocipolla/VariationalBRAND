@@ -15,7 +15,7 @@ from root.utils import calculate_ARI, save_results, generate_labels_pred
 
 def main():
     # SPECIFY DATASETS' INFO
-    Y_FULL_FILENAME = 'Y.csv'
+    Y_TOT_FILENAME = 'Y.csv'
     Y_TRAINING_FILENAME = 'Y_training.csv'
     LABELS_TRAINING_FILENAME = 'labels_training.csv'
     LABELS_TOT_FILENAME = 'labels_tot.csv'
@@ -24,7 +24,7 @@ def main():
     # => modify below specify_parameters function
 
     # RUN VAR_BRAND
-    var_brand(Y_FULL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME)
+    var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME)
 
 def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING):
     # Numero di componenti
@@ -218,7 +218,7 @@ def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
         PHI_VAR_MIX = PHI_VAR_MIX,
     )
 
-def var_brand(Y_FULL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME):
+def var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME):
     tic = TimeTracker.start()
     #STEP 1
     #load training dataset and labels
@@ -231,7 +231,7 @@ def var_brand(Y_FULL_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LA
 
     # STEP 2
     # load entire dataset
-    Y = loadtxt(Y_FULL_FILENAME, delimiter=',')
+    Y = loadtxt(Y_TOT_FILENAME, delimiter=',')
 
     # specificy hyperparameters (! modify to match your hyperparameters)
     user_input_parameters = specify_parameters(list_robust_mean, list_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
