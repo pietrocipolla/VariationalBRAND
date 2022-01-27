@@ -5,9 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/root" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
-      <excludeFolder url="file://$MODULE_DIR$/tests/2_950" />
       <excludeFolder url="file://$MODULE_DIR$/tests/2_950b" />
-      <excludeFolder url="file://$MODULE_DIR$/tests/3_950" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
