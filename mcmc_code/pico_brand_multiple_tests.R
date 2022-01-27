@@ -1,0 +1,313 @@
+#IMPORT
+library(mvnfast)
+library(mcclust)
+library(mclust)
+library(ggplot2)
+# devtools::install_github('sarawade/mcclust.ext')
+library(mcclust.ext)
+library(tidyverse)
+library(forecast)
+library(adaptDA) # install.packages("~/Downloads/adaptDA_1.0.tar.gz",repos = NULL, type = "source")
+library(raedda) # remotes::install_github("AndreaCappozzo/raedda")
+library(foreach)
+
+library(parallel)
+library(doParallel)#install.packages("doParallel" )
+
+library(patchwork)
+library(xtable)
+library(doRNG)
+library(brand) # remotes::install_github("Fradenti/Brand")
+#library(BNPadaptRDA)
+
+#GENERATE DATA
+generate_data <- function(N_FACTOR, p) {
+  # training set realizations
+  N <- 1000 * N_FACTOR
+  
+  # full dataset realizations
+  M <- 1000 * N_FACTOR
+  
+  # training set cardinalities
+  N_vec <- list(300, 300, 400)
+  N_vec = lapply(N_vec,"*",N_FACTOR)
+  
+  # full dataset cardinalities
+  M_vec <- list(200, 200, 250, 90, 100, 100, 10)
+  M_vec = lapply(M_vec,"*",N_FACTOR)
+  
+  #alternative cardinalities
+  # "small" = list(350, 250, 250, 49, 50, 50, 1)
+  # "not_small" = list(200, 200, 250, 90, 100, 100, 10)
+  
+  # clusters in the training set
+  G <- 3
+  
+  # training sets labels
+  cl_train <- rep(1:G, N_vec)
+  
+  #full labels
+  cl_tot <- rep(1:length(M_vec), M_vec)
+  
+  #mu
+  MU <-
+    list(c(-5, 5),
+         c(-4, -4),
+         c(4, 4),
+         c(-0, 0),
+         c(5, -10),
+         c(5, -10),
+         c(-10, -10))
+  
+  #sigma
+  SIGMA <-
+    list(
+      matrix(c(1, .9, .9, 1), 2, 2),
+      diag(2),
+      diag(2),
+      matrix(c(1, -.75, -.75, 1), 2, 2),
+      matrix(c(1, .9, .9, 1), 2, 2),
+      matrix(c(1, -.9, -.9, 1), 2, 2),
+      diag(.01, 2)
+    )
+  
+  
+  #multidimensional MU
+  desired_length <- length(MU) 
+  updated_mu <- vector(mode = "list", length = desired_length)
+  
+  i = 1
+  while(i<length(MU)+1){
+    mu = matrix(0,1,p)
+    mu[1:2]=MU[[i]]
+    updated_mu[[i]]=mu
+    i=i+1
+  }
+  
+  MU = updated_mu
+  
+  #multidimensional SIGMA
+  desired_length <- length(SIGMA) 
+  updated_SIGMA <- vector(mode = "list", length = desired_length)
+  
+  i = 1
+  while(i<length(SIGMA)+1){
+    sigma = diag(p)
+    sigma[1:2,1:2] = SIGMA[[i]]
+    updated_SIGMA[[i]]=sigma
+    i=i+1
+  }
+  
+  SIGMA = updated_SIGMA
+  
+  #training set labels
+  cl_test <- rep(1:length(M_vec), M_vec)
+  
+  #optionally add label noise
+  label_noise <- FALSE
+  cl_train_label_noise <- cl_train
+  if (label_noise == TRUE) {
+    obs_LB <-
+      sample(which(cl_train_label_noise %in% c(2, 3)), size = 120)
+    cl_train_label_noise[obs_LB] <-
+      ifelse(test = cl_train_label_noise[obs_LB] == 2, 3, 2) # add label noise
+  }
+  
+  #Y_TRAINING
+  X <- 
+    purrr::map_dfr(1:G,  ~ as.data.frame(mvnfast::rmvn(
+      n = N_vec[[.x]], mu = MU[[.x]], sigma = SIGMA[[.x]],
+    )))
+  
+  #Y_ALL
+  Y <- 
+    purrr::map_dfr(1:length(M_vec),  ~ as.data.frame(mvnfast::rmvn(
+      n = M_vec[[.x]], mu = MU[[.x]], sigma = SIGMA[[.x]]
+    ))) #NEW: 1:length(M_vec), OLD 1:H, BUG/svista?
+  
+  #updated labels_training
+  cl_train_label_noise 
+  
+  #save data
+  write.table(Y,paste("Y_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(X,paste("Y_training_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(cl_train_label_noise, paste("labels_training_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(cl_tot,paste("labels_tot_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  
+  #PLOTS
+  #plots training and all dataset
+  # x11()
+  # plot(X, col=cl_train_label_noise)
+  # x11()
+  # plot(Y, col=cl_tot)
+  
+  output_df <- list("X" = X,"Y" = Y, "p" = p, "cl_train_label_noise" = cl_train_label_noise, "G" = G , "cl_tot" = cl_tot)
+  
+  return(output_df)
+}
+
+
+#PICO_BRAND
+pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
+  #MCMC
+  # truncation
+  H <- 10
+
+  BURN_IN <- 20000 
+  length_chain <- 60000
+  
+  start_time = Sys.time()
+  
+  #num clusters after noise
+  J <- length(unique(cl_train_label_noise))
+  
+  #hyperparameters
+  alpha_MCD = .75 #c(.75, 1)
+  k_tilde_train = 10 #c(10, 1000)
+  
+  prior <- list(
+    aDir = c(rep(1, J), .1),
+    aDP = .1,
+    #(.5?)
+    m_H     = rep(0, p),
+    k_H = .01,
+    v_H = 10,
+    S_H = diag(p) * 10,
+    k_g = k_tilde_train,
+    v_g = 5,
+    a_alphaDP = 1,
+    b_alphaDP = 1
+  )
+  
+  
+  #DECOMMENT AND MODIFY TO ACTIVATE PARALLEL MODE
+  # MC_SIM <- 1
+  # results = list()
+  
+  #clustvarsel::startParallel(TRUE)
+  # results =
+  #   foreach(i = 1:MC_SIM) %dopar% {
+  
+  #brand
+  fit_adapt_RDA_bnp <-
+    Brand_mlvt(
+      Y = Y,
+      X = X,
+      categ = cl_train_label_noise,
+      prior = prior,
+      L = 20,
+      burn_in = BURN_IN,
+      thinning = 1,
+      nsim = length_chain,
+      fixed_alphaDP = FALSE,
+      h_MCD = alpha_MCD,
+      raw_MCD = FALSE,
+      kappa = .25,
+      learning_type = "transductive",
+      light = TRUE
+    )
+  
+  cl_adapt_BNP <-
+    apply(fit_adapt_RDA_bnp$AB[, 1, ], 1, major.vote)
+  
+  novelty_adapt_BNP <- which(cl_adapt_BNP == 0)
+  
+  BET    <- fit_adapt_RDA_bnp$AB[novelty_adapt_BNP, 2,]
+  psmBET <- comp.psm(t(BET) + 1)
+  
+  cl_beta_VI <- minVI(psmBET)$cl
+  cl_beta_adapt_BNP <- cl_adapt_BNP
+  cl_beta_adapt_BNP[cl_adapt_BNP == 0] <-
+    cl_beta_VI + G # I add G to separate from the original tr labels
+  
+  a_posteriori_prob_novelty <-
+    apply(fit_adapt_RDA_bnp$AB[, 1, ] == 0, 1, mean)
+  
+  result <-
+  list(
+    cl_alpha = cl_adapt_BNP,
+    cl_beta = cl_beta_adapt_BNP,
+    a_posteriori_prob_novelty = a_posteriori_prob_novelty,
+    ari = mclust::adjustedRandIndex(cl_tot, cl_beta_adapt_BNP),
+    cluster_found = length(unique(cl_beta_adapt_BNP))
+  )
+  
+  #}#end parallel
+  
+  end_time = Sys.time()
+  elapsed_time_mins = end_time - start_time
+  
+  # IF MULTIPLE CHAINS, report results only for the best ari
+  # aris = rep(0, length(results))
+  # 
+  # i = 1
+  # while(i < length(results)+1){
+  #   aris[i] = results[[i]]$ari
+  #   i=i+1
+  # }
+  # 
+  # index_max_ari = which.max(aris)
+  
+  #REPORT 
+  #result = results[[index_max_ari]]
+  n = length(result$cl_beta)
+  
+  tot_clusters = length(unique(cl_tot))
+  cluster_found = length(unique(result$cl_beta))
+  ARI = result$ari
+  
+  out = cbind(p, n, elapsed_time_mins, tot_clusters, cluster_found,ARI )
+  
+  #TO  
+  title = paste('MCMC',':','n=',n,'p=', p,sep=' ')
+  txt = paste(title,out,sep='\n')
+  #writeLines(txt, "outfile.txt")
+  writeLines(title, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""))
+  write.table(out, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""),sep="\t",row.names=FALSE, append = TRUE)
+  
+  #PLOTS
+  #plot training set
+  # plot(X, col=cl_train_label_noise)
+  
+  #jpeg(file="training_dataset.jpeg")
+  jpeg(file=paste("training_dataset_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  plot(X, col=cl_train_label_noise)
+  dev.off()
+  
+  #plot test set
+  #plot(Y, col=cl_tot)
+  
+  #jpeg(file="test_dataset.jpeg")
+  jpeg(file=paste("test_dataset_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  plot(Y, col=cl_tot)
+  dev.off()
+  
+  #plot algo output
+  #plot(Y, col=result$cl_beta)
+
+  #jpeg(file="output_brand_.jpeg")
+  jpeg(file=paste("output_brand_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  plot(Y, col=result$cl_beta)
+  dev.off()
+  
+  write.table(result$cl_beta, paste("cl_beta_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+}
+
+#TESTS
+#setwd('/home/eb/brand_tests/mcmc')
+
+n_factor_list = list(1,10) #default
+#n_factor_list = list(10) 
+p_list = list(2,3,5,10) #default
+#p_list = list(2,3)
+
+for (N_FACTOR in n_factor_list) {
+  for (p in p_list) {
+    todo = paste('n_factor :' ,N_FACTOR,'p: ', p)
+    print(todo)
+    output_df = generate_data(N_FACTOR, p)
+    #pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
+  }
+}
+
+
