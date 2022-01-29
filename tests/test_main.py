@@ -1,6 +1,8 @@
 from root.main import var_brand
 from unittest import TestCase
 import os
+import random
+import numpy as np
 
 # class Test(TestCase):
 #     def test_main(self):
@@ -14,17 +16,26 @@ import os
 
 class Test_Multiple(TestCase):
     def test_main(self):
-        FOLDER = "/home/eb/brand_tests/mcmc/"
-        #FOLDER = "/home/eb/brand_tests/mcmc_n950_p3/"
+        random.seed(1)
+        np.random.seed(1)
+
+        #FOLDER = "/home/eb/brand_tests/mcmc/"
+        FOLDER = "/home/eb/brand_tests/mcmc_n500_p2-3/"
         file_list = os.listdir(FOLDER)
 
         #print(file_list)
         datasets = []
 
         labels_training_list = []
+
         for file in file_list:
             if 'labels_training' in file:
                 labels_training_list.append(file)
+
+
+        labels_training_list = sorted(labels_training_list ,key=lambda x: (float(x.split('_')[2]),int((x.split('_')[3]).split('.csv')[0])))
+        print(labels_training_list)
+
 
 
         for file in labels_training_list:
@@ -51,8 +62,24 @@ class Test_Multiple(TestCase):
 
         print(datasets)
 
-        for list in datasets :
+        for list in datasets:
             print(list[0],list[1], list[2])
-            var_brand(Y_TOT_FILENAME=list[0], Y_TRAINING_FILENAME=list[1],
-                      LABELS_TRAINING_FILENAME=list[2], LABELS_TOT_FILENAME=list[3])
+            try:
+                var_brand(Y_TOT_FILENAME=list[0], Y_TRAINING_FILENAME=list[1],
+                          LABELS_TRAINING_FILENAME=list[2], LABELS_TOT_FILENAME=list[3])
+            except Exception as e:
+                print(e)
+                # temp_name = (list[0].split('Y_')[1]).split('.csv')[0]
+                # output_name = 'output_' + temp_name+ '.txt'
+                #
+                # line1 = "n\tp\tn_iter\tmain_time_secs\tmain_time_mins\tARI"
+                #
+                # line2 = str(e)
+                #
+                # lines = [line1, line2]
+                # with open(output_name, 'w') as f:
+                #     for line in lines:
+                #         f.write(line)
+                #         f.write('\n')
+
 

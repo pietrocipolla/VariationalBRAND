@@ -1,0 +1,2 @@
+n	p	n_iter	main_time_secs	main_time_mins	ARI
+5000	3	17	main: 221.7653678709994	3.6960894645166564	0.9633549953548143

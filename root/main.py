@@ -11,9 +11,14 @@ from root.controller.hyperparameters_setter.set_hyperparameters import set_hyper
 from root.model.hyperparameters_model import HyperparametersModel
 from numpy import loadtxt, unique
 from root.utils import calculate_ARI, save_results, generate_labels_pred
+import random
 
 
 def main():
+    # SET RANDOM SEEDS
+    random.seed(10)
+    np.random.seed(10)
+
     # SPECIFY DATASETS' INFO
     Y_TOT_FILENAME = 'Y.csv'
     Y_TRAINING_FILENAME = 'Y_training.csv'
@@ -37,7 +42,7 @@ def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
 
     # Num iteration and tolerance cavi
     n_iter = 1000
-    tol = 1e-8
+    tol = 1e-5
 
     #HYPERPARAMETERS
     gamma = 5
@@ -260,8 +265,8 @@ def var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LAB
     labels_tot = loadtxt(LABELS_TOT_FILENAME, delimiter=',')
     ARI = calculate_ARI(labels_tot, labels_pred)
 
-    #Save results
-    save_results(hyperparameters_model, main_time, ARI, np.array(labels_pred))
+    #Save results-old
+    save_results(hyperparameters_model, main_time, len(elbo_values), ARI, np.array(labels_pred))
 
 
 if __name__ == '__main__':

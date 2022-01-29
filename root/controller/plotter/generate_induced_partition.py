@@ -3,11 +3,11 @@ from root.controller.plotter.plot_covariance_ellipses import  plot_cov_ellipse
 from root.model.hyperparameters_model import HyperparametersModel
 from root.model.variational_parameters import VariationalParameters
 import numpy as np
+import matplotlib.pyplot as plt
+from jax import numpy as jnp
 
 
 def generate_induced_partition(Y,labels_pred, robust_mean, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
-    import matplotlib.pyplot as plt
-
     #print(robust_mean)
 
     print('Clusters\' numerosity')
@@ -18,8 +18,8 @@ def generate_induced_partition(Y,labels_pred, robust_mean, hyperparameters_model
     for i in unique_clusters:
         print('cluster ', i, ': ',labels_pred.count(i))
 
+    #plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / num_clusters) for i in labels_pred])
 
-    plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / num_clusters) for i in labels_pred])
     if (hyperparameters_model.p == 2):
         plt.scatter(Y[:, 0], Y[:, 1], c=[matplotlib.cm.get_cmap("Spectral")(float(i) / num_clusters) for i in labels_pred])
 
@@ -48,8 +48,6 @@ def generate_induced_partition(Y,labels_pred, robust_mean, hyperparameters_model
 
 
 def generate_induced_partition_iter(Y, robust_mean, iter, hyperparameters_model: HyperparametersModel, variational_parameters: VariationalParameters, cov_ellipse):
-    import matplotlib.pyplot as plt
-    from jax import numpy as jnp
     ll = []
     for i in range(Y.shape[0]):
         ll.append(jnp.argmax(variational_parameters.phi_m_k[i, :]))
