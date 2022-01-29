@@ -261,10 +261,12 @@ pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
   
   #TO  
   title = paste('MCMC',':','n=',n,'p=', p,sep=' ')
-  txt = paste(title,out,sep='\n')
-  #writeLines(txt, "outfile.txt")
-  writeLines(title, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""))
-  write.table(out, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""),sep="\t",row.names=FALSE, append = TRUE)
+  subtitle = paste("p"," n", "elapsed_time_mins", "tot_clusters", "cluster_found","ARI",sep='\t' )
+  txt = paste(title,subtitle,sep='\n')
+  
+  writeLines(txt, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""))
+  write.table(out, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""),sep="\t",
+              row.names=FALSE,col.names=FALSE, append = TRUE)
   
   #PLOTS
   #plot training set
@@ -307,11 +309,11 @@ set.seed(666)
 
 #n_factor_list = list( 0.5, 1, 2.5, 5, 10) #default
 #n_factor_list = list(2.5, 5, 10)
-n_factor_list = list(5,10) 
-#n_factor_list = list(0.5,1) 
+#n_factor_list = list(5,10) 
+n_factor_list = list(0.5,1) 
 #p_list = list(2,3,5,7,10) #default
-#p_list = list(2,3) #p = 5 failed n = 0.5, n = 1
-p_list = list(2)
+p_list = list(2,3) #p = 5 failed n = 0.5, n = 1
+#p_list = list(2)
 
 for (N_FACTOR in n_factor_list) {
   for (p in p_list) {
@@ -340,4 +342,36 @@ for (N_FACTOR in n_factor_list) {
     gc() #memory leak?
   }
 }
+
+n_factor_list = list(2.5) 
+p_list = list(2) 
+
+for (N_FACTOR in n_factor_list) {
+  for (p in p_list) {
+    todo = paste('n_factor :' ,N_FACTOR,'p: ', p)
+    print(todo)
+    output_df = generate_data(N_FACTOR, p)
+    
+    tryCatch(
+      expr = {
+        pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
+        
+        message(paste(todo, " => Successfully executed"))
+      },
+      error = function(e){
+        message('Caught an error!')
+        print(e)
+      },
+      warning = function(w){
+        message('Caught an warning!')
+        print(w)
+      },
+      finally = {
+        message(paste(todo, " => executed"))
+      }
+    )    
+    gc() #memory leak?
+  }
+}
+
 
