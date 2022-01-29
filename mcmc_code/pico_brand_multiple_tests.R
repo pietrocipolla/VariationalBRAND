@@ -307,13 +307,10 @@ pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
 setwd('/home/eb/brand_tests/mcmc')
 set.seed(666) 
 
-#n_factor_list = list( 0.5, 1, 2.5, 5, 10) #default
-#n_factor_list = list(2.5, 5, 10)
-#n_factor_list = list(5,10) 
-n_factor_list = list(0.5,1) 
-#p_list = list(2,3,5,7,10) #default
-p_list = list(2,3) #p = 5 failed n = 0.5, n = 1
-#p_list = list(2)
+#crash for n_factor > 1
+n_factor_list = list( 0.5, 1, 2.5, 5, 10) 
+p_list = list(2,3,5,7,10) #default
+
 
 for (N_FACTOR in n_factor_list) {
   for (p in p_list) {
@@ -325,37 +322,6 @@ for (N_FACTOR in n_factor_list) {
       expr = {
         pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
 
-        message(paste(todo, " => Successfully executed"))
-      },
-      error = function(e){
-        message('Caught an error!')
-        print(e)
-      },
-      warning = function(w){
-        message('Caught an warning!')
-        print(w)
-      },
-      finally = {
-        message(paste(todo, " => executed"))
-      }
-    )    
-    gc() #memory leak?
-  }
-}
-
-n_factor_list = list(2.5) 
-p_list = list(2) 
-
-for (N_FACTOR in n_factor_list) {
-  for (p in p_list) {
-    todo = paste('n_factor :' ,N_FACTOR,'p: ', p)
-    print(todo)
-    output_df = generate_data(N_FACTOR, p)
-    
-    tryCatch(
-      expr = {
-        pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
-        
         message(paste(todo, " => Successfully executed"))
       },
       error = function(e){
