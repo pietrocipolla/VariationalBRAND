@@ -19,8 +19,8 @@ class Test_Multiple(TestCase):
         random.seed(1)
         np.random.seed(1)
 
-        #FOLDER = "/home/eb/brand_tests/mcmc/"
-        FOLDER = "/home/eb/brand_tests/mcmc_n500_p2-3/"
+        FOLDER = "/home/eb/brand_tests/mcmc/"
+        #FOLDER = "/home/eb/brand_tests/mcmc_n500_p2-3/"
         file_list = os.listdir(FOLDER)
 
         #print(file_list)
