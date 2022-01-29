@@ -34,7 +34,7 @@ class Test_Multiple(TestCase):
 
 
         labels_training_list = sorted(labels_training_list ,key=lambda x: (float(x.split('_')[2]),int((x.split('_')[3]).split('.csv')[0])))
-        print(labels_training_list)
+        #print(labels_training_list)
 
 
 
