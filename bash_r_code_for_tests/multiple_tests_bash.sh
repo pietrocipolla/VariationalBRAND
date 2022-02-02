@@ -1,5 +1,5 @@
 #!/bin/bash
-### MCMC 4H + MINI 3H IN 7 ORE FINISCE, ULTIMO SEED RICHIDERA 9 ORE. ##
+### MCMC
 echo "Hello World"
 DATE_WITH_TIME=$(date +%d-%m-%Y_%H-%M-%S)
 WORKING_DIRECTORY="/home/eb/Desktop/MCMC_VI_R/BASH/tests/"$DATE_WITH_TIME"/"
@@ -7,8 +7,8 @@ mkdir -p $WORKING_DIRECTORY;
 
 #mini
 #seeds_list=(1 2 3)
-#n_factor_list=(5) #N FATTORE = 10 CI METTE 3 ORE*3, N = 5 45 MIN *3 => 3H +; MCMC 25MIN*10 = 4H
-#p_list=(5 7 10) #2 GIA FATTO P = 3 MANCA SOLO IL SEED 9 E 10 QUINDI OK ANCHE QUELLI FINO A 3
+#n_factor_list=(5)
+#p_list=(5 7 10)
 
 
 #default
