@@ -17,8 +17,8 @@ n_factor_list=(0.5 1 2.5 5 10)
 p_list=(2 3 5 7 10)
 
 
-VAR_BRAND
-generate data
+#VAR_BRAND
+#generate data
 for SEED in ${seeds_list[@]}
 do
     for N_FACTOR in ${n_factor_list[@]}
