@@ -1,4 +1,4 @@
-from root.controller.sample_data_handler.utils import get_labels_cluster_kmeans
+from controller.sample_data_handler.utils import get_labels_cluster_kmeans
 from jax import numpy as jnp
 
 

@@ -1,0 +1,4 @@
+#RUN multiple_tests_bash.sh
+#-open terminal in current folder
+#run:
+# bash multiple_tests_bash.sh

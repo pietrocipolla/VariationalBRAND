@@ -1,0 +1,3 @@
+MCMC : n= 1000 p= 2
+p	 n	elapsed_time_mins	tot_clusters	cluster_found	ARI
+2	1000	6.67883439064026	7	6	0.93320163557701

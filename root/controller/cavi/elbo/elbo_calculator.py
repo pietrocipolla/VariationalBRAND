@@ -1,9 +1,9 @@
 from jax.scipy.special import digamma as jdgamma
 from jax.scipy.special import gammaln as jgammaln
 from jax import numpy as jnp
-from root.controller.cavi.utils import useful_functions
-from root.model.hyperparameters_model import HyperparametersModel
-from root.model.variational_parameters import VariationalParameters
+from controller.cavi.utils import useful_functions
+from model.hyperparameters_model import HyperparametersModel
+from model.variational_parameters import VariationalParameters
 
 def elbo_calculator(data, hyper: HyperparametersModel, var_param: VariationalParameters, p, psi_dp=None):
     M = hyper.M

@@ -1,12 +1,10 @@
 import copy
-
-from root.controller.plotter.generate_induced_partition import generate_induced_partition, generate_induced_partition_iter
-from root.controller.cavi.elbo.elbo_calculator import elbo_calculator
-from root.controller.cavi.init_cavi.init_cavi import init_cavi
-from root.controller.cavi.updater.parameters_updater import update_parameters
+from controller.cavi.elbo.elbo_calculator import elbo_calculator
+from controller.cavi.init_cavi.init_cavi import init_cavi
+from controller.cavi.updater.parameters_updater import update_parameters
 from jax import numpy as jnp
-from root.model.hyperparameters_model import HyperparametersModel
-from root.model.user_input_model import UserInputModel
+from model.hyperparameters_model import HyperparametersModel
+from model.user_input_model import UserInputModel
 
 def cavi(Y: jnp.array, list_robust_mean, hyperparameters_model : HyperparametersModel, user_input_parameters: UserInputModel):
     n_iter = user_input_parameters.n_iter

@@ -1,4 +1,4 @@
-from root.main import var_brand
+from main import var_brand
 from unittest import TestCase
 import os
 import random
@@ -16,11 +16,12 @@ import numpy as np
 
 class Test_Multiple(TestCase):
     def test_main(self):
-        random.seed(1)
-        np.random.seed(1)
+        import sys
+        FOLDER = sys.argv[0]  #"/home/eb/brand_tests/mcmc/
+        SEED = sys.argv[1]
+        random.seed(SEED)
+        np.random.seed(SEED)
 
-        FOLDER = "/home/eb/brand_tests/mcmc/"
-        #FOLDER = "/home/eb/brand_tests/mcmc_n500_p2-3/"
         file_list = os.listdir(FOLDER)
 
         #print(file_list)
@@ -69,17 +70,6 @@ class Test_Multiple(TestCase):
                           LABELS_TRAINING_FILENAME=list[2], LABELS_TOT_FILENAME=list[3])
             except Exception as e:
                 print(e)
-                # temp_name = (list[0].split('Y_')[1]).split('.csv')[0]
-                # output_name = 'output_' + temp_name+ '.txt'
-                #
-                # line1 = "n\tp\tn_iter\tmain_time_secs\tmain_time_mins\tARI"
-                #
-                # line2 = str(e)
-                #
-                # lines = [line1, line2]
-                # with open(output_name, 'w') as f:
-                #     for line in lines:
-                #         f.write(line)
-                #         f.write('\n')
+
 
 

@@ -43,7 +43,10 @@ class TimeTracker:
         for record in TimeTracker.records:
             print(record.function_name, record.elapsed_time)
             if(record.function_name == 'main'):
-                main_time = str(record.function_name) + ': ' + str(record.elapsed_time)
+                main_time =  str(record.elapsed_time)
+
+        print("main_time")
+        print(main_time)
 
         return main_time
 

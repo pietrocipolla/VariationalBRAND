@@ -129,12 +129,6 @@ generate_data <- function(N_FACTOR, p) {
   #updated labels_training
   cl_train_label_noise 
   
-  #save data
-  write.table(Y,paste("Y_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
-  write.table(X,paste("Y_training_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
-  write.table(cl_train_label_noise, paste("labels_training_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
-  write.table(cl_tot,paste("labels_tot_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
-  
   #PLOTS
   #plots training and all dataset
   # x11()
@@ -147,13 +141,21 @@ generate_data <- function(N_FACTOR, p) {
   return(output_df)
 }
 
+save_data <- function(X,Y,p,cl_train_label_noise, G, cl_tot, SEED, N_FACTOR) {
+  #save data
+  write.table(Y,paste("Y_",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(X,paste("Y_training_",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(cl_train_label_noise, paste("labels_training_",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(cl_tot,paste("labels_tot_",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+}
+
 
 #PICO_BRAND
 pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
   #MCMC
   # truncation
-  H <- 10
-
+  H <- 20
+  
   BURN_IN <- 20000 
   length_chain <- 60000
   
@@ -225,13 +227,13 @@ pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
     apply(fit_adapt_RDA_bnp$AB[, 1, ] == 0, 1, mean)
   
   result <-
-  list(
-    cl_alpha = cl_adapt_BNP,
-    cl_beta = cl_beta_adapt_BNP,
-    a_posteriori_prob_novelty = a_posteriori_prob_novelty,
-    ari = mclust::adjustedRandIndex(cl_tot, cl_beta_adapt_BNP),
-    cluster_found = length(unique(cl_beta_adapt_BNP))
-  )
+    list(
+      cl_alpha = cl_adapt_BNP,
+      cl_beta = cl_beta_adapt_BNP,
+      a_posteriori_prob_novelty = a_posteriori_prob_novelty,
+      ari = mclust::adjustedRandIndex(cl_tot, cl_beta_adapt_BNP),
+      cluster_found = length(unique(cl_beta_adapt_BNP))
+    )
   
   #}#end parallel
   
@@ -259,21 +261,24 @@ pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
   
   out = cbind(p, n, elapsed_time_mins, tot_clusters, cluster_found,ARI )
   
-  #TO  
+  #SAVE_OUTPUT
   title = paste('MCMC',':','n=',n,'p=', p,sep=' ')
   subtitle = paste("p"," n", "elapsed_time_mins", "tot_clusters", "cluster_found","ARI",sep='\t' )
   txt = paste(title,subtitle,sep='\n')
   
-  writeLines(txt, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""))
-  write.table(out, paste("outfile_",N_FACTOR,'_',p,'.txt',  sep = ""),sep="\t",
+  writeLines(txt, paste("outfile_",SEED,'_',N_FACTOR,'_',p,'.txt',  sep = ""))
+  write.table(out, paste("outfile_",SEED,'_',N_FACTOR,'_',p,'.txt',  sep = ""),sep="\t",
               row.names=FALSE,col.names=FALSE, append = TRUE)
+  
+  write.table(out, paste("output_csv",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""),sep="\n",
+              row.names=FALSE,col.names=FALSE, append = FALSE)
   
   #PLOTS
   #plot training set
   # plot(X, col=cl_train_label_noise)
   
   #jpeg(file="training_dataset.jpeg")
-  jpeg(file=paste("training_dataset_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  jpeg(file=paste("training_dataset_",SEED,'_',N_FACTOR,'_',p,'.jpeg',  sep = ""))
   plot(X, col=cl_train_label_noise)
   dev.off()
   
@@ -281,63 +286,29 @@ pico_brand <- function(X,Y,p,cl_train_label_noise, G, cl_tot) {
   #plot(Y, col=cl_tot)
   
   #jpeg(file="test_dataset.jpeg")
-  jpeg(file=paste("test_dataset_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  jpeg(file=paste("test_dataset_",SEED,'_',N_FACTOR,'_',p,'.jpeg',  sep = ""))
   plot(Y, col=cl_tot)
   dev.off()
   
   #plot algo output
   #plot(Y, col=result$cl_beta)
-
+  
   #jpeg(file="output_brand_.jpeg")
-  jpeg(file=paste("output_brand_",N_FACTOR,'_',p,'.jpeg',  sep = ""))
+  jpeg(file=paste("output_brand_",SEED,'_',N_FACTOR,'_',p,'.jpeg',  sep = ""))
   plot(Y, col=result$cl_beta)
   dev.off()
   
-  write.table(result$cl_beta, paste("cl_beta_",N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
+  write.table(result$cl_beta, paste("cl_beta_",SEED,'_',N_FACTOR,'_',p,'.csv',  sep = ""), row.names = FALSE, col.names=FALSE, sep=',')
 }
 
-# SINGLE TEST
-# N_FACTOR = 1
-# P = 2
-# set.seed(123) 
+
+#EXAMPLE 
+# SEED = 666
+# N_FACTOR = 0.2
+# p = 2
+# 
+# set.seed(SEED)
 # output_df = generate_data(N_FACTOR, p)
+# save_data(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot,SEED,N_FACTOR)
 # pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
-
-# MULTIPLE TESTS
-setwd('/home/eb/brand_tests/mcmc')
-set.seed(666) 
-
-#crash for n_factor > 1
-n_factor_list = list( 0.5, 1, 2.5, 5, 10) 
-p_list = list(2,3,5,7,10) #default
-
-
-for (N_FACTOR in n_factor_list) {
-  for (p in p_list) {
-    todo = paste('n_factor :' ,N_FACTOR,'p: ', p)
-    print(todo)
-    output_df = generate_data(N_FACTOR, p)
-    
-    tryCatch(
-      expr = {
-        pico_brand(output_df$X,output_df$Y,output_df$p,output_df$cl_train_label_noise, output_df$G, output_df$cl_tot)
-
-        message(paste(todo, " => Successfully executed"))
-      },
-      error = function(e){
-        message('Caught an error!')
-        print(e)
-      },
-      warning = function(w){
-        message('Caught an warning!')
-        print(w)
-      },
-      finally = {
-        message(paste(todo, " => executed"))
-      }
-    )    
-    gc() #memory leak?
-  }
-}
-
 

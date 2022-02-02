@@ -1,23 +1,24 @@
 import copy
 import numpy as np
-from root.controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
-from root.model.user_input_model import UserInputModel
-from root.controller.time_tracker.time_tracker import TimeTracker
-from root.controller.plotter.generate_induced_partition import generate_induced_partition
-from root.controller.plotter.generate_elbo_plot import generate_elbo_plot
-from root.controller.sample_data_handler.robust_calculator import calculate_robust_parameters_labels
-from root.controller.cavi.cavi import cavi
-from root.controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
-from root.model.hyperparameters_model import HyperparametersModel
+from controller.sample_data_handler.test_init_kmeans import test_mu_var_DP_init_kmeans
+from model.user_input_model import UserInputModel
+from controller.time_tracker.time_tracker import TimeTracker
+from controller.plotter.generate_induced_partition import generate_induced_partition
+from controller.plotter.generate_elbo_plot import generate_elbo_plot
+from controller.sample_data_handler.robust_calculator import calculate_robust_parameters_labels
+from controller.cavi.cavi import cavi
+from controller.hyperparameters_setter.set_hyperparameters import set_hyperparameters
+from model.hyperparameters_model import HyperparametersModel
 from numpy import loadtxt, unique
-from root.utils import calculate_ARI, save_results, generate_labels_pred
+from utils import calculate_ARI, save_results, generate_labels_pred
 import random
 
 
 def main():
     # SET RANDOM SEEDS
-    random.seed(10)
-    np.random.seed(10)
+    SEED = 666
+    random.seed(SEED)
+    np.random.seed(SEED)
 
     # SPECIFY DATASETS' INFO
     Y_TOT_FILENAME = 'Y.csv'
@@ -29,7 +30,7 @@ def main():
     # => modify below specify_parameters function
 
     # RUN VAR_BRAND
-    var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME)
+    var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME,SEED)
 
 def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING):
     # Numero di componenti
@@ -37,8 +38,7 @@ def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
     # Numero di classi nel training set
     J = NUM_CLASSES_TRAINING
     # Numero di classi massime nel Dirichlet Process
-    #T = 20
-    T = 10
+    T = 20
 
     # Num iteration and tolerance cavi
     n_iter = 1000
@@ -223,7 +223,7 @@ def specify_parameters(robust_mean, robust_inv_cov_mat, Y, NUM_CLASSES_TRAINING)
         PHI_VAR_MIX = PHI_VAR_MIX,
     )
 
-def var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME):
+def var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LABELS_TOT_FILENAME, SEED):
     tic = TimeTracker.start()
     #STEP 1
     #load training dataset and labels
@@ -255,18 +255,18 @@ def var_brand(Y_TOT_FILENAME, Y_TRAINING_FILENAME, LABELS_TRAINING_FILENAME, LAB
     labels_pred = generate_labels_pred(variational_parameters, Y)
 
     #Generate induced partitions
-    generate_induced_partition(Y,labels_pred, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=False)
-    generate_induced_partition(Y,labels_pred, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True)
+    generate_induced_partition(Y,labels_pred, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=False, SEED=SEED)
+    generate_induced_partition(Y,labels_pred, list_robust_mean, hyperparameters_model, variational_parameters, cov_ellipse=True, SEED=SEED)
 
     #Generate elbo plot
-    generate_elbo_plot(elbo_values, hyperparameters_model)
+    generate_elbo_plot(elbo_values, hyperparameters_model, SEED)
 
     #Calculate ARI
     labels_tot = loadtxt(LABELS_TOT_FILENAME, delimiter=',')
     ARI = calculate_ARI(labels_tot, labels_pred)
 
-    #Save results-old
-    save_results(hyperparameters_model, main_time, len(elbo_values), ARI, np.array(labels_pred))
+    #Save results-old-old
+    save_results(hyperparameters_model, main_time, len(elbo_values), ARI, np.array(labels_pred), SEED)
 
 
 if __name__ == '__main__':

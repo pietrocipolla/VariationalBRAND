@@ -1,6 +1,6 @@
 import sklearn
 import numpy
-from root.model.variational_parameters import VariationalParameters
+from model.variational_parameters import VariationalParameters
 
 
 def generate_labels_pred(variational_parameters : VariationalParameters, Y):
@@ -15,11 +15,12 @@ def calculate_ARI(labels_true, labels_pred):
     return sklearn.metrics.adjusted_rand_score(labels_true, labels_pred)
 
 
-def save_results(hyperparameters_model, main_time_secs, n_iter, ARI, labels_pred):
+def save_results(hyperparameters_model, main_time_secs, n_iter, ARI, labels_pred,SEED):
     p = hyperparameters_model.p
     M = hyperparameters_model.M
-    main_time_mins = float(main_time_secs.split(': ')[1]) / 60
-    output_name = 'output_' + str(p) + '_' + str(M) + '.txt'
+
+    main_time_mins = float(main_time_secs) / 60
+    output_name = 'output_' + str(SEED) + '_' + str(p) + '_' + str(M) + '.txt'
 
     line1 = "n\tp\tn_iter\tmain_time_secs\tmain_time_mins\tARI"
 
@@ -32,5 +33,13 @@ def save_results(hyperparameters_model, main_time_secs, n_iter, ARI, labels_pred
             f.write(line)
             f.write('\n')
 
-    labels_pred_name = 'labels_pred_' + str(p) + '_' + str(M) + '.csv'
+    output_csv_name = 'output_csv_' + str(SEED) + '_' + str(p) + '_' + str(M) + '_.txt'
+
+    to_save = [str(SEED),str(hyperparameters_model.M), str(hyperparameters_model.p),
+            str(n_iter) ,str(main_time_secs),str(main_time_mins) , str(ARI)]
+
+    numpy.savetxt(output_csv_name, to_save, delimiter=",", fmt="%s")
+
+    labels_pred_name = 'labels_pred_' + str(SEED) + '_'+ str(p) + '_' + str(M) + '.csv'
     numpy.savetxt(labels_pred_name, labels_pred, delimiter=",")
+
